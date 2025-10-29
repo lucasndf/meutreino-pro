@@ -1,182 +1,231 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MeuTreino PRO</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0e0e0e; --panel:#1e1e1e; --muted:#2a2a2a; --text:#fff; --sub:#bdbdbd;
-  --brand:#00e676; --danger:#ff5252; --border:#333; --shadow:0 0 30px rgba(0,0,0,.4);
-}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
-.hidden{display:none!important}
-.wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
-.card{background:var(--panel);width:100%;max-width:420px;padding:28px;border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow)}
-.brand{display:flex;gap:10px;align-items:center;font-weight:700}
-.brand-logo{width:40px;height:40px;display:grid;place-items:center;background:var(--brand);color:#000;border-radius:10px}
-.pro{color:var(--brand)}
-.title{font-size:21px;margin:16px 0 6px}
-.subtitle{font-size:14px;color:var(--sub);margin-bottom:18px}
-.field{margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
-label{font-size:13px;color:var(--sub)}
-input,select,textarea{background:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--text);font-size:15px}
-.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:700;cursor:pointer;margin-top:4px;background:var(--brand);color:#042a17}
-.btn.google{background:#fff;color:#111;border:1px solid #ccc}
-.btn.ghost{background:var(--muted);color:var(--text)}
-.linkbar{display:flex;justify-content:space-between;margin-top:4px}
-.link{background:none;border:none;color:var(--brand);font-size:14px;cursor:pointer;padding:6px 0}
-.alert{display:none;background:#3a1b1f;border:1px solid #562428;padding:12px;margin-bottom:12px;border-radius:12px}
-.alert.ok{background:#1b3a29;border-color:#2b5a45;color:#afffda}
-.hr{display:flex;align-items:center;gap:10px;margin:16px 0}
-.hr div{flex:1;height:1px;background:var(--border)}
-.hr span{font-size:12px;color:var(--sub)}
 
-/* APP */
+<style>
+:root {
+  --bg: #fafafa;
+  --panel:#ffffff;
+  --border:#e6e6e6;
+  --text:#111;
+  --sub:#555;
+  --muted:#f3f3f3;
+  --brand:#009c3b;
+  --brand-dark:#026a29;
+  --danger:#e54848;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;width:100%;height:100%;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);color:var(--text);
+}
+
+/* LOGIN LAYOUT */
+.wrap{
+  min-height:100vh;
+  display:flex;justify-content:center;align-items:center;padding:16px;
+}
+.card{
+  width:100%;max-width:420px;
+  background:var(--panel);
+  border-radius:16px;
+  border:1px solid var(--border);
+  padding:26px;
+}
+.brand{
+  display:flex;align-items:center;gap:12px;font-size:20px;font-weight:bold;
+}
+.brand-logo{
+  width:40px;height:40px;
+  background:var(--brand);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:8px;color:#fff;font-size:22px;
+}
+.pro{color:var(--brand-dark);font-weight:700}
+.title{font-size:20px;margin:12px 0 6px}
+.subtitle{font-size:14px;color:var(--sub);margin-bottom:14px}
+.hidden{display:none !important}
+
+.field{display:flex;flex-direction:column;margin-bottom:14px}
+input,select,textarea{
+  padding:12px;border-radius:10px;font-size:15px;
+  border:1px solid var(--border);background:var(--muted);
+}
+.btn{
+  width:100%;padding:12px;margin-top:2px;
+  border:none;border-radius:10px;
+  font-weight:600;cursor:pointer;
+}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.google{background:#fff;border:1px solid #ccc;color:#333}
+.btn.ghost{background:var(--panel);border:1px solid var(--border);color:var(--text)}
+
+.linkbar{display:flex;justify-content:space-between;margin-top:10px}
+.link{border:none;background:none;color:var(--brand-dark);font-size:14px;cursor:pointer}
+
+/* ALERT */
+.alert{
+  display:none;padding:10px;font-size:14px;margin-bottom:12px;border-radius:8px;background:#ffd8d8;color:#8a0000;
+}
+.alert.ok{background:#daf5d8;color:#084d19}
+
+/* APP AREA */
 .app{width:100%;max-width:1100px;margin:auto;padding:20px}
-.topbar{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:16px}
-.pill{background:var(--muted);padding:6px 12px;border-radius:8px}
-.tools{display:flex;gap:8px;align-items:center}
-.search{max-width:320px}
+.topbar{
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;
+  align-items:center;margin-bottom:18px;
+}
+.pill{
+  padding:6px 12px;background:var(--muted);
+  border-radius:12px;border:1px solid var(--border);font-size:14px;
+}
 .grid{display:grid;gap:16px}
 @media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
-.card-student{background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:16px;display:flex;gap:10px;flex-direction:column}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.badge{background:#151515;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub)}
-.actions{display:flex;gap:8px;margin-top:6px}
-.btn-sm{padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:#151515;color:var(--text);cursor:pointer}
-.btn-sm.danger{border-color:#7a2b2b;background:#2a1414;color:#ffb3b3}
-.btn-sm.brand{border-color:#0d4026;background:#0f2318;color:#b6ffd8}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+.card-student{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;
+}
+.badge{
+  background:var(--muted);
+  padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub);
+}
+.actions{display:flex;gap:8px}
+.btn-sm{
+  padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;
+  border:1px solid var(--border);background:var(--muted);
+}
+.btn-sm.brand{background:var(--brand);color:#fff;border:none}
+.btn-sm.danger{background:var(--danger);color:#fff;border:none}
 
 /* FAB */
-.fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--brand);color:#042a17;font-size:32px;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
+.fab{
+  position:fixed;bottom:28px;right:28px;
+  width:56px;height:56px;border-radius:50%;
+  font-size:36px;background:var(--brand);color:#fff;border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
 
-/* Modal */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center}
-.modal{width:90%;max-width:380px;background:var(--panel);padding:24px;border-radius:18px;border:1px solid var(--border)}
+/* MODAL */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;
+}
+.modal{
+  width:90%;max-width:380px;background:var(--panel);
+  padding:22px;border-radius:16px;
+  border:1px solid var(--border);
+}
 .modal h2{margin:0 0 14px}
-.modal .row2{display:flex;gap:10px}
+
 </style>
 </head>
 <body>
 
 <main class="wrap">
-  <!-- AUTH -->
-  <section id="auth-card" class="card">
-    <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
-    <h2 class="title" id="view-title">Entrar</h2>
-    <p class="subtitle" id="view-sub">Acesse seu painel de alunos.</p>
-    <div id="alert" class="alert"></div>
 
-    <form id="form-login">
-      <div class="field"><label>Email</label><input id="login-email" type="email" required></div>
-      <div class="field"><label>Senha</label><input id="login-pass" type="password" required></div>
-      <button class="btn">Entrar</button>
-    </form>
+<!-- ✅ LOGIN -->
+<section id="auth-card" class="card">
+  <div class="brand">
+    <div class="brand-logo">🏋️</div>
+    MeuTreino <span class="pro">PRO</span>
+  </div>
 
-    <form id="form-signup" class="hidden">
-      <div class="field"><label>Seu nome</label><input id="su-name" required></div>
-      <div class="field"><label>Email</label><input id="su-email" type="email" required></div>
-      <div class="field"><label>Senha (min. 6)</label><input id="su-pass" type="password" minlength="6" required></div>
-      <button class="btn">Criar conta</button>
-    </form>
+  <h2 class="title" id="view-title">Entrar</h2>
+  <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
 
-    <form id="form-reset" class="hidden">
-      <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required></div>
-      <button class="btn">Enviar link</button>
-    </form>
+  <div id="alert" class="alert"></div>
 
-    <div class="hr"><div></div><span>ou</span><div></div></div>
-    <button id="btn-google" class="btn google">Entrar com Google</button>
+  <form id="form-login">
+    <div class="field"><label>Email</label><input id="login-email" type="email" required /></div>
+    <div class="field"><label>Senha</label><input id="login-pass" type="password" required /></div>
+    <button class="btn primary">Entrar</button>
+  </form>
 
-    <div class="linkbar">
-      <button class="link" id="go-signup">Criar conta</button>
-      <button class="link" id="go-reset">Esqueci a senha</button>
-    </div>
-    <div class="linkbar">
-      <button class="link hidden" id="go-login">Voltar login</button>
-    </div>
-  </section>
+  <form id="form-signup" class="hidden">
+    <div class="field"><label>Nome completo</label><input id="su-name" required /></div>
+    <div class="field"><label>Email</label><input id="su-email" type="email" required /></div>
+    <div class="field"><label>Senha (6+)</label><input id="su-pass" type="password" minlength="6" required /></div>
+    <button class="btn primary">Criar conta</button>
+  </form>
 
-  <!-- APP -->
-  <section id="app" class="app hidden">
-    <div class="topbar">
-      <strong>Meus Alunos</strong>
-      <input id="search" class="search" type="text" placeholder="Pesquisar por nome...">
-      <div class="tools">
-        <span class="pill" id="plan-pill">Plano: Free (5)</span>
-        <span class="pill" id="user-pill">...</span>
-        <button id="btn-logout" class="btn ghost" style="width:auto;padding:10px 14px">Sair</button>
-      </div>
-    </div>
+  <form id="form-reset" class="hidden">
+    <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required /></div>
+    <button class="btn primary">Enviar link</button>
+  </form>
 
-    <div id="students-list" class="grid"></div>
-    <button id="btn-add" class="fab" title="Adicionar aluno">+</button>
-  </section>
+  <div class="hr"></div>
+  <button id="btn-google" class="btn google">Entrar com Google</button>
 
-  <!-- MODAL CADASTRO -->
-  <div id="modal-bg" class="modal-bg hidden">
-    <div class="modal">
-      <h2 id="modal-title">Novo Aluno</h2>
-      <form id="form-student">
-        <input type="hidden" id="st-id">
-        <div class="field"><label>Nome completo</label><input id="st-name" required></div>
-        <div class="field"><label>Telefone (WhatsApp)</label><input id="st-phone" placeholder="(DDD) 9XXXX-XXXX"></div>
-        <div class="row2">
-          <div class="field" style="flex:1">
-            <label>Objetivo</label>
-            <select id="st-goal" required>
-              <option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option>
-            </select>
-          </div>
-          <div class="field" style="flex:1">
-            <label>Nível</label>
-            <select id="st-level">
-              <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
-            </select>
-          </div>
-        </div>
-        <div class="field"><label>Observações</label><textarea id="st-notes" rows="3" placeholder="Ex.: Lesão no ombro direito"></textarea></div>
-        <button class="btn" type="submit">Salvar</button>
-        <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
-      </form>
+  <div class="linkbar">
+    <button class="link" id="go-signup">Criar conta</button>
+    <button class="link" id="go-reset">Esqueci a senha</button>
+  </div>
+  <div class="linkbar">
+    <button class="link hidden" id="go-login">Voltar login</button>
+  </div>
+</section>
+
+<!-- ✅ APP -->
+<section id="app" class="app hidden">
+  <div class="topbar">
+    <strong>Meus Alunos</strong>
+    <input id="search" class="search" type="text" placeholder="Pesquisar por nome..." />
+    <div class="tools">
+      <span class="pill" id="plan-pill">Plano: Free (5)</span>
+      <span class="pill" id="user-pill">...</span>
+      <button id="btn-logout" class="btn ghost" style="width:auto">Sair</button>
     </div>
   </div>
 
-  <!-- MODAL UPGRADE -->
-  <div id="upgrade-bg" class="modal-bg hidden">
-    <div class="modal">
-      <h2>Limite atingido (Plano Free)</h2>
-      <p style="color:var(--sub);margin-top:6px">Você já possui 5 alunos cadastrados. Para cadastrar mais, atualize seu plano.</p>
-      <div class="field">
-        <div class="row" style="gap:8px;flex-wrap:wrap">
-          <button id="btn-plan-pro" class="btn" type="button">MeuTreino PRO — Ilimitado</button>
-          <button id="btn-upg-cancel" class="btn ghost" type="button">Fechar</button>
-        </div>
+  <div id="students-list" class="grid"></div>
+  <button id="btn-add" class="fab">+</button>
+</section>
+
+<!-- ✅ MODAL ALUNO -->
+<div id="modal-bg" class="modal-bg hidden">
+  <div class="modal">
+    <h2 id="modal-title">Novo Aluno</h2>
+    <form id="form-student">
+      <input type="hidden" id="st-id">
+      <div class="field"><label>Nome</label><input id="st-name" required /></div>
+      <div class="field"><label>WhatsApp</label><input id="st-phone" /></div>
+      <div class="field"><label>Objetivo</label>
+        <select id="st-goal"><option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option></select>
       </div>
-      <p class="subtitle">Obs.: colocaremos pagamento por Pix/QR futuramente.</p>
-    </div>
+      <div class="field"><label>Nível</label>
+        <select id="st-level"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
+      </div>
+      <div class="field"><label>Observações</label><textarea id="st-notes" rows="3"></textarea></div>
+      <button class="btn primary" type="submit">Salvar</button>
+      <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
+    </form>
   </div>
-
-</main>
-
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
-  signOut, updateProfile, onAuthStateChanged
+  GoogleAuthProvider, signInWithPopup, signOut,
+  updateProfile, sendPasswordResetEmail, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
-  getFirestore, collection, addDoc, onSnapshot, query, where, orderBy,
-  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, getDocs
+  getFirestore, collection, addDoc, onSnapshot, query, where,
+  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
+// ✅ CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyBsPf40matUV8So60OHb0h4oRwMRWaB0ho",
   authDomain: "acdm-70082.firebaseapp.com",
@@ -185,235 +234,257 @@ const firebaseConfig = {
   messagingSenderId: "236961358499",
   appId: "1:236961358499:web:40b7391c4c9b3405ff1516"
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// UI helpers
+// ✅ UI HELPERS
 const $ = (id)=>document.getElementById(id);
 function showAlert(msg, ok=false){
-  $("alert").textContent = msg;
-  $("alert").classList.toggle("ok", ok);
-  $("alert").style.display = "block";
+  const box = $("alert");
+  box.textContent = msg;
+  box.style.display = "block";
+  box.classList.toggle("ok", ok);
   clearTimeout(showAlert._t);
-  showAlert._t = setTimeout(()=>$("alert").style.display="none", ok?2000:4500);
+  showAlert._t = setTimeout(()=> box.style.display="none", 3500);
 }
-function switchView(v){
-  ["form-login","form-signup","form-reset"].forEach(id=>$(id).classList.add("hidden"));
+function switchView(view){
+  ["form-login","form-signup","form-reset"].forEach(id => $(id).classList.add("hidden"));
   $("go-login").classList.remove("hidden");
-  if(v==="signup"){ $("form-signup").classList.remove("hidden"); $("view-title").textContent="Criar conta"; $("view-sub").textContent="Preencha seus dados"; }
-  else if(v==="reset"){ $("form-reset").classList.remove("hidden"); $("view-title").textContent="Recuperar senha"; $("view-sub").textContent="Enviaremos um link"; }
-  else { $("form-login").classList.remove("hidden"); $("view-title").textContent="Entrar"; $("view-sub").textContent="Acesse sua conta"; $("go-login").classList.add("hidden"); }
+  if(view==="signup"){
+    $("form-signup").classList.remove("hidden");
+    $("view-title").textContent = "Criar conta";
+    $("view-sub").textContent = "Cadastre-se e comece!";
+  } else if(view==="reset"){
+    $("form-reset").classList.remove("hidden");
+    $("view-title").textContent = "Recuperar senha";
+    $("view-sub").textContent = "Receba um link no email";
+  } else {
+    $("form-login").classList.remove("hidden");
+    $("view-title").textContent = "Entrar";
+    $("view-sub").textContent = "Gerencie seus alunos";
+    $("go-login").classList.add("hidden");
+  }
 }
 
-// Auth forms
+// ✅ TROCA DE FORMULÁRIO
 $("go-signup").onclick = ()=>switchView("signup");
 $("go-reset").onclick = ()=>switchView("reset");
 $("go-login").onclick = ()=>switchView("login");
 
-$("form-login").onsubmit = async(e)=>{ e.preventDefault();
-  try{ await signInWithEmailAndPassword(auth, $("login-email").value, $("login-pass").value); }
-  catch(err){ showAlert("Erro: "+err.message); }
-};
-$("form-signup").onsubmit = async(e)=>{ e.preventDefault();
+// ✅ LOGIN EMAIL
+$("form-login").onsubmit = async(e)=>{
+  e.preventDefault();
   try{
-    const cred = await createUserWithEmailAndPassword(auth, $("su-email").value, $("su-pass").value);
+    await signInWithEmailAndPassword(auth,
+      $("login-email").value,
+      $("login-pass").value
+    );
+  }catch(err){
+    showAlert("Erro: " + err.message);
+  }
+};
+
+// ✅ CADASTRO
+$("form-signup").onsubmit = async(e)=>{
+  e.preventDefault();
+  try{
+    const cred = await createUserWithEmailAndPassword(auth,
+      $("su-email").value,
+      $("su-pass").value
+    );
     await updateProfile(cred.user, { displayName: $("su-name").value });
-    // cria doc de usuário com plano FREE
-    await setDoc(doc(db, "users", cred.user.uid), { plan: "free", limit: 5, createdAt: serverTimestamp(), name: $("su-name").value, email: cred.user.email });
-    showAlert("Conta criada!", true);
-  }catch(err){ showAlert("Erro: "+err.message); }
+
+    await setDoc(doc(db,"users",cred.user.uid), {
+      plan:"free", limit:5,
+      name:$("su-name").value,
+      email:cred.user.email,
+      createdAt: serverTimestamp()
+    });
+
+    showAlert("Conta criada com sucesso!", true);
+  }catch(err){
+    showAlert("Erro: " + err.message);
+  }
 };
-$("form-reset").onsubmit = async(e)=>{ e.preventDefault();
-  try{ await sendPasswordResetEmail(auth, $("rs-email").value); showAlert("Email enviado!", true); switchView("login"); }
-  catch(err){ showAlert(err.message); }
+
+// ✅ RECUPERAÇÃO DE SENHA
+$("form-reset").onsubmit = async(e)=>{
+  e.preventDefault();
+  try{
+    await sendPasswordResetEmail(auth, $("rs-email").value);
+    showAlert("Email enviado!", true);
+    switchView("login");
+  }catch(err){ showAlert(err.message); }
 };
+
+// ✅ LOGIN GOOGLE
 $("btn-google").onclick = async()=>{
   try{
     const cred = await signInWithPopup(auth, new GoogleAuthProvider());
-    // se for primeiro login, garante doc em /users
-    const uref = doc(db, "users", cred.user.uid);
-    const snap = await getDoc(uref);
+    const ref = doc(db,"users",cred.user.uid);
+    const snap = await getDoc(ref);
     if(!snap.exists()){
-      await setDoc(uref, { plan: "free", limit: 5, createdAt: serverTimestamp(), name: cred.user.displayName || "", email: cred.user.email });
+      await setDoc(ref, {
+        plan:"free", limit:5,
+        email:cred.user.email,
+        name:cred.user.displayName,
+        createdAt: serverTimestamp()
+      });
     }
-  }catch(err){ showAlert("Erro: "+err.message); }
+  }catch(err){
+    showAlert("Erro: " + err.message);
+  }
 };
+
+// ✅ LOGOUT
 $("btn-logout").onclick = ()=>signOut(auth);
 
-// State
-let unsub = null;
-let currentUser = null;
-let currentPlan = { plan: "free", limit: 5 };
-
-// Formatters
-const toWa = (phone) => {
-  const digits = (phone||"").replace(/\D/g,"");
-  if(!digits) return null;
-  return `https://wa.me/55${digits}`;
+// ✅ FUNÇÃO WHATSAPP
+const phoneToWhatsApp = (p)=>{
+  const num = (p||"").replace(/\D/g,"");
+  return num ? `https://wa.me/55${num}` : null;
 };
 
-// Render
-function renderStudentCard(st){
-  const div = document.createElement("div");
-  div.className = "card-student";
-  div.innerHTML = `
-    <div class="row" style="justify-content:space-between">
-      <strong>${st.name}</strong>
-      <span class="badge">${st.level||"—"}</span>
-    </div>
-    <div class="row">
-      <span class="badge">🎯 ${st.goal||"—"}</span>
-      ${st.phone ? `<a class="btn-sm brand" href="${toWa(st.phone)}" target="_blank">WhatsApp</a>` : `<span class="badge">📱 sem telefone</span>`}
-    </div>
-    ${st.notes ? `<div class="badge" style="white-space:pre-wrap;line-height:1.4">📝 ${st.notes}</div>` : ""}
+// ✅ RENDER CARDS
+function renderStudent(st){
+  const item = document.createElement("div");
+  item.className = "card-student";
+  item.innerHTML = `
+    <strong>${st.name}</strong>
+    <span class="badge">🎯 ${st.goal}</span>
+    <span class="badge">📌 ${st.level}</span>
+    ${st.notes ? `<small>${st.notes}</small>` : ""}
+    ${
+      st.phone ?
+      `<a href="${phoneToWhatsApp(st.phone)}" target="_blank" class="btn-sm brand">WhatsApp</a>` :
+      `<span class="badge">Sem telefone</span>`
+    }
     <div class="actions">
       <button class="btn-sm" data-edit>Editar</button>
       <button class="btn-sm danger" data-del>Excluir</button>
-    </div>
-  `;
-  // actions
-  div.querySelector("[data-edit]").onclick = ()=>{
-    $("modal-title").textContent = "Editar Aluno";
+    </div>`;
+  
+  // Editar
+  item.querySelector("[data-edit]").onclick = ()=>{
+    $("modal-title").textContent = "Editar aluno";
     $("st-id").value = st.id;
-    $("st-name").value = st.name || "";
-    $("st-phone").value = st.phone || "";
-    $("st-goal").value = st.goal || "Hipertrofia";
-    $("st-level").value = st.level || "Iniciante";
-    $("st-notes").value = st.notes || "";
+    $("st-name").value = st.name;
+    $("st-phone").value = st.phone;
+    $("st-goal").value = st.goal;
+    $("st-level").value = st.level;
+    $("st-notes").value = st.notes;
     $("modal-bg").classList.remove("hidden");
   };
-  div.querySelector("[data-del]").onclick = async()=>{
-    if(confirm(`Excluir ${st.name}?`)){
-      await deleteDoc(doc(db, "students", st.id));
+
+  // Excluir
+  item.querySelector("[data-del]").onclick = async()=>{
+    if(confirm("Excluir aluno?")){
+      await deleteDoc(doc(db,"students",st.id));
     }
   };
-  return div;
+
+  return item;
 }
+
+// ✅ EXIBE LISTA
 function renderList(list){
   const wrap = $("students-list");
   wrap.innerHTML = "";
-  const term = ($("search").value || "").trim().toLowerCase();
+  const term = $("search").value.toLowerCase();
   list
     .filter(s => s.name.toLowerCase().includes(term))
-    .forEach(s => wrap.appendChild(renderStudentCard(s)));
+    .forEach(s => wrap.appendChild(renderStudent(s)));
 }
 
-// Load plan + subscribe students
-async function startUserSession(user){
+// ✅ ESTADO LOGIN
+let unsub = null;
+let currentUser = null;
+let currentPlan = { plan:"free", limit:5 };
+async function start(user){
   currentUser = user;
   $("auth-card").classList.add("hidden");
   $("app").classList.remove("hidden");
-  $("user-pill").textContent = user.displayName || user.email;
+  $("user-pill").textContent = user.email;
 
-  // carregar plano
-  const uref = doc(db, "users", user.uid);
+  const uref = doc(db,"users",user.uid);
   const usnap = await getDoc(uref);
-  if(usnap.exists()){ currentPlan = usnap.data(); } else {
-    currentPlan = { plan:"free", limit:5 };
-    await setDoc(uref, { plan:"free", limit:5, createdAt: serverTimestamp(), email: user.email, name: user.displayName||"" });
-  }
-  $("plan-pill").textContent = `Plano: ${currentPlan.plan === "pro" ? "PRO (ilimitado)" : `Free (${currentPlan.limit})`}`;
+  if(usnap.exists()) currentPlan = usnap.data();
 
-// subscribe alunos do usuário
-if (unsub) unsub();
-const q = query(
-  collection(db, "students"),
-  where("ownerId", "==", user.uid)
-);
+  $("plan-pill").textContent =
+    currentPlan.plan === "pro"
+    ? "Plano: PRO (ilimitado)"
+    : `Plano: Free (${currentPlan.limit})`;
 
-unsub = onSnapshot(q, (snap) => {
-  const arr = [];
-  snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
-  
-  // ordena pelo nome manualmente
-  arr.sort((a, b) => a.name.localeCompare(b.name));
+  if(unsub) unsub();
+  unsub = onSnapshot(
+    query(collection(db,"students"), where("ownerId","==",user.uid)),
+    snap=>{
+      const arr=[];
+      snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
+      renderList(arr);
+      start._count = arr.length;
+    }
+  );
+}
 
-  renderList(arr);
-  startUserSession._count = arr.length;
-});
-
-
-// Auth state
-onAuthStateChanged(auth, (user)=>{
-  if(user) startUserSession(user);
-  else {
+// ✅ FIREBASE MONITOR
+onAuthStateChanged(auth,(user)=>{
+  if(user) start(user);
+  else{
     $("app").classList.add("hidden");
     $("auth-card").classList.remove("hidden");
     if(unsub) unsub();
   }
 });
 
-// Search
-$("search").oninput = ()=>{ // re-render com filtro
-  // força re-render pegando DOM atual
-  // (para simplicidade, reaproveitamos última lista guardada por onSnapshot via innerHTML)
-  const cards = Array.from(document.querySelectorAll(".card-student"));
-  if(!cards.length) return;
-  // rebuild from state stored:
-  // simples: dispara nova render a partir do snapshot mais recente via getDocs
-  if(!currentUser) return;
-  getDocs(query(collection(db,"students"), where("ownerId","==",currentUser.uid), orderBy("name")))
-    .then(snap=>{
-      const arr=[]; snap.forEach(d=>arr.push({id:d.id, ...d.data()})); renderList(arr);
-    });
-};
+// ✅ PESQUISA
+$("search").oninput = ()=> renderList(start._list||[]);
 
-// Modal handlers
-$("btn-add").onclick = async()=>{
-  // checa limite do plano
-  const count = startUserSession._count || 0;
-  if(currentPlan.plan !== "pro" && count >= (currentPlan.limit||5)){
-    $("upgrade-bg").classList.remove("hidden");
+// ✅ ABRIR MODAL
+$("btn-add").onclick = ()=>{
+  if(currentPlan.plan!=="pro" && start._count >= currentPlan.limit){
+    alert("Limite do Plano Free atingido!");
     return;
   }
-  $("modal-title").textContent = "Novo Aluno";
-  $("st-id").value = "";
+  $("modal-title").textContent = "Novo aluno";
   $("form-student").reset();
+  $("st-id").value = "";
   $("modal-bg").classList.remove("hidden");
 };
+
+// ✅ CANCELAR MODAL
 $("btn-cancel").onclick = ()=> $("modal-bg").classList.add("hidden");
 
-$("btn-upg-cancel").onclick = ()=> $("upgrade-bg").classList.add("hidden");
-$("btn-plan-pro").onclick = async()=>{
-  // mock de upgrade: seta PRO no banco (até integrar pagamento)
-  if(!currentUser) return;
-  await updateDoc(doc(db,"users",currentUser.uid), { plan: "pro", limit: null, upgradedAt: serverTimestamp() });
-  currentPlan = { plan: "pro", limit: null };
-  $("plan-pill").textContent = "Plano: PRO (ilimitado)";
-  $("upgrade-bg").classList.add("hidden");
-  showAlert("Plano atualizado para PRO ✅", true);
-};
-
+// ✅ SALVAR ALUNO
 $("form-student").onsubmit = async(e)=>{
   e.preventDefault();
   const id = $("st-id").value;
-  const payload = {
+  const data = {
     ownerId: currentUser.uid,
-    name: $("st-name").value.trim(),
-    phone: $("st-phone").value.trim(),
+    name: $("st-name").value,
+    phone: $("st-phone").value,
     goal: $("st-goal").value,
     level: $("st-level").value,
-    notes: $("st-notes").value.trim(),
-    updatedAt: serverTimestamp(),
-    createdAt: serverTimestamp()
+    notes: $("st-notes").value,
+    updatedAt: serverTimestamp()
   };
   try{
     if(id){
-      const ref = doc(db,"students",id);
-      delete payload.createdAt; // não sobrescreve
-      await updateDoc(ref, payload);
-      showAlert("Aluno atualizado ✅", true);
+      await updateDoc(doc(db,"students",id), data);
+      showAlert("Aluno atualizado ✅",true);
     }else{
-      await addDoc(collection(db,"students"), payload);
-      showAlert("Aluno cadastrado ✅", true);
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db,"students"), data);
+      showAlert("Aluno cadastrado ✅",true);
     }
     $("modal-bg").classList.add("hidden");
-    e.target.reset();
   }catch(err){
     showAlert("Erro: " + err.message);
   }
 };
+
 </script>
 </body>
 </html>
