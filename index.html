@@ -315,21 +315,24 @@ async function startUserSession(user){
   }
   $("plan-pill").textContent = `Plano: ${currentPlan.plan === "pro" ? "PRO (ilimitado)" : `Free (${currentPlan.limit})`}`;
 
-  // subscribe alunos do usuário
-  if(unsub) unsub();
-  const q = query(
-    collection(db, "students"),
-    where("ownerId", "==", user.uid),
-    orderBy("name")
-  );
-  unsub = onSnapshot(q, (snap)=>{
-    const arr = [];
-    snap.forEach(d => arr.push({ id:d.id, ...d.data() }));
-    renderList(arr);
-    // guardar contagem para checagem de limite
-    startUserSession._count = arr.length;
-  });
-}
+// subscribe alunos do usuário
+if (unsub) unsub();
+const q = query(
+  collection(db, "students"),
+  where("ownerId", "==", user.uid)
+);
+
+unsub = onSnapshot(q, (snap) => {
+  const arr = [];
+  snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+  
+  // ordena pelo nome manualmente
+  arr.sort((a, b) => a.name.localeCompare(b.name));
+
+  renderList(arr);
+  startUserSession._count = arr.length;
+});
+
 
 // Auth state
 onAuthStateChanged(auth, (user)=>{
