@@ -1,283 +1,416 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MeuTreino PRO — Login</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MeuTreino PRO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0e0e; --panel:#1e1e1e; --muted:#2a2a2a; --text:#fff; --sub:#bdbdbd;
+  --brand:#00e676; --danger:#ff5252; --border:#333; --shadow:0 0 30px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
+.hidden{display:none!important}
+.wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.card{background:var(--panel);width:100%;max-width:420px;padding:28px;border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.brand{display:flex;gap:10px;align-items:center;font-weight:700}
+.brand-logo{width:40px;height:40px;display:grid;place-items:center;background:var(--brand);color:#000;border-radius:10px}
+.pro{color:var(--brand)}
+.title{font-size:21px;margin:16px 0 6px}
+.subtitle{font-size:14px;color:var(--sub);margin-bottom:18px}
+.field{margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;color:var(--sub)}
+input,select,textarea{background:var(--muted);border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--text);font-size:15px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:700;cursor:pointer;margin-top:4px;background:var(--brand);color:#042a17}
+.btn.google{background:#fff;color:#111;border:1px solid #ccc}
+.btn.ghost{background:var(--muted);color:var(--text)}
+.linkbar{display:flex;justify-content:space-between;margin-top:4px}
+.link{background:none;border:none;color:var(--brand);font-size:14px;cursor:pointer;padding:6px 0}
+.alert{display:none;background:#3a1b1f;border:1px solid #562428;padding:12px;margin-bottom:12px;border-radius:12px}
+.alert.ok{background:#1b3a29;border-color:#2b5a45;color:#afffda}
+.hr{display:flex;align-items:center;gap:10px;margin:16px 0}
+.hr div{flex:1;height:1px;background:var(--border)}
+.hr span{font-size:12px;color:var(--sub)}
 
-  <!-- Fonte -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+/* APP */
+.app{width:100%;max-width:1100px;margin:auto;padding:20px}
+.topbar{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:16px}
+.pill{background:var(--muted);padding:6px 12px;border-radius:8px}
+.tools{display:flex;gap:8px;align-items:center}
+.search{max-width:320px}
+.grid{display:grid;gap:16px}
+@media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card-student{background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:16px;display:flex;gap:10px;flex-direction:column}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{background:#151515;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub)}
+.actions{display:flex;gap:8px;margin-top:6px}
+.btn-sm{padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:#151515;color:var(--text);cursor:pointer}
+.btn-sm.danger{border-color:#7a2b2b;background:#2a1414;color:#ffb3b3}
+.btn-sm.brand{border-color:#0d4026;background:#0f2318;color:#b6ffd8}
 
-  <!-- ==================== ESTILOS ==================== -->
-  <style>
-    :root {
-      --bg: #0e0e0e;
-      --panel: #1f1f1f;
-      --muted: #2a2a2a;
-      --text: #ffffff;
-      --sub: #bdbdbd;
-      --brand: #00e676;
-      --danger: #ff4444;
-      --border: #333;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    * { box-sizing: border-box; }
-    html, body {
-      height:100%;
-      margin:0;
-      background:var(--bg);
-      font-family:'Inter',sans-serif;
-      color:var(--text);
-    }
-    .wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
-    .card {
-      width:100%; max-width:420px;
-      background:var(--panel); border:1px solid var(--border);
-      border-radius:18px; padding:30px;
-      box-shadow:var(--shadow);
-    }
-    .hidden{display:none!important}
-    .brand{display:flex; gap:10px; align-items:center;}
-    .brand-logo{
-      width:40px;height:40px;background:var(--brand);
-      display:grid;place-items:center;color:#000;border-radius:10px;
-    }
-    .pro{color:var(--brand)}
-    .title{font-size:22px; font-weight:700; margin:12px 0 6px;}
-    .subtitle{font-size:14px; color:var(--sub); margin-bottom:20px;}
+/* FAB */
+.fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--brand);color:#042a17;font-size:32px;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow)}
 
-    .field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px;}
-    input{
-      background:var(--muted);
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:12px;
-      outline:none;
-      color:var(--text);
-    }
-    input:focus{
-      border-color:var(--brand);
-      box-shadow:0 0 0 2px rgba(0,230,118,.2);
-    }
-
-    .btn{
-      width:100%;
-      background:var(--brand);
-      border:0;border-radius:12px;
-      padding:14px;margin-top:6px;
-      font-weight:700; cursor:pointer;
-      color:#042912;
-    }
-    .btn.google{background:#fff;color:#111;border:1px solid #e9e9e9;}
-    .btn.ghost{background:var(--muted);color:var(--text);}
-
-    .linkbar{display:flex; justify-content:space-between;}
-    .link{background:none;border:0;color:var(--brand);font-size:14px;cursor:pointer;}
-
-    .alert{
-      display:none;
-      background:#261114;border:1px solid #3a1b1f;
-      padding:10px;margin-bottom:10px;border-radius:10px;
-    }
-    .alert.ok{background:#0f2318;border-color:#1b3a29;color:#b6ffce;}
-
-    .hr{display:flex;align-items:center;gap:10px;margin:18px 0;}
-    .hr div{height:1px;background:var(--border);flex:1;}
-    .hr span{color:var(--sub);font-size:12px;}
-
-    /* APP */
-    .app{width:100%;max-width:900px;margin:auto;}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-    .pill{background:var(--muted);padding:6px 12px;border-radius:8px;}
-    .grid{display:grid;gap:16px;}
-    .kpi{background:var(--panel);border:1px solid var(--border);padding:20px;border-radius:16px;}
-  </style>
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center}
+.modal{width:90%;max-width:380px;background:var(--panel);padding:24px;border-radius:18px;border:1px solid var(--border)}
+.modal h2{margin:0 0 14px}
+.modal .row2{display:flex;gap:10px}
+</style>
 </head>
-
 <body>
 
 <main class="wrap">
-  <!-- LOGIN E AUTENTICAÇÃO -->
-  <section id="auth-card" class="card view active">
-    <div class="brand">
-      <div class="brand-logo">🏋️</div>
-      <h1>MeuTreino <span class="pro">PRO</span></h1>
-    </div>
+  <!-- AUTH -->
+  <section id="auth-card" class="card">
+    <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
     <h2 class="title" id="view-title">Entrar</h2>
-    <p class="subtitle" id="view-sub">Acesse sua conta para gerenciar seus treinos.</p>
-
+    <p class="subtitle" id="view-sub">Acesse seu painel de alunos.</p>
     <div id="alert" class="alert"></div>
 
     <form id="form-login">
-      <div class="field">
-        <label>Email</label>
-        <input id="login-email" type="email" placeholder="email@gmail.com" required>
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input id="login-pass" type="password" placeholder="••••••••" required>
-      </div>
-      <button class="btn" type="submit">Entrar</button>
+      <div class="field"><label>Email</label><input id="login-email" type="email" required></div>
+      <div class="field"><label>Senha</label><input id="login-pass" type="password" required></div>
+      <button class="btn">Entrar</button>
     </form>
 
     <form id="form-signup" class="hidden">
-      <div class="field">
-        <label>Seu nome</label>
-        <input id="su-name" type="text" required>
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input id="su-email" type="email" required>
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input id="su-pass" type="password" minlength="6" required>
-      </div>
-      <button class="btn" type="submit">Criar conta</button>
+      <div class="field"><label>Seu nome</label><input id="su-name" required></div>
+      <div class="field"><label>Email</label><input id="su-email" type="email" required></div>
+      <div class="field"><label>Senha (min. 6)</label><input id="su-pass" type="password" minlength="6" required></div>
+      <button class="btn">Criar conta</button>
     </form>
 
     <form id="form-reset" class="hidden">
-      <div class="field">
-        <label>Seu e-mail</label>
-        <input id="rs-email" type="email" required>
-      </div>
-      <button class="btn" type="submit">Enviar link</button>
+      <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required></div>
+      <button class="btn">Enviar link</button>
     </form>
 
     <div class="hr"><div></div><span>ou</span><div></div></div>
-
-    <button id="btn-google" class="btn google" type="button">Entrar com Google</button>
+    <button id="btn-google" class="btn google">Entrar com Google</button>
 
     <div class="linkbar">
-      <button class="link" id="go-signup">Cadastrar</button>
+      <button class="link" id="go-signup">Criar conta</button>
       <button class="link" id="go-reset">Esqueci a senha</button>
     </div>
     <div class="linkbar">
-      <button class="link hidden" id="go-login">Voltar ao login</button>
+      <button class="link hidden" id="go-login">Voltar login</button>
     </div>
   </section>
 
-  <!-- DASHBOARD -->
+  <!-- APP -->
   <section id="app" class="app hidden">
     <div class="topbar">
-      <strong>MeuTreino PRO</strong>
-      <span class="pill" id="user-pill">...</span>
-      <button id="btn-logout" class="btn ghost">Sair</button>
+      <strong>Meus Alunos</strong>
+      <input id="search" class="search" type="text" placeholder="Pesquisar por nome...">
+      <div class="tools">
+        <span class="pill" id="plan-pill">Plano: Free (5)</span>
+        <span class="pill" id="user-pill">...</span>
+        <button id="btn-logout" class="btn ghost" style="width:auto;padding:10px 14px">Sair</button>
+      </div>
     </div>
 
-    <div class="grid">
-      <div class="kpi">✅ Login realizado com sucesso!</div>
-      <div class="kpi">🚀 Em breve: cadastro de alunos e treinos</div>
-    </div>
+    <div id="students-list" class="grid"></div>
+    <button id="btn-add" class="fab" title="Adicionar aluno">+</button>
   </section>
+
+  <!-- MODAL CADASTRO -->
+  <div id="modal-bg" class="modal-bg hidden">
+    <div class="modal">
+      <h2 id="modal-title">Novo Aluno</h2>
+      <form id="form-student">
+        <input type="hidden" id="st-id">
+        <div class="field"><label>Nome completo</label><input id="st-name" required></div>
+        <div class="field"><label>Telefone (WhatsApp)</label><input id="st-phone" placeholder="(DDD) 9XXXX-XXXX"></div>
+        <div class="row2">
+          <div class="field" style="flex:1">
+            <label>Objetivo</label>
+            <select id="st-goal" required>
+              <option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option>
+            </select>
+          </div>
+          <div class="field" style="flex:1">
+            <label>Nível</label>
+            <select id="st-level">
+              <option>Iniciante</option><option>Intermediário</option><option>Avançado</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Observações</label><textarea id="st-notes" rows="3" placeholder="Ex.: Lesão no ombro direito"></textarea></div>
+        <button class="btn" type="submit">Salvar</button>
+        <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL UPGRADE -->
+  <div id="upgrade-bg" class="modal-bg hidden">
+    <div class="modal">
+      <h2>Limite atingido (Plano Free)</h2>
+      <p style="color:var(--sub);margin-top:6px">Você já possui 5 alunos cadastrados. Para cadastrar mais, atualize seu plano.</p>
+      <div class="field">
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <button id="btn-plan-pro" class="btn" type="button">MeuTreino PRO — Ilimitado</button>
+          <button id="btn-upg-cancel" class="btn ghost" type="button">Fechar</button>
+        </div>
+      </div>
+      <p class="subtitle">Obs.: colocaremos pagamento por Pix/QR futuramente.</p>
+    </div>
+  </div>
+
 </main>
 
-<!-- ==================== FIREBASE E LÓGICA ==================== -->
 <script type="module">
-  // Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import {
-    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-    GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
-    signOut, updateProfile, onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
+  signOut, updateProfile, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, onSnapshot, query, where, orderBy,
+  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, getDocs
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBsPf40matUV8So60OHb0h4oRwMRWaB0ho",
-    authDomain: "acdm-70082.firebaseapp.com",
-    projectId: "acdm-70082",
-    storageBucket: "acdm-70082.firebasestorage.app",
-    messagingSenderId: "236961358499",
-    appId: "1:236961358499:web:40b7391c4c9b3405ff1516"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyBsPf40matUV8So60OHb0h4oRwMRWaB0ho",
+  authDomain: "acdm-70082.firebaseapp.com",
+  projectId: "acdm-70082",
+  storageBucket: "acdm-70082.firebasestorage.app",
+  messagingSenderId: "236961358499",
+  appId: "1:236961358499:web:40b7391c4c9b3405ff1516"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+// UI helpers
+const $ = (id)=>document.getElementById(id);
+function showAlert(msg, ok=false){
+  $("alert").textContent = msg;
+  $("alert").classList.toggle("ok", ok);
+  $("alert").style.display = "block";
+  clearTimeout(showAlert._t);
+  showAlert._t = setTimeout(()=>$("alert").style.display="none", ok?2000:4500);
+}
+function switchView(v){
+  ["form-login","form-signup","form-reset"].forEach(id=>$(id).classList.add("hidden"));
+  $("go-login").classList.remove("hidden");
+  if(v==="signup"){ $("form-signup").classList.remove("hidden"); $("view-title").textContent="Criar conta"; $("view-sub").textContent="Preencha seus dados"; }
+  else if(v==="reset"){ $("form-reset").classList.remove("hidden"); $("view-title").textContent="Recuperar senha"; $("view-sub").textContent="Enviaremos um link"; }
+  else { $("form-login").classList.remove("hidden"); $("view-title").textContent="Entrar"; $("view-sub").textContent="Acesse sua conta"; $("go-login").classList.add("hidden"); }
+}
 
-  // UI
-  const byId = (i)=>document.getElementById(i);
-  const alertBox = byId("alert");
-  const authCard = byId("auth-card");
-  const appView = byId("app");
-  const userPill = byId("user-pill");
+// Auth forms
+$("go-signup").onclick = ()=>switchView("signup");
+$("go-reset").onclick = ()=>switchView("reset");
+$("go-login").onclick = ()=>switchView("login");
 
-  function showAlert(msg, ok=false){
-    alertBox.textContent=msg;
-    alertBox.classList.toggle("ok",ok);
-    alertBox.style.display="block";
-    setTimeout(()=>alertBox.style.display="none",ok?2000:4000);
-  }
-
-  function switchView(v){
-    ["form-login","form-signup","form-reset"].forEach(id=>byId(id).classList.add("hidden"));
-    byId("go-login").classList.remove("hidden");
-
-    if(v==="signup"){
-      byId("form-signup").classList.remove("hidden");
-      byId("view-title").textContent="Criar conta";
-      byId("view-sub").textContent="Digite seus dados abaixo";
-    } else if(v==="reset"){
-      byId("form-reset").classList.remove("hidden");
-      byId("view-title").textContent="Recuperar senha";
-      byId("view-sub").textContent="Receba o link no seu email";
-    } else {
-      byId("form-login").classList.remove("hidden");
-      byId("view-title").textContent="Entrar";
-      byId("view-sub").textContent="Acesse sua conta";
-      byId("go-login").classList.add("hidden");
+$("form-login").onsubmit = async(e)=>{ e.preventDefault();
+  try{ await signInWithEmailAndPassword(auth, $("login-email").value, $("login-pass").value); }
+  catch(err){ showAlert("Erro: "+err.message); }
+};
+$("form-signup").onsubmit = async(e)=>{ e.preventDefault();
+  try{
+    const cred = await createUserWithEmailAndPassword(auth, $("su-email").value, $("su-pass").value);
+    await updateProfile(cred.user, { displayName: $("su-name").value });
+    // cria doc de usuário com plano FREE
+    await setDoc(doc(db, "users", cred.user.uid), { plan: "free", limit: 5, createdAt: serverTimestamp(), name: $("su-name").value, email: cred.user.email });
+    showAlert("Conta criada!", true);
+  }catch(err){ showAlert("Erro: "+err.message); }
+};
+$("form-reset").onsubmit = async(e)=>{ e.preventDefault();
+  try{ await sendPasswordResetEmail(auth, $("rs-email").value); showAlert("Email enviado!", true); switchView("login"); }
+  catch(err){ showAlert(err.message); }
+};
+$("btn-google").onclick = async()=>{
+  try{
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    // se for primeiro login, garante doc em /users
+    const uref = doc(db, "users", cred.user.uid);
+    const snap = await getDoc(uref);
+    if(!snap.exists()){
+      await setDoc(uref, { plan: "free", limit: 5, createdAt: serverTimestamp(), name: cred.user.displayName || "", email: cred.user.email });
     }
-  }
+  }catch(err){ showAlert("Erro: "+err.message); }
+};
+$("btn-logout").onclick = ()=>signOut(auth);
 
-  byId("go-signup").onclick=()=>switchView("signup");
-  byId("go-reset").onclick=()=>switchView("reset");
-  byId("go-login").onclick=()=>switchView("login");
+// State
+let unsub = null;
+let currentUser = null;
+let currentPlan = { plan: "free", limit: 5 };
 
-  byId("form-login").onsubmit=async(e)=>{
-    e.preventDefault();
-    try{
-      await signInWithEmailAndPassword(auth,byId("login-email").value,byId("login-pass").value);
-    }catch(e){showAlert("Erro: "+e.message);}
+// Formatters
+const toWa = (phone) => {
+  const digits = (phone||"").replace(/\D/g,"");
+  if(!digits) return null;
+  return `https://wa.me/55${digits}`;
+};
+
+// Render
+function renderStudentCard(st){
+  const div = document.createElement("div");
+  div.className = "card-student";
+  div.innerHTML = `
+    <div class="row" style="justify-content:space-between">
+      <strong>${st.name}</strong>
+      <span class="badge">${st.level||"—"}</span>
+    </div>
+    <div class="row">
+      <span class="badge">🎯 ${st.goal||"—"}</span>
+      ${st.phone ? `<a class="btn-sm brand" href="${toWa(st.phone)}" target="_blank">WhatsApp</a>` : `<span class="badge">📱 sem telefone</span>`}
+    </div>
+    ${st.notes ? `<div class="badge" style="white-space:pre-wrap;line-height:1.4">📝 ${st.notes}</div>` : ""}
+    <div class="actions">
+      <button class="btn-sm" data-edit>Editar</button>
+      <button class="btn-sm danger" data-del>Excluir</button>
+    </div>
+  `;
+  // actions
+  div.querySelector("[data-edit]").onclick = ()=>{
+    $("modal-title").textContent = "Editar Aluno";
+    $("st-id").value = st.id;
+    $("st-name").value = st.name || "";
+    $("st-phone").value = st.phone || "";
+    $("st-goal").value = st.goal || "Hipertrofia";
+    $("st-level").value = st.level || "Iniciante";
+    $("st-notes").value = st.notes || "";
+    $("modal-bg").classList.remove("hidden");
   };
-
-  byId("form-signup").onsubmit=async(e)=>{
-    e.preventDefault();
-    try{
-      const cred = await createUserWithEmailAndPassword(auth,byId("su-email").value,byId("su-pass").value);
-      await updateProfile(cred.user,{displayName:byId("su-name").value});
-      showAlert("Conta criada!",true);
-    }catch(e){showAlert("Erro: "+e.message);}
-  };
-
-  byId("form-reset").onsubmit=async(e)=>{
-    e.preventDefault();
-    try{
-      await sendPasswordResetEmail(auth,byId("rs-email").value);
-      showAlert("Email enviado!",true);
-      switchView("login");
-    }catch(e){showAlert(e.message);}
-  };
-
-  byId("btn-google").onclick=async()=>{
-    try{
-      await signInWithPopup(auth,new GoogleAuthProvider());
-    }catch(e){showAlert("Erro: "+e.message);}
-  };
-
-  byId("btn-logout").onclick=()=>signOut(auth);
-
-  onAuthStateChanged(auth, u=>{
-    if(u){
-      authCard.classList.add("hidden");
-      appView.classList.remove("hidden");
-      userPill.textContent=u.displayName||u.email;
-    } else {
-      appView.classList.add("hidden");
-      authCard.classList.remove("hidden");
+  div.querySelector("[data-del]").onclick = async()=>{
+    if(confirm(`Excluir ${st.name}?`)){
+      await deleteDoc(doc(db, "students", st.id));
     }
+  };
+  return div;
+}
+function renderList(list){
+  const wrap = $("students-list");
+  wrap.innerHTML = "";
+  const term = ($("search").value || "").trim().toLowerCase();
+  list
+    .filter(s => s.name.toLowerCase().includes(term))
+    .forEach(s => wrap.appendChild(renderStudentCard(s)));
+}
+
+// Load plan + subscribe students
+async function startUserSession(user){
+  currentUser = user;
+  $("auth-card").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  $("user-pill").textContent = user.displayName || user.email;
+
+  // carregar plano
+  const uref = doc(db, "users", user.uid);
+  const usnap = await getDoc(uref);
+  if(usnap.exists()){ currentPlan = usnap.data(); } else {
+    currentPlan = { plan:"free", limit:5 };
+    await setDoc(uref, { plan:"free", limit:5, createdAt: serverTimestamp(), email: user.email, name: user.displayName||"" });
+  }
+  $("plan-pill").textContent = `Plano: ${currentPlan.plan === "pro" ? "PRO (ilimitado)" : `Free (${currentPlan.limit})`}`;
+
+  // subscribe alunos do usuário
+  if(unsub) unsub();
+  const q = query(
+    collection(db, "students"),
+    where("ownerId", "==", user.uid),
+    orderBy("name")
+  );
+  unsub = onSnapshot(q, (snap)=>{
+    const arr = [];
+    snap.forEach(d => arr.push({ id:d.id, ...d.data() }));
+    renderList(arr);
+    // guardar contagem para checagem de limite
+    startUserSession._count = arr.length;
   });
-</script>
+}
 
+// Auth state
+onAuthStateChanged(auth, (user)=>{
+  if(user) startUserSession(user);
+  else {
+    $("app").classList.add("hidden");
+    $("auth-card").classList.remove("hidden");
+    if(unsub) unsub();
+  }
+});
+
+// Search
+$("search").oninput = ()=>{ // re-render com filtro
+  // força re-render pegando DOM atual
+  // (para simplicidade, reaproveitamos última lista guardada por onSnapshot via innerHTML)
+  const cards = Array.from(document.querySelectorAll(".card-student"));
+  if(!cards.length) return;
+  // rebuild from state stored:
+  // simples: dispara nova render a partir do snapshot mais recente via getDocs
+  if(!currentUser) return;
+  getDocs(query(collection(db,"students"), where("ownerId","==",currentUser.uid), orderBy("name")))
+    .then(snap=>{
+      const arr=[]; snap.forEach(d=>arr.push({id:d.id, ...d.data()})); renderList(arr);
+    });
+};
+
+// Modal handlers
+$("btn-add").onclick = async()=>{
+  // checa limite do plano
+  const count = startUserSession._count || 0;
+  if(currentPlan.plan !== "pro" && count >= (currentPlan.limit||5)){
+    $("upgrade-bg").classList.remove("hidden");
+    return;
+  }
+  $("modal-title").textContent = "Novo Aluno";
+  $("st-id").value = "";
+  $("form-student").reset();
+  $("modal-bg").classList.remove("hidden");
+};
+$("btn-cancel").onclick = ()=> $("modal-bg").classList.add("hidden");
+
+$("btn-upg-cancel").onclick = ()=> $("upgrade-bg").classList.add("hidden");
+$("btn-plan-pro").onclick = async()=>{
+  // mock de upgrade: seta PRO no banco (até integrar pagamento)
+  if(!currentUser) return;
+  await updateDoc(doc(db,"users",currentUser.uid), { plan: "pro", limit: null, upgradedAt: serverTimestamp() });
+  currentPlan = { plan: "pro", limit: null };
+  $("plan-pill").textContent = "Plano: PRO (ilimitado)";
+  $("upgrade-bg").classList.add("hidden");
+  showAlert("Plano atualizado para PRO ✅", true);
+};
+
+$("form-student").onsubmit = async(e)=>{
+  e.preventDefault();
+  const id = $("st-id").value;
+  const payload = {
+    ownerId: currentUser.uid,
+    name: $("st-name").value.trim(),
+    phone: $("st-phone").value.trim(),
+    goal: $("st-goal").value,
+    level: $("st-level").value,
+    notes: $("st-notes").value.trim(),
+    updatedAt: serverTimestamp(),
+    createdAt: serverTimestamp()
+  };
+  try{
+    if(id){
+      const ref = doc(db,"students",id);
+      delete payload.createdAt; // não sobrescreve
+      await updateDoc(ref, payload);
+      showAlert("Aluno atualizado ✅", true);
+    }else{
+      await addDoc(collection(db,"students"), payload);
+      showAlert("Aluno cadastrado ✅", true);
+    }
+    $("modal-bg").classList.add("hidden");
+    e.target.reset();
+  }catch(err){
+    showAlert("Erro: " + err.message);
+  }
+};
+</script>
 </body>
 </html>
