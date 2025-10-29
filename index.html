@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MeuTreino PRO</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,8 +28,9 @@ body{
   font-family:'Inter',sans-serif;
   background:var(--bg);color:var(--text);
 }
+.hidden{display:none!important}
 
-/* LOGIN LAYOUT */
+/* LOGIN */
 .wrap{
   min-height:100vh;
   display:flex;justify-content:center;align-items:center;padding:16px;
@@ -53,7 +54,6 @@ body{
 .pro{color:var(--brand-dark);font-weight:700}
 .title{font-size:20px;margin:12px 0 6px}
 .subtitle{font-size:14px;color:var(--sub);margin-bottom:14px}
-.hidden{display:none !important}
 
 .field{display:flex;flex-direction:column;margin-bottom:14px}
 input,select,textarea{
@@ -78,7 +78,7 @@ input,select,textarea{
 }
 .alert.ok{background:#daf5d8;color:#084d19}
 
-/* APP AREA */
+/* APP: LISTA DE ALUNOS */
 .app{width:100%;max-width:1100px;margin:auto;padding:20px}
 .topbar{
   display:grid;grid-template-columns:1fr auto auto;gap:12px;
@@ -88,25 +88,33 @@ input,select,textarea{
   padding:6px 12px;background:var(--muted);
   border-radius:12px;border:1px solid var(--border);font-size:14px;
 }
+.search{max-width:320px}
 .grid{display:grid;gap:16px}
 @media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
 
 .card-student{
   background:var(--panel);border:1px solid var(--border);
-  border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;
+  border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;position:relative;
 }
 .badge{
   background:var(--muted);
   padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub);
 }
-.actions{display:flex;gap:8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
 .btn-sm{
   padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;
   border:1px solid var(--border);background:var(--muted);
 }
 .btn-sm.brand{background:var(--brand);color:#fff;border:none}
 .btn-sm.danger{background:var(--danger);color:#fff;border:none}
+
+/* BOTÃO TREINOS NO TOPO DO CARD */
+.train-top{
+  position:absolute;top:12px;right:12px;
+  padding:8px 10px;border-radius:999px;font-size:13px;cursor:pointer;
+  background:var(--brand);color:#fff;border:none;display:flex;gap:6px;align-items:center;
+}
 
 /* FAB */
 .fab{
@@ -117,102 +125,173 @@ input,select,textarea{
   cursor:pointer;
 }
 
-/* MODAL */
+/* MODAIS GENÉRICOS */
 .modal-bg{
   position:fixed;inset:0;background:rgba(0,0,0,.45);
   display:flex;align-items:center;justify-content:center;
 }
 .modal{
-  width:90%;max-width:380px;background:var(--panel);
+  width:90%;max-width:420px;background:var(--panel);
   padding:22px;border-radius:16px;
   border:1px solid var(--border);
 }
 .modal h2{margin:0 0 14px}
 
+/* VIEW: TREINOS DO ALUNO (PERSONAL) */
+.view{width:100%;max-width:1100px;margin:auto;padding:20px}
+.view-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;
+}
+.back{border:none;background:var(--panel);border:1px solid var(--border);padding:10px 12px;border-radius:10px;cursor:pointer}
+.cycle-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cycle-pill{padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:var(--muted);cursor:pointer}
+.cycle-pill.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+.list{display:grid;gap:12px}
+.card-cycle{
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.cycle-actions{display:flex;gap:8px;flex-wrap:wrap}
+.helper{
+  background:var(--panel);border:1px dashed var(--border);border-radius:12px;padding:16px;color:var(--sub)
+}
+
+/* MODAL CICLO */
+.form-row{display:flex;gap:10px}
+.form-row .field{flex:1}
+.hint{font-size:12px;color:var(--sub);margin-top:4px}
 </style>
 </head>
 <body>
 
 <main class="wrap">
 
-<!-- ✅ LOGIN -->
-<section id="auth-card" class="card">
-  <div class="brand">
-    <div class="brand-logo">🏋️</div>
-    MeuTreino <span class="pro">PRO</span>
-  </div>
+  <!-- LOGIN -->
+  <section id="auth-card" class="card">
+    <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
+    <h2 class="title" id="view-title">Entrar</h2>
+    <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
+    <div id="alert" class="alert"></div>
 
-  <h2 class="title" id="view-title">Entrar</h2>
-  <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
+    <form id="form-login">
+      <div class="field"><label>Email</label><input id="login-email" type="email" required/></div>
+      <div class="field"><label>Senha</label><input id="login-pass" type="password" required/></div>
+      <button class="btn primary">Entrar</button>
+    </form>
 
-  <div id="alert" class="alert"></div>
+    <form id="form-signup" class="hidden">
+      <div class="field"><label>Nome completo</label><input id="su-name" required/></div>
+      <div class="field"><label>Email</label><input id="su-email" type="email" required/></div>
+      <div class="field"><label>Senha (6+)</label><input id="su-pass" type="password" minlength="6" required/></div>
+      <button class="btn primary">Criar conta</button>
+    </form>
 
-  <form id="form-login">
-    <div class="field"><label>Email</label><input id="login-email" type="email" required /></div>
-    <div class="field"><label>Senha</label><input id="login-pass" type="password" required /></div>
-    <button class="btn primary">Entrar</button>
-  </form>
+    <form id="form-reset" class="hidden">
+      <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required/></div>
+      <button class="btn primary">Enviar link</button>
+    </form>
 
-  <form id="form-signup" class="hidden">
-    <div class="field"><label>Nome completo</label><input id="su-name" required /></div>
-    <div class="field"><label>Email</label><input id="su-email" type="email" required /></div>
-    <div class="field"><label>Senha (6+)</label><input id="su-pass" type="password" minlength="6" required /></div>
-    <button class="btn primary">Criar conta</button>
-  </form>
+    <div class="hr"></div>
+    <button id="btn-google" class="btn google">Entrar com Google</button>
 
-  <form id="form-reset" class="hidden">
-    <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required /></div>
-    <button class="btn primary">Enviar link</button>
-  </form>
+    <div class="linkbar">
+      <button class="link" id="go-signup">Criar conta</button>
+      <button class="link" id="go-reset">Esqueci a senha</button>
+    </div>
+    <div class="linkbar">
+      <button class="link hidden" id="go-login">Voltar login</button>
+    </div>
+  </section>
 
-  <div class="hr"></div>
-  <button id="btn-google" class="btn google">Entrar com Google</button>
+  <!-- APP: MEUS ALUNOS -->
+  <section id="app" class="app hidden">
+    <div class="topbar">
+      <strong>Meus Alunos</strong>
+      <input id="search" class="search" type="text" placeholder="Pesquisar por nome..."/>
+      <div class="tools">
+        <span class="pill" id="plan-pill">Plano: Free (5)</span>
+        <span class="pill" id="user-pill">...</span>
+        <button id="btn-logout" class="btn ghost" style="width:auto">Sair</button>
+      </div>
+    </div>
 
-  <div class="linkbar">
-    <button class="link" id="go-signup">Criar conta</button>
-    <button class="link" id="go-reset">Esqueci a senha</button>
-  </div>
-  <div class="linkbar">
-    <button class="link hidden" id="go-login">Voltar login</button>
-  </div>
-</section>
+    <div id="students-list" class="grid"></div>
+    <button id="btn-add" class="fab">+</button>
+  </section>
 
-<!-- ✅ APP -->
-<section id="app" class="app hidden">
-  <div class="topbar">
-    <strong>Meus Alunos</strong>
-    <input id="search" class="search" type="text" placeholder="Pesquisar por nome..." />
-    <div class="tools">
-      <span class="pill" id="plan-pill">Plano: Free (5)</span>
-      <span class="pill" id="user-pill">...</span>
-      <button id="btn-logout" class="btn ghost" style="width:auto">Sair</button>
+  <!-- VIEW: TREINOS DO ALUNO (PERSONAL) -->
+  <section id="train-view" class="view hidden">
+    <div class="view-header">
+      <button id="btn-back" class="back">← Voltar</button>
+      <h2 id="train-title" style="margin:0">Aluno — Treinos</h2>
+      <div class="cycle-bar">
+        <button id="btn-new-cycle" class="btn ghost" style="width:auto">+ Criar Ciclo</button>
+      </div>
+    </div>
+
+    <div id="cycles-empty" class="helper hidden">
+      Nenhum ciclo encontrado. Clique em <b>+ Criar Ciclo</b> para começar.
+    </div>
+
+    <div id="cycles-list" class="list"></div>
+  </section>
+
+  <!-- MODAL: ALUNO -->
+  <div id="modal-bg" class="modal-bg hidden">
+    <div class="modal">
+      <h2 id="modal-title">Novo Aluno</h2>
+      <form id="form-student">
+        <input type="hidden" id="st-id">
+        <div class="field"><label>Nome</label><input id="st-name" required/></div>
+        <div class="field"><label>WhatsApp</label><input id="st-phone"/></div>
+        <div class="field"><label>Objetivo</label>
+          <select id="st-goal">
+            <option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option>
+          </select>
+        </div>
+        <div class="field"><label>Nível</label>
+          <select id="st-level"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
+        </div>
+        <div class="field"><label>Observações</label><textarea id="st-notes" rows="3"></textarea></div>
+        <button class="btn primary" type="submit">Salvar</button>
+        <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
+      </form>
     </div>
   </div>
 
-  <div id="students-list" class="grid"></div>
-  <button id="btn-add" class="fab">+</button>
-</section>
-
-<!-- ✅ MODAL ALUNO -->
-<div id="modal-bg" class="modal-bg hidden">
-  <div class="modal">
-    <h2 id="modal-title">Novo Aluno</h2>
-    <form id="form-student">
-      <input type="hidden" id="st-id">
-      <div class="field"><label>Nome</label><input id="st-name" required /></div>
-      <div class="field"><label>WhatsApp</label><input id="st-phone" /></div>
-      <div class="field"><label>Objetivo</label>
-        <select id="st-goal"><option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option></select>
-      </div>
-      <div class="field"><label>Nível</label>
-        <select id="st-level"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
-      </div>
-      <div class="field"><label>Observações</label><textarea id="st-notes" rows="3"></textarea></div>
-      <button class="btn primary" type="submit">Salvar</button>
-      <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
-    </form>
+  <!-- MODAL: CICLO -->
+  <div id="cycle-bg" class="modal-bg hidden">
+    <div class="modal">
+      <h2 id="cycle-title">Criar Ciclo</h2>
+      <form id="form-cycle">
+        <input type="hidden" id="cycle-id">
+        <div class="field">
+          <label>Nome do Ciclo</label>
+          <input id="cycle-name" placeholder="Ex.: Hipertrofia Mês 1" required/>
+          <div class="hint">Escolha um nome que identifique a fase (ex.: “Pré-Verão - 8 semanas”).</div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Início</label>
+            <input id="cycle-start" type="date" required/>
+          </div>
+          <div class="field">
+            <label>Fim</label>
+            <input id="cycle-end" type="date" required/>
+          </div>
+        </div>
+        <div class="hint">Em breve: opção de repetir automaticamente nas próximas semanas.</div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn primary" type="submit">Salvar Ciclo</button>
+          <button class="btn ghost" type="button" id="btn-cycle-cancel">Cancelar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+
+</main>
+
+<!-- FIREBASE + LÓGICA -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
@@ -222,10 +301,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, query, where,
-  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc
+  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, orderBy
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// ✅ CONFIG FIREBASE
+/* CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyBsPf40matUV8So60OHb0h4oRwMRWaB0ho",
   authDomain: "acdm-70082.firebaseapp.com",
@@ -234,12 +313,11 @@ const firebaseConfig = {
   messagingSenderId: "236961358499",
   appId: "1:236961358499:web:40b7391c4c9b3405ff1516"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ✅ UI HELPERS
+/* HELPERS */
 const $ = (id)=>document.getElementById(id);
 function showAlert(msg, ok=false){
   const box = $("alert");
@@ -247,69 +325,58 @@ function showAlert(msg, ok=false){
   box.style.display = "block";
   box.classList.toggle("ok", ok);
   clearTimeout(showAlert._t);
-  showAlert._t = setTimeout(()=> box.style.display="none", 3500);
+  showAlert._t = setTimeout(()=> box.style.display="none", ok?1800:3500);
 }
+const wa = p => p ? `https://wa.me/55${p.replace(/\D/g,"")}` : null;
+
+/* NAV BETWEEN VIEWS */
+function go(view){
+  // views: auth-card, app, train-view
+  ["auth-card","app","train-view"].forEach(id=>$(id).classList.add("hidden"));
+  $(view).classList.remove("hidden");
+}
+
+/* FORMS: troca de telas do login */
+$("go-signup").onclick = ()=>{ switchView("signup"); };
+$("go-reset").onclick  = ()=>{ switchView("reset"); };
+$("go-login").onclick  = ()=>{ switchView("login"); };
 function switchView(view){
-  ["form-login","form-signup","form-reset"].forEach(id => $(id).classList.add("hidden"));
+  ["form-login","form-signup","form-reset"].forEach(id=>$(id).classList.add("hidden"));
   $("go-login").classList.remove("hidden");
   if(view==="signup"){
     $("form-signup").classList.remove("hidden");
-    $("view-title").textContent = "Criar conta";
-    $("view-sub").textContent = "Cadastre-se e comece!";
-  } else if(view==="reset"){
+    $("view-title").textContent="Criar conta";
+    $("view-sub").textContent="Cadastre-se e comece!";
+  }else if(view==="reset"){
     $("form-reset").classList.remove("hidden");
-    $("view-title").textContent = "Recuperar senha";
-    $("view-sub").textContent = "Receba um link no email";
-  } else {
+    $("view-title").textContent="Recuperar senha";
+    $("view-sub").textContent="Receba um link no email";
+  }else{
     $("form-login").classList.remove("hidden");
-    $("view-title").textContent = "Entrar";
-    $("view-sub").textContent = "Gerencie seus alunos";
+    $("view-title").textContent="Entrar";
+    $("view-sub").textContent="Gerencie seus alunos facilmente.";
     $("go-login").classList.add("hidden");
   }
 }
 
-// ✅ TROCA DE FORMULÁRIO
-$("go-signup").onclick = ()=>switchView("signup");
-$("go-reset").onclick = ()=>switchView("reset");
-$("go-login").onclick = ()=>switchView("login");
-
-// ✅ LOGIN EMAIL
+/* AUTH: login/cadastro/reset/google/logout */
 $("form-login").onsubmit = async(e)=>{
   e.preventDefault();
   try{
-    await signInWithEmailAndPassword(auth,
-      $("login-email").value,
-      $("login-pass").value
-    );
-  }catch(err){
-    showAlert("Erro: " + err.message);
-  }
+    await signInWithEmailAndPassword(auth, $("login-email").value, $("login-pass").value);
+  }catch(err){ showAlert("Erro: "+err.message); }
 };
-
-// ✅ CADASTRO
 $("form-signup").onsubmit = async(e)=>{
   e.preventDefault();
   try{
-    const cred = await createUserWithEmailAndPassword(auth,
-      $("su-email").value,
-      $("su-pass").value
-    );
+    const cred = await createUserWithEmailAndPassword(auth, $("su-email").value, $("su-pass").value);
     await updateProfile(cred.user, { displayName: $("su-name").value });
-
     await setDoc(doc(db,"users",cred.user.uid), {
-      plan:"free", limit:5,
-      name:$("su-name").value,
-      email:cred.user.email,
-      createdAt: serverTimestamp()
+      plan:"free", limit:5, name:$("su-name").value, email:cred.user.email, createdAt:serverTimestamp()
     });
-
     showAlert("Conta criada com sucesso!", true);
-  }catch(err){
-    showAlert("Erro: " + err.message);
-  }
+  }catch(err){ showAlert("Erro: "+err.message); }
 };
-
-// ✅ RECUPERAÇÃO DE SENHA
 $("form-reset").onsubmit = async(e)=>{
   e.preventDefault();
   try{
@@ -318,173 +385,294 @@ $("form-reset").onsubmit = async(e)=>{
     switchView("login");
   }catch(err){ showAlert(err.message); }
 };
-
-// ✅ LOGIN GOOGLE
 $("btn-google").onclick = async()=>{
   try{
     const cred = await signInWithPopup(auth, new GoogleAuthProvider());
     const ref = doc(db,"users",cred.user.uid);
     const snap = await getDoc(ref);
     if(!snap.exists()){
-      await setDoc(ref, {
-        plan:"free", limit:5,
-        email:cred.user.email,
-        name:cred.user.displayName,
-        createdAt: serverTimestamp()
-      });
+      await setDoc(ref, { plan:"free", limit:5, email:cred.user.email, name:cred.user.displayName||"", createdAt:serverTimestamp() });
     }
-  }catch(err){
-    showAlert("Erro: " + err.message);
-  }
+  }catch(err){ showAlert("Erro: "+err.message); }
 };
-
-// ✅ LOGOUT
 $("btn-logout").onclick = ()=>signOut(auth);
 
-// ✅ FUNÇÃO WHATSAPP
-const phoneToWhatsApp = (p)=>{
-  const num = (p||"").replace(/\D/g,"");
-  return num ? `https://wa.me/55${num}` : null;
-};
+/* STATE */
+let unsubStudents = null;
+let unsubCycles = null;
+let currentUser = null;
+let currentPlan = { plan:"free", limit:5 };
+let currentStudent = null;
 
-// ✅ RENDER CARDS
-function renderStudent(st){
-  const item = document.createElement("div");
-  item.className = "card-student";
-  item.innerHTML = `
-    <strong>${st.name}</strong>
-    <span class="badge">🎯 ${st.goal}</span>
-    <span class="badge">📌 ${st.level}</span>
-    ${st.notes ? `<small>${st.notes}</small>` : ""}
-    ${
-      st.phone ?
-      `<a href="${phoneToWhatsApp(st.phone)}" target="_blank" class="btn-sm brand">WhatsApp</a>` :
-      `<span class="badge">Sem telefone</span>`
-    }
+/* STUDENTS RENDER */
+function renderStudentCard(st){
+  const div = document.createElement("div");
+  div.className="card-student";
+  div.innerHTML = `
+    <button class="train-top" data-train><span>🏋</span> Treinos</button>
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <strong>${st.name}</strong>
+      <span class="badge">${st.level||"—"}</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span class="badge">🎯 ${st.goal||"—"}</span>
+      ${st.phone ? `<a class="btn-sm brand" href="${wa(st.phone)}" target="_blank">WhatsApp</a>` : `<span class="badge">Sem telefone</span>`}
+    </div>
+    ${st.notes ? `<div class="badge" style="white-space:pre-wrap">📝 ${st.notes}</div>` : ""}
     <div class="actions">
       <button class="btn-sm" data-edit>Editar</button>
       <button class="btn-sm danger" data-del>Excluir</button>
-    </div>`;
-  
-  // Editar
-  item.querySelector("[data-edit]").onclick = ()=>{
-    $("modal-title").textContent = "Editar aluno";
+    </div>
+  `;
+  div.querySelector("[data-edit]").onclick = ()=>{
+    $("modal-title").textContent="Editar Aluno";
     $("st-id").value = st.id;
-    $("st-name").value = st.name;
-    $("st-phone").value = st.phone;
-    $("st-goal").value = st.goal;
-    $("st-level").value = st.level;
-    $("st-notes").value = st.notes;
+    $("st-name").value = st.name || "";
+    $("st-phone").value = st.phone || "";
+    $("st-goal").value = st.goal || "Hipertrofia";
+    $("st-level").value = st.level || "Iniciante";
+    $("st-notes").value = st.notes || "";
     $("modal-bg").classList.remove("hidden");
   };
-
-  // Excluir
-  item.querySelector("[data-del]").onclick = async()=>{
-    if(confirm("Excluir aluno?")){
+  div.querySelector("[data-del]").onclick = async()=>{
+    if(confirm(`Excluir ${st.name}?`)){
       await deleteDoc(doc(db,"students",st.id));
     }
   };
-
-  return item;
+  // 🏋 Treinos
+  div.querySelector("[data-train]").onclick = ()=>{
+    openTrainView(st);
+  };
+  return div;
 }
-
-// ✅ EXIBE LISTA
-function renderList(list){
+function renderStudents(list){
   const wrap = $("students-list");
   wrap.innerHTML = "";
-  const term = $("search").value.toLowerCase();
+  const term = ($("search").value||"").toLowerCase();
   list
-    .filter(s => s.name.toLowerCase().includes(term))
-    .forEach(s => wrap.appendChild(renderStudent(s)));
+    .filter(s=> s.name.toLowerCase().includes(term))
+    .forEach(s=> wrap.appendChild(renderStudentCard(s)));
 }
 
-// ✅ ESTADO LOGIN
-let unsub = null;
-let currentUser = null;
-let currentPlan = { plan:"free", limit:5 };
-async function start(user){
-  currentUser = user;
-  $("auth-card").classList.add("hidden");
-  $("app").classList.remove("hidden");
-  $("user-pill").textContent = user.email;
-
-  const uref = doc(db,"users",user.uid);
-  const usnap = await getDoc(uref);
-  if(usnap.exists()) currentPlan = usnap.data();
-
-  $("plan-pill").textContent =
-    currentPlan.plan === "pro"
-    ? "Plano: PRO (ilimitado)"
-    : `Plano: Free (${currentPlan.limit})`;
-
-  if(unsub) unsub();
-  unsub = onSnapshot(
-    query(collection(db,"students"), where("ownerId","==",user.uid)),
-    snap=>{
-      const arr=[];
-      snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
-      renderList(arr);
-      start._count = arr.length;
-    }
-  );
-}
-
-// ✅ FIREBASE MONITOR
-onAuthStateChanged(auth,(user)=>{
-  if(user) start(user);
-  else{
-    $("app").classList.add("hidden");
-    $("auth-card").classList.remove("hidden");
-    if(unsub) unsub();
+/* LISTEN AUTH */
+onAuthStateChanged(auth, async(user)=>{
+  if(user){
+    currentUser = user;
+    $("user-pill").textContent = user.displayName || user.email;
+    // plano
+    const uref = doc(db,"users",user.uid);
+    const usnap = await getDoc(uref);
+    currentPlan = usnap.exists()? usnap.data() : { plan:"free", limit:5 };
+    $("plan-pill").textContent = currentPlan.plan==="pro" ? "Plano: PRO (ilimitado)" : `Plano: Free (${currentPlan.limit})`;
+    // subscribe students
+    if(unsubStudents) unsubStudents();
+    const q = query(collection(db,"students"), where("ownerId","==",user.uid));
+    unsubStudents = onSnapshot(q, snap=>{
+      const arr=[]; snap.forEach(d=>arr.push({id:d.id, ...d.data()}));
+      // ordena por nome
+      arr.sort((a,b)=> (a.name||"").localeCompare(b.name||""));
+      renderStudents(arr);
+      onAuthStateChanged._count = arr.length;
+    });
+    go("app");
+  }else{
+    if(unsubStudents) unsubStudents();
+    if(unsubCycles) unsubCycles();
+    go("auth-card");
   }
 });
 
-// ✅ PESQUISA
-$("search").oninput = ()=> renderList(start._list||[]);
-
-// ✅ ABRIR MODAL
-$("btn-add").onclick = ()=>{
-  if(currentPlan.plan!=="pro" && start._count >= currentPlan.limit){
-    alert("Limite do Plano Free atingido!");
-    return;
-  }
-  $("modal-title").textContent = "Novo aluno";
-  $("form-student").reset();
-  $("st-id").value = "";
-  $("modal-bg").classList.remove("hidden");
+/* SEARCH */
+$("search").oninput = ()=> {
+  // simples: re-render com os elementos atuais (refetch snapshot)
+  // aqui não guardamos cache global dos alunos; então provocamos re-render pedindo nova lista
+  // já que o onSnapshot acima re-renderiza sempre que muda algo, basta simular filtro local:
+  const cards = Array.from(document.querySelectorAll(".card-student"));
+  const term = ($("search").value||"").toLowerCase();
+  cards.forEach(c=>{
+    const name = (c.querySelector("strong")?.textContent||"").toLowerCase();
+    c.style.display = name.includes(term) ? "" : "none";
+  });
 };
 
-// ✅ CANCELAR MODAL
+/* MODAL ALUNO */
+$("btn-add").onclick = ()=>{
+  // checar limite plano
+  const count = onAuthStateChanged._count || 0;
+  if(currentPlan.plan!=="pro" && count >= (currentPlan.limit||5)){
+    showAlert("Limite do Plano Free atingido. Atualize para PRO para cadastrar mais alunos.");
+    return;
+  }
+  $("modal-title").textContent="Novo Aluno";
+  $("st-id").value = "";
+  $("form-student").reset();
+  $("modal-bg").classList.remove("hidden");
+};
 $("btn-cancel").onclick = ()=> $("modal-bg").classList.add("hidden");
 
-// ✅ SALVAR ALUNO
 $("form-student").onsubmit = async(e)=>{
   e.preventDefault();
   const id = $("st-id").value;
-  const data = {
+  const payload = {
     ownerId: currentUser.uid,
-    name: $("st-name").value,
-    phone: $("st-phone").value,
+    name: $("st-name").value.trim(),
+    phone: $("st-phone").value.trim(),
     goal: $("st-goal").value,
     level: $("st-level").value,
-    notes: $("st-notes").value,
-    updatedAt: serverTimestamp()
+    notes: $("st-notes").value.trim(),
+    updatedAt: serverTimestamp(),
+    createdAt: serverTimestamp()
   };
   try{
     if(id){
-      await updateDoc(doc(db,"students",id), data);
-      showAlert("Aluno atualizado ✅",true);
+      const ref = doc(db,"students",id);
+      delete payload.createdAt;
+      await updateDoc(ref, payload);
+      showAlert("Aluno atualizado ✅", true);
     }else{
-      data.createdAt = serverTimestamp();
-      await addDoc(collection(db,"students"), data);
-      showAlert("Aluno cadastrado ✅",true);
+      await addDoc(collection(db,"students"), payload);
+      showAlert("Aluno cadastrado ✅", true);
     }
     $("modal-bg").classList.add("hidden");
   }catch(err){
-    showAlert("Erro: " + err.message);
+    showAlert("Erro: "+err.message);
   }
 };
 
+/* =========================
+   TREINOS DO ALUNO — CICLOS
+   ========================= */
+
+$("btn-back").onclick = ()=>{
+  // voltar para lista
+  currentStudent = null;
+  if(unsubCycles) unsubCycles();
+  go("app");
+};
+
+$("btn-new-cycle").onclick = ()=>{
+  if(!currentStudent) return;
+  $("cycle-title").textContent = "Criar Ciclo";
+  $("cycle-id").value = "";
+  $("form-cycle").reset();
+  $("cycle-bg").classList.remove("hidden");
+};
+$("btn-cycle-cancel").onclick = ()=> $("cycle-bg").classList.add("hidden");
+
+/* Abrir a tela de Treinos do aluno (personal) */
+function openTrainView(student){
+  currentStudent = student;
+  $("train-title").textContent = `${student.name} — Treinos`;
+  go("train-view");
+  subscribeCycles(student.id);
+}
+
+/* Inscrever nos ciclos do aluno */
+function subscribeCycles(studentId){
+  if(unsubCycles) unsubCycles();
+  // subcoleção: students/{id}/cycles
+  const cyclesRef = collection(doc(db,"students",studentId), "cycles");
+  // Sem orderBy nas regras: ordenamos no cliente para evitar problema de índice/regra
+  unsubCycles = onSnapshot(cyclesRef, snap=>{
+    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
+    // ordenar por startDate asc, depois name
+    arr.sort((a,b)=>{
+      const as=(a.startDate||""); const bs=(b.startDate||"");
+      if(as===bs) return (a.name||"").localeCompare(b.name||"");
+      return as<bs?-1:1;
+    });
+    renderCycles(arr);
+  });
+}
+
+/* Renderização dos ciclos */
+function renderCycles(list){
+  const empty = $("cycles-empty");
+  const wrap = $("cycles-list");
+  wrap.innerHTML = "";
+  if(!list.length){
+    empty.classList.remove("hidden");
+    return;
+  }
+  empty.classList.add("hidden");
+
+  list.forEach(c=>{
+    const card = document.createElement("div");
+    card.className="card-cycle";
+    const period = c.startDate && c.endDate ? formatPeriod(c.startDate, c.endDate) : "Sem período";
+    card.innerHTML = `
+      <div style="min-width:220px">
+        <strong>${c.name||"(Sem nome)"}</strong>
+        <div class="badge" style="margin-top:6px">${period}</div>
+      </div>
+      <div class="cycle-actions">
+        <button class="btn-sm" data-open>📅 Abrir dias</button>
+        <button class="btn-sm" data-edit>✏️ Renomear/Período</button>
+        <button class="btn-sm danger" data-del>🗑 Excluir</button>
+      </div>
+    `;
+    // abrir dias (próxima etapa)
+    card.querySelector("[data-open]").onclick = ()=>{
+      alert("Em breve: dias da semana e exercícios. (Seg a Dom, CRUD de exercícios)");
+    };
+    // editar ciclo
+    card.querySelector("[data-edit]").onclick = ()=>{
+      $("cycle-title").textContent = "Editar Ciclo";
+      $("cycle-id").value = c.id;
+      $("cycle-name").value = c.name || "";
+      $("cycle-start").value = c.startDate || "";
+      $("cycle-end").value = c.endDate || "";
+      $("cycle-bg").classList.remove("hidden");
+    };
+    // excluir ciclo
+    card.querySelector("[data-del]").onclick = async()=>{
+      if(confirm(`Excluir ciclo "${c.name}"? Isso não remove exercícios (serão tratados na próxima etapa).`)){
+        await deleteDoc(doc(doc(db,"students",currentStudent.id),"cycles",c.id));
+      }
+    };
+    wrap.appendChild(card);
+  });
+}
+
+/* Salvar ciclo (criar/editar) */
+$("form-cycle").onsubmit = async(e)=>{
+  e.preventDefault();
+  if(!currentStudent) return showAlert("Aluno inválido.");
+  const id = $("cycle-id").value;
+  const data = {
+    name: $("cycle-name").value.trim(),
+    startDate: $("cycle-start").value,
+    endDate: $("cycle-end").value,
+    updatedAt: serverTimestamp()
+  };
+  if(!data.name || !data.startDate || !data.endDate){
+    return showAlert("Preencha nome, início e fim do ciclo.");
+  }
+  try{
+    const cyclesRef = collection(doc(db,"students",currentStudent.id), "cycles");
+    if(id){
+      await updateDoc(doc(cyclesRef,id), data);
+      showAlert("Ciclo atualizado ✅", true);
+    }else{
+      await addDoc(cyclesRef, { ...data, createdAt: serverTimestamp() });
+      showAlert("Ciclo criado ✅", true);
+    }
+    $("cycle-bg").classList.add("hidden");
+  }catch(err){
+    showAlert("Erro: "+err.message);
+  }
+};
+
+/* Utils */
+function formatPeriod(yyyy1, yyyy2){
+  // yyyy-mm-dd → dd/mm/yyyy
+  const f = s=>{
+    const [y,m,d] = (s||"").split("-");
+    if(!y||!m||!d) return s||"";
+    return `${d}/${m}/${y}`;
+  };
+  return `${f(yyyy1)} — ${f(yyyy2)}`;
+}
 </script>
 </body>
 </html>
