@@ -29,7 +29,6 @@ body{
   background:var(--bg);color:var(--text);
 }
 .hidden{display:none!important}
-
 /* LOGIN */
 .wrap{
   min-height:100vh;
@@ -72,7 +71,6 @@ textarea{resize:vertical}
 
 .linkbar{display:flex;justify-content:space-between;margin-top:10px;gap:10px;flex-wrap:wrap}
 .link{border:none;background:none;color:var(--brand-dark);font-size:14px;cursor:pointer}
-
 /* ALERT */
 .alert{
   display:none;padding:10px;font-size:14px;margin-bottom:12px;border-radius:8px;background:#ffd8d8;color:#8a0000;
@@ -117,7 +115,6 @@ textarea{resize:vertical}
   padding:8px 10px;border-radius:999px;font-size:13px;cursor:pointer;
   background:var(--brand);color:#fff;border:none;display:flex;gap:6px;align-items:center;
 }
-
 /* MODAIS GENÉRICOS */
 .modal-bg{
   position:fixed;inset:0;background:rgba(0,0,0,.45);
@@ -141,6 +138,7 @@ textarea{resize:vertical}
 .helper{
   background:var(--panel);border:1px dashed var(--border);border-radius:12px;padding:16px;color:var(--sub)
 }
+
 /* CICLOS */
 .list{display:grid;gap:12px}
 .card-cycle{
@@ -192,6 +190,26 @@ textarea{resize:vertical}
   box-shadow:0 10px 20px rgba(0,0,0,.15);cursor:pointer;
 }
 
+/* VIEW ESPECIAL DO ALUNO: acordeão semanal */
+.week{
+  display:grid;gap:10px;max-width:900px;margin:0 auto;
+}
+.week-day{
+  background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;
+}
+.week-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 14px;cursor:pointer;font-weight:700;
+}
+.week-body{
+  display:none;padding:12px 14px;border-top:1px dashed var(--border);
+}
+.week-day.open .week-body{display:block}
+.week-empty{
+  background:var(--panel);border:1px dashed var(--border);border-radius:12px;
+  padding:16px;color:var(--sub);text-align:center;
+}
 </style>
 </head>
 <body>
@@ -251,6 +269,7 @@ textarea{resize:vertical}
     <div id="students-list" class="grid"></div>
     <button id="btn-add" class="fab">+</button>
   </section>
+
   <!-- VIEW: TREINOS DO ALUNO (CICLOS) -->
   <section id="train-view" class="view hidden">
     <div class="view-header">
@@ -293,7 +312,6 @@ textarea{resize:vertical}
     <div id="ex-empty" class="helper hidden">Nenhum exercício cadastrado para este dia.</div>
     <div id="ex-list" class="list"></div>
   </section>
-
   <!-- MODAL: CADASTRAR / EDITAR ALUNO -->
   <div id="modal-bg" class="modal-bg hidden">
     <div class="modal">
@@ -304,7 +322,7 @@ textarea{resize:vertical}
         <div class="field"><label>Nome</label><input id="st-name" required/></div>
         <div class="field"><label>WhatsApp</label><input id="st-phone"/></div>
 
-        <!-- NOVOS CAMPOS PARA LOGIN DO ALUNO -->
+        <!-- Campos para login do aluno -->
         <div class="field">
           <label>CPF (somente números)</label>
           <input id="st-cpf" maxlength="11" placeholder="Somente números" inputmode="numeric"/>
@@ -331,6 +349,7 @@ textarea{resize:vertical}
       </form>
     </div>
   </div>
+
   <!-- MODAL: CICLO -->
   <div id="cycle-bg" class="modal-bg hidden">
     <div class="modal">
@@ -378,12 +397,11 @@ textarea{resize:vertical}
       </form>
     </div>
   </div>
-
   <!-- LOGIN ALUNO (CPF + Data de Nascimento) -->
   <div id="student-login-bg" class="modal-bg hidden" style="z-index:2100">
     <div class="modal" style="max-width:380px">
       <h2>Entrar como Aluno</h2>
-      <p class="subtitle">Acesse seu treino preenchendo seus dados</p>
+      <p class="subtitle">Acesse seus treinos da semana</p>
       <form id="form-student-login">
         <div class="field">
           <label>CPF (somente números)</label>
@@ -401,18 +419,28 @@ textarea{resize:vertical}
     </div>
   </div>
 
+  <!-- VIEW: SEMANA DO ALUNO (apenas visualização) -->
+  <section id="student-week-view" class="view hidden">
+    <div class="view-header">
+      <button id="btn-student-back" class="back">← Voltar</button>
+      <h2 id="student-title" style="margin:0">Treinos da Semana</h2>
+    </div>
+    <div id="student-week-empty" class="week-empty hidden">Nenhum treino cadastrado. Fale com seu personal.</div>
+    <div id="student-week" class="week"></div>
+  </section>
+
 </main>
 <!-- FIREBASE + LÓGICA -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  GoogleAuthProvider, signInWithPopup, signOut,
+  GoogleAuthProvider, signInWithPopup, signOut, signInAnonymously,
   updateProfile, sendPasswordResetEmail, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, query, where,
-  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, getDocs
+  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, getDocs, orderBy
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 /* CONFIG */
@@ -443,10 +471,9 @@ const wa = p => p ? `https://wa.me/55${p.replace(/\D/g,"")}` : null;
 
 /* NAV */
 function go(view){
-  ["auth-card","app","train-view","days-view","ex-view"].forEach(id=>$(id).classList.add("hidden"));
+  ["auth-card","app","train-view","days-view","ex-view","student-week-view"].forEach(id=>$(id).classList.add("hidden"));
   $(view).classList.remove("hidden");
 }
-
 /* Troca telas login/cadastro */
 $("go-signup").onclick = ()=> switchView("signup");
 $("go-reset").onclick  = ()=> switchView("reset");
@@ -469,6 +496,7 @@ function switchView(view){
     $("go-login").classList.add("hidden");
   }
 }
+
 /* AUTH: login/cadastro/reset/google/logout */
 $("form-login").onsubmit = async(e)=>{
   e.preventDefault();
@@ -544,7 +572,7 @@ function renderStudentCard(st){
     </div>
   `;
   if(!isStudentMode){
-    div.querySelector("[data-edit]").onclick = ()=>{
+    div.querySelector("[data-edit]")?.addEventListener("click", ()=>{
       $("modal-title").textContent="Editar Aluno";
       $("st-id").value = st.id;
       $("st-name").value = st.name || "";
@@ -555,14 +583,13 @@ function renderStudentCard(st){
       $("st-level").value = st.level || "Iniciante";
       $("st-notes").value = st.notes || "";
       $("modal-bg").classList.remove("hidden");
-    };
-    div.querySelector("[data-del]").onclick = async()=>{
+    });
+    div.querySelector("[data-del]")?.addEventListener("click", async()=>{
       if(confirm(`Excluir ${st.name}?`)){
         await deleteDoc(doc(db,"students",st.id));
       }
-    };
+    });
   }
-  // Ver treinos
   div.querySelector("[data-train]").onclick = ()=>{
     openTrainView(st);
   };
@@ -578,10 +605,8 @@ function renderStudents(list){
 
 /* Auth listener */
 onAuthStateChanged(auth, async(user)=>{
-  if(user){
+  if(user && !isStudentMode){
     currentUser = user;
-    isStudentMode = false;
-    currentStudentUser = null;
     $("user-pill").textContent = user.displayName || user.email;
     const uref = doc(db,"users",user.uid);
     const usnap = await getDoc(uref);
@@ -597,17 +622,17 @@ onAuthStateChanged(auth, async(user)=>{
     });
     go("app");
   }else{
-    if(unsubStudents) unsubStudents();
-    if(unsubCycles) unsubCycles();
-    if(unsubDays) unsubDays();
-    if(unsubExercises) unsubExercises();
-    currentUser = null;
-    currentStudent = null;
-    currentCycle = null;
-    currentDay = null;
-    isStudentMode = false;
-    currentStudentUser = null;
-    go("auth-card");
+    if(!isStudentMode){
+      if(unsubStudents) unsubStudents();
+      if(unsubCycles) unsubCycles();
+      if(unsubDays) unsubDays();
+      if(unsubExercises) unsubExercises();
+      currentUser = null;
+      currentStudent = null;
+      currentCycle = null;
+      currentDay = null;
+      go("auth-card");
+    }
   }
 });
 
@@ -620,10 +645,9 @@ $("search").oninput = ()=>{
     c.style.display = name.includes(term) ? "" : "none";
   });
 };
-
 /* Modal aluno: adicionar/editar */
 $("btn-add").onclick = ()=>{
-  if(isStudentMode) return; // aluno não pode
+  if(isStudentMode) return;
   const count = onAuthStateChanged._count || 0;
   if(currentPlan.plan!=="pro" && count >= (currentPlan.limit||5)){
     showAlert("Limite do Plano Free atingido. Atualize para PRO para cadastrar mais alunos.");
@@ -644,7 +668,7 @@ $("form-student").onsubmit = async(e)=>{
     ownerId: currentUser?.uid || null,
     name: $("st-name").value.trim(),
     phone: $("st-phone").value.trim(),
-    cpf: $("st-cpf").value.replace(/\D/g,"") || null,
+    cpf: ($("st-cpf").value||"").replace(/\D/g,"") || null,
     birth: $("st-birth").value || null,
     goal: $("st-goal").value,
     level: $("st-level").value,
@@ -667,15 +691,16 @@ $("form-student").onsubmit = async(e)=>{
     showAlert("Erro: "+err.message);
   }
 };
+
 /* TREINOS DO ALUNO — CICLOS */
 $("btn-back").onclick = ()=>{
   currentStudent = null;
   if(unsubCycles) unsubCycles();
   if(isStudentMode){
-    // aluno volta para "login" (ou poderíamos fechar e mostrar dias?)
-    go("auth-card");
+    // no modo aluno, voltar leva ao login
     isStudentMode = false;
     currentStudentUser = null;
+    go("auth-card");
   }else{
     go("app");
   }
@@ -740,19 +765,19 @@ function renderCycles(list){
       openDaysView();
     };
     if(!isStudentMode){
-      card.querySelector("[data-edit]").onclick = ()=>{
+      card.querySelector("[data-edit]")?.addEventListener("click", ()=>{
         $("cycle-title").textContent = "Editar Ciclo";
         $("cycle-id").value = c.id;
         $("cycle-name").value = c.name || "";
         $("cycle-start").value = c.startDate || "";
         $("cycle-end").value = c.endDate || "";
         $("cycle-bg").classList.remove("hidden");
-      };
-      card.querySelector("[data-del]").onclick = async()=>{
+      });
+      card.querySelector("[data-del]")?.addEventListener("click", async()=>{
         if(confirm(`Excluir ciclo "${c.name}"?`)){
           await deleteDoc(doc(db,"students",currentStudent.id,"cycles",c.id));
         }
-      };
+      });
     }
     wrap.appendChild(card);
   });
@@ -782,6 +807,7 @@ $("form-cycle").onsubmit = async(e)=>{
     showAlert("Erro: "+err.message);
   }
 };
+
 /* DIAS DO CICLO */
 $("btn-back-cycles").onclick = ()=>{
   currentCycle = null;
@@ -856,6 +882,7 @@ function renderDaysGrid(days){
     grid.appendChild(card);
   });
 }
+
 /* EXERCÍCIOS DO DIA — CRUD */
 $("btn-back-days").onclick = ()=>{
   if(unsubExercises) unsubExercises();
@@ -893,7 +920,6 @@ function subscribeExercises(){
     const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
     arr.sort((a,b)=> (a.order||0) - (b.order||0));
     renderExercises(arr);
-    // contador no dia
     updateDoc(doc(db,"students",currentStudent.id,"cycles",currentCycle.id,"days",currentDay.id), {
       exercisesCount: arr.length, updatedAt: serverTimestamp()
     }).catch(()=>{});
@@ -927,7 +953,7 @@ function renderExercises(list){
       ${ex.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${ex.notes}</div>`:""}
     `;
     if(!isStudentMode){
-      card.querySelector("[data-edit]").onclick = ()=>{
+      card.querySelector("[data-edit]")?.addEventListener("click", ()=>{
         $("ex-modal-title").textContent = "Editar Exercício";
         $("ex-id").value = ex.id;
         $("ex-name").value = ex.name || "";
@@ -937,12 +963,12 @@ function renderExercises(list){
         $("ex-rest").value = ex.rest || "";
         $("ex-notes").value = ex.notes || "";
         $("ex-bg").classList.remove("hidden");
-      };
-      card.querySelector("[data-del]").onclick = async()=>{
+      });
+      card.querySelector("[data-del]")?.addEventListener("click", async()=>{
         if(confirm(`Excluir "${ex.name||'exercício'}"?`)){
           await deleteDoc(doc(exCollectionRef(), ex.id));
         }
-      };
+      });
     }
     wrap.appendChild(card);
   });
@@ -977,42 +1003,6 @@ $("form-ex").onsubmit = async(e)=>{
   }
 };
 
-/* LOGIN DO ALUNO (CPF + NASC) */
-$("btn-open-student-login").onclick = () => {
-  $("student-login-bg").classList.remove("hidden");
-};
-$("btn-stu-login-cancel").onclick = () => {
-  $("student-login-bg").classList.add("hidden");
-};
-function cleanCpf(v){ return (v||"").replace(/\D/g,""); }
-$("form-student-login").onsubmit = async(e)=>{
-  e.preventDefault();
-  const cpf = cleanCpf($("stu-cpf").value);
-  const birth = $("stu-birth").value;
-  if(!cpf || !birth){ showAlert("Informe CPF e nascimento corretamente"); return; }
-  try{
-    const q = query(collection(db,"students"), where("cpf","==",cpf), where("birth","==",birth));
-    const snap = await getDocs(q);
-    if(snap.empty){ showAlert("Aluno não encontrado. Fale com seu personal."); return; }
-    const docSnap = snap.docs[0];
-    const st = { id: docSnap.id, ...docSnap.data() };
-    if(st.active===false){ showAlert("Aluno inativo. Contate seu personal."); return; }
-    isStudentMode = true;
-    currentStudentUser = st;
-    $("student-login-bg").classList.add("hidden");
-    showAlert("Bem-vindo! ✅", true);
-    currentStudent = { id: st.id, name: st.name };
-    $("train-title").textContent = `${st.name} — Treinos (visualização)`;
-    // esconder botões globais
-    $("btn-add")?.classList.add("hidden");
-    $("btn-new-cycle")?.classList.add("hidden");
-    $("btn-new-ex")?.classList.add("hidden");
-    go("train-view");
-    subscribeCycles(st.id);
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
-};
 /* Utils */
 function formatPeriod(yyyy1, yyyy2){
   const f = s=>{
@@ -1023,6 +1013,149 @@ function formatPeriod(yyyy1, yyyy2){
   };
   return `${f(yyyy1)} — ${f(yyyy2)}`;
 }
+/* ============ MODO ALUNO ============ */
+$("btn-open-student-login").onclick = () => {
+  $("student-login-bg").classList.remove("hidden");
+};
+$("btn-stu-login-cancel").onclick = () => {
+  $("student-login-bg").classList.add("hidden");
+};
+
+function cleanCpf(v){ return (v||"").replace(/\D/g,""); }
+const weekOrder = ["seg","ter","qua","qui","sex","sab","dom"];
+const weekNames = {
+  seg:"SEGUNDA", ter:"TERÇA", qua:"QUARTA", qui:"QUINTA",
+  sex:"SEXTA", sab:"SÁBADO", dom:"DOMINGO"
+};
+
+$("form-student-login").onsubmit = async(e)=>{
+  e.preventDefault();
+  const cpf = cleanCpf($("stu-cpf").value);
+  const birth = $("stu-birth").value;
+  if(!cpf || !birth){ showAlert("Informe CPF e nascimento corretamente"); return; }
+  try{
+    // Busca aluno pelo CPF+nasc
+    const qAl = query(collection(db,"students"), where("cpf","==",cpf), where("birth","==",birth));
+    const sAl = await getDocs(qAl);
+    if(sAl.empty){ showAlert("Aluno não encontrado. Fale com seu personal."); return; }
+    const stDoc = sAl.docs[0];
+    const st = { id: stDoc.id, ...stDoc.data() };
+    if(st.active===false){ showAlert("Aluno inativo. Contate seu personal."); return; }
+
+    // Login anônimo para liberar leitura
+    await signInAnonymously(auth);
+
+    isStudentMode = true;
+    currentStudentUser = st;
+    $("student-login-bg").classList.add("hidden");
+
+    $("student-title").textContent = `Treinos da Semana — ${st.name||"Aluno"}`;
+    await loadStudentWeek(st.id); // renderiza a semana
+    go("student-week-view");
+  }catch(err){
+    showAlert("Erro: "+err.message);
+  }
+};
+
+/* Voltar no modo aluno -> volta pro login */
+$("btn-student-back").onclick = ()=>{
+  isStudentMode = false;
+  currentStudentUser = null;
+  go("auth-card");
+};
+
+/* Carregar semana do aluno (pega ciclo 'mais recente' e lista dias) */
+async function loadStudentWeek(studentId){
+  const weekWrap = $("student-week");
+  const empty = $("student-week-empty");
+  weekWrap.innerHTML = "";
+  empty.classList.add("hidden");
+
+  // 1) pega ciclos e escolhe o mais "recente"
+  const cyclesRef = collection(db,"students",studentId,"cycles");
+  const csSnap = await getDocs(cyclesRef);
+  if(csSnap.empty){ empty.classList.remove("hidden"); return; }
+
+  const cycles = [];
+  csSnap.forEach(d=> cycles.push({id:d.id, ...d.data()}));
+  // regra: se houver startDate, ordenar por startDate desc; senão por createdAt (não confiável na regra)
+  cycles.sort((a,b)=>{
+    const as=a.startDate||"", bs=b.startDate||"";
+    if(as===bs) return (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);
+    return as>bs? -1: 1;
+  });
+  const sel = cycles[0];
+
+  // 2) pega dias e ordena por order (seg..dom)
+  const daysRef = collection(db,"students",studentId,"cycles",sel.id,"days");
+  const dSnap = await getDocs(daysRef);
+  if(dSnap.empty){ empty.textContent="Nenhum dia cadastrado neste ciclo."; empty.classList.remove("hidden"); return; }
+  const days = [];
+  dSnap.forEach(d=> days.push({id:d.id, ...d.data()}));
+  days.sort((a,b)=> (a.order||0)-(b.order||0));
+
+  // 3) monta acordeão, cada dia carrega seus exercícios
+  for(const d of days){
+    const dayBox = document.createElement("div");
+    dayBox.className = "week-day";
+    dayBox.innerHTML = `
+      <div class="week-head">
+        <span>${d.name||weekNames[d.id]||"DIA"}</span>
+        <span class="badge">${d.exercisesCount||0} exercício(s)</span>
+      </div>
+      <div class="week-body"><div class="list" data-body></div></div>
+    `;
+    const head = dayBox.querySelector(".week-head");
+    const body = dayBox.querySelector(".week-body");
+    const bodyList = dayBox.querySelector("[data-body]");
+
+    head.addEventListener("click", async()=>{
+      const opened = dayBox.classList.toggle("open");
+      if(opened && !dayBox._loaded){
+        // carrega exercícios do dia
+        const exRef = collection(db,"students",studentId,"cycles",sel.id,"days",d.id,"exercises");
+        const exSnap = await getDocs(exRef);
+        const exs = [];
+        exSnap.forEach(x=> exs.push({id:x.id, ...x.data()}));
+        exs.sort((a,b)=> (a.order||0)-(b.order||0));
+
+        if(!exs.length){
+          bodyList.innerHTML = `<div class="helper">Nenhum exercício neste dia.</div>`;
+        }else{
+          bodyList.innerHTML = "";
+          exs.forEach(ex=>{
+            const c = document.createElement("div");
+            c.className="ex-card";
+            c.innerHTML = `
+              <div class="ex-top">
+                <div class="ex-name">${ex.name||"(Sem nome)"}</div>
+              </div>
+              <div class="ex-line">
+                <span class="ex-chip">Séries: <b>${ex.sets||"—"}</b></span>
+                <span class="ex-chip">Reps: <b>${ex.reps||"—"}</b></span>
+                <span class="ex-chip">Carga: <b>${ex.load||"—"}</b></span>
+                <span class="ex-chip">Descanso: <b>${ex.rest||"—"}</b></span>
+              </div>
+              ${ex.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${ex.notes}</div>`:""}
+            `;
+            bodyList.appendChild(c);
+          });
+        }
+        dayBox._loaded = true;
+      }
+    });
+
+    weekWrap.appendChild(dayBox);
+  }
+}
+
+/* Botões extras do login aluno */
+$("btn-open-student-login").addEventListener("click", ()=> {
+  $("go-login").classList.remove("hidden");
+});
+$("btn-stu-login-cancel").addEventListener("click", ()=> {
+  $("go-login").classList.add("hidden");
+});
 
 </script>
 </body>
