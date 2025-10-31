@@ -11,9 +11,15 @@
 
 <style>
 :root {
-  --bg:#fafafa; --panel:#ffffff; --border:#e6e6e6;
-  --text:#111; --sub:#555; --muted:#f3f3f3;
-  --brand:#009c3b; --brand-dark:#026a29; --danger:#e54848;
+  --bg: #fafafa;
+  --panel:#ffffff;
+  --border:#e6e6e6;
+  --text:#111;
+  --sub:#555;
+  --muted:#f3f3f3;
+  --brand:#009c3b;
+  --brand-dark:#026a29;
+  --danger:#e54848;
 }
 
 *{box-sizing:border-box}
@@ -26,18 +32,22 @@ body{
 
 /* LOGIN */
 .wrap{
-  min-height:100vh;display:flex;justify-content:center;align-items:center;
-  padding:16px;
+  min-height:100vh;
+  display:flex;justify-content:center;align-items:center;padding:16px;
 }
 .card{
-  width:100%;max-width:420px;background:var(--panel);
-  border-radius:16px;border:1px solid var(--border);padding:26px;
+  width:100%;max-width:420px;
+  background:var(--panel);
+  border-radius:16px;
+  border:1px solid var(--border);
+  padding:26px;
 }
 .brand{
   display:flex;align-items:center;gap:12px;font-size:20px;font-weight:bold;
 }
 .brand-logo{
-  width:40px;height:40px;background:var(--brand);
+  width:40px;height:40px;
+  background:var(--brand);
   display:flex;align-items:center;justify-content:center;
   border-radius:8px;color:#fff;font-size:22px;
 }
@@ -50,53 +60,44 @@ input,select,textarea{
   padding:12px;border-radius:10px;font-size:15px;
   border:1px solid var(--border);background:var(--muted);
 }
-
+textarea{resize:vertical}
 .btn{
-  width:100%;padding:12px;margin-top:2px;border:none;border-radius:10px;
+  width:100%;padding:12px;margin-top:2px;
+  border:none;border-radius:10px;
   font-weight:600;cursor:pointer;
 }
 .btn.primary{background:var(--brand);color:#fff}
 .btn.google{background:#fff;border:1px solid #ccc;color:#333}
 .btn.ghost{background:var(--panel);border:1px solid var(--border);color:var(--text)}
 
-.linkbar{display:flex;justify-content:space-between;margin-top:10px}
+.linkbar{display:flex;justify-content:space-between;margin-top:10px;gap:10px;flex-wrap:wrap}
 .link{border:none;background:none;color:var(--brand-dark);font-size:14px;cursor:pointer}
 
 /* ALERT */
 .alert{
-  display:none;padding:10px;font-size:14px;margin-bottom:12px;
-  border-radius:8px;background:#ffd8d8;color:#8a0000;
+  display:none;padding:10px;font-size:14px;margin-bottom:12px;border-radius:8px;background:#ffd8d8;color:#8a0000;
 }
 .alert.ok{background:#daf5d8;color:#084d19}
 
-/* APP BASE */
-.app,.view{
-  width:100%;max-width:1100px;margin:auto;padding:20px;
-}
+/* APP: LISTA DE ALUNOS */
+.app,.view{width:100%;max-width:1100px;margin:auto;padding:20px}
 .topbar{
-  display:grid;grid-template-columns:1fr auto auto;
-  gap:12px;align-items:center;margin-bottom:18px;
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;
+  align-items:center;margin-bottom:18px;
 }
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .pill{
   padding:6px 12px;background:var(--muted);
   border-radius:12px;border:1px solid var(--border);font-size:14px;
 }
 .search{max-width:320px}
-
 .grid{display:grid;gap:16px}
 @media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
 
-/* Alumno card */
 .card-student{
-  background:var(--panel);border:1px solid var(--border);border-radius:16px;
-  padding:14px;display:flex;flex-direction:column;gap:10px;position:relative;
-}
-.train-top{
-  position:absolute;top:12px;right:12px;
-  padding:8px 10px;border-radius:999px;font-size:13px;cursor:pointer;
-  background:var(--brand);color:#fff;border:none;
-  display:flex;gap:6px;align-items:center;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;position:relative;
 }
 .badge{
   background:var(--muted);
@@ -110,20 +111,17 @@ input,select,textarea{
 .btn-sm.brand{background:var(--brand);color:#fff;border:none}
 .btn-sm.danger{background:var(--danger);color:#fff;border:none}
 
-/* Floating Button */
-.fab{
-  position:fixed;right:20px;bottom:20px;width:56px;height:56px;
-  border-radius:50%;background:var(--brand);color:#fff;
-  border:none;font-size:32px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(0,0,0,.25);
+/* BOTÃO TREINOS NO TOPO DO CARD */
+.train-top{
+  position:absolute;top:12px;right:12px;
+  padding:8px 10px;border-radius:999px;font-size:13px;cursor:pointer;
+  background:var(--brand);color:#fff;border:none;display:flex;gap:6px;align-items:center;
 }
-.fab:hover{background:var(--brand-dark)}
-/* MODAIS */
+
+/* MODAIS GENÉRICOS */
 .modal-bg{
   position:fixed;inset:0;background:rgba(0,0,0,.45);
   display:flex;align-items:center;justify-content:center;
-  z-index:2000;
 }
 .modal{
   width:90%;max-width:460px;background:var(--panel);
@@ -132,7 +130,7 @@ input,select,textarea{
 }
 .modal h2{margin:0 0 14px}
 
-/* HEADERS de VIEW */
+/* VIEW: TÍTULOS/HEADERS */
 .view-header{
   display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;
 }
@@ -141,17 +139,13 @@ input,select,textarea{
   padding:10px 12px;border-radius:10px;cursor:pointer
 }
 .helper{
-  background:var(--panel);border:1px dashed var(--border);
-  border-radius:12px;padding:16px;color:var(--sub)
+  background:var(--panel);border:1px dashed var(--border);border-radius:12px;padding:16px;color:var(--sub)
 }
-
 /* CICLOS */
 .list{display:grid;gap:12px}
 .card-cycle{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:14px;padding:14px;
-  display:flex;justify-content:space-between;align-items:center;
-  gap:12px;flex-wrap:wrap;
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
 }
 .cycle-actions{display:flex;gap:8px;flex-wrap:wrap}
 
@@ -160,29 +154,23 @@ input,select,textarea{
 @media(min-width:720px){.days-grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1024px){.days-grid{grid-template-columns:repeat(4,1fr)}}
 .day-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:14px;padding:14px;
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
   display:flex;flex-direction:column;gap:6px
 }
 .day-top{display:flex;justify-content:space-between;align-items:center}
 .day-name{font-weight:700}
 .day-count{font-size:12px;color:var(--sub)}
 .day-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.btn-xs{
-  padding:6px 8px;border-radius:8px;border:1px solid var(--border);
-  background:var(--muted);font-size:12px;cursor:pointer
-}
+.btn-xs{padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--muted);font-size:12px;cursor:pointer}
 .btn-xs.brand{background:var(--brand);color:#fff;border:none}
 
 /* EXERCÍCIOS */
 .ex-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:14px;padding:14px;
+  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
   display:flex;flex-direction:column;gap:8px
 }
 .ex-top{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:8px;flex-wrap:wrap
+  display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap
 }
 .ex-name{font-weight:700}
 .ex-line{
@@ -195,37 +183,30 @@ input,select,textarea{
 }
 .ex-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-/* Linha divisória */
-.hr{
-  height:1px;width:100%;background:var(--border);
-  margin:20px 0;
+/* FAB de adicionar aluno */
+.fab{
+  position:fixed;right:22px;bottom:22px;
+  width:54px;height:54px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--brand);color:#fff;border:none;font-size:26px;
+  box-shadow:0 10px 20px rgba(0,0,0,.15);cursor:pointer;
 }
+
 </style>
 </head>
 <body>
-
 <main class="wrap">
 
   <!-- LOGIN -->
   <section id="auth-card" class="card">
-    <div class="brand">
-      <div class="brand-logo">🏋️</div>
-      MeuTreino <span class="pro">PRO</span>
-    </div>
+    <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
     <h2 class="title" id="view-title">Entrar</h2>
     <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
-
     <div id="alert" class="alert"></div>
 
     <form id="form-login">
-      <div class="field">
-        <label>Email</label>
-        <input id="login-email" type="email" required/>
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input id="login-pass" type="password" required/>
-      </div>
+      <div class="field"><label>Email</label><input id="login-email" type="email" required/></div>
+      <div class="field"><label>Senha</label><input id="login-pass" type="password" required/></div>
       <button class="btn primary">Entrar</button>
     </form>
 
@@ -237,15 +218,11 @@ input,select,textarea{
     </form>
 
     <form id="form-reset" class="hidden">
-      <div class="field">
-        <label>Email cadastrado</label>
-        <input id="rs-email" type="email" required/>
-      </div>
+      <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required/></div>
       <button class="btn primary">Enviar link</button>
     </form>
 
     <div class="hr"></div>
-
     <button id="btn-google" class="btn google">Entrar com Google</button>
 
     <div class="linkbar">
@@ -253,17 +230,18 @@ input,select,textarea{
       <button class="link" id="go-reset">Esqueci a senha</button>
     </div>
 
+    <!-- BOTÃO DE ACESSO PARA ALUNO -->
     <div class="linkbar">
+      <button class="link" id="btn-open-student-login">Sou Aluno</button>
       <button class="link hidden" id="go-login">Voltar login</button>
     </div>
   </section>
-
   <!-- APP: MEUS ALUNOS -->
   <section id="app" class="app hidden">
     <div class="topbar">
       <strong>Meus Alunos</strong>
       <input id="search" class="search" type="text" placeholder="Pesquisar por nome..."/>
-      <div class="tools" style="display:flex;align-items:center;gap:10px">
+      <div class="tools">
         <span class="pill" id="plan-pill">Plano: Free (5)</span>
         <span class="pill" id="user-pill">...</span>
         <button id="btn-logout" class="btn ghost" style="width:auto">Sair</button>
@@ -271,10 +249,8 @@ input,select,textarea{
     </div>
 
     <div id="students-list" class="grid"></div>
-
     <button id="btn-add" class="fab">+</button>
   </section>
-
   <!-- VIEW: TREINOS DO ALUNO (CICLOS) -->
   <section id="train-view" class="view hidden">
     <div class="view-header">
@@ -301,11 +277,7 @@ input,select,textarea{
         <button id="btn-regen-days" class="btn ghost" style="width:auto">Recriar 7 dias</button>
       </div>
     </div>
-
-    <div id="days-empty" class="helper hidden">
-      Nenhum dia encontrado. Clique em <b>Recriar 7 dias</b>.
-    </div>
-
+    <div id="days-empty" class="helper hidden">Nenhum dia encontrado. Clique em <b>Recriar 7 dias</b>.</div>
     <div id="days-grid" class="days-grid"></div>
   </section>
 
@@ -318,7 +290,6 @@ input,select,textarea{
         <button id="btn-new-ex" class="btn ghost" style="width:auto">+ Novo Exercício</button>
       </div>
     </div>
-
     <div id="ex-empty" class="helper hidden">Nenhum exercício cadastrado para este dia.</div>
     <div id="ex-list" class="list"></div>
   </section>
@@ -328,75 +299,50 @@ input,select,textarea{
     <div class="modal">
       <h2 id="modal-title">Novo Aluno</h2>
       <form id="form-student">
-        <input type="hidden" id="st-id"/>
+        <input type="hidden" id="st-id">
 
+        <div class="field"><label>Nome</label><input id="st-name" required/></div>
+        <div class="field"><label>WhatsApp</label><input id="st-phone"/></div>
+
+        <!-- NOVOS CAMPOS PARA LOGIN DO ALUNO -->
         <div class="field">
-          <label>Nome</label>
-          <input id="st-name" required/>
+          <label>CPF (somente números)</label>
+          <input id="st-cpf" maxlength="11" placeholder="Somente números" inputmode="numeric"/>
+        </div>
+        <div class="field">
+          <label>Nascimento</label>
+          <input id="st-birth" type="date"/>
         </div>
 
-        <div class="field">
-          <label>WhatsApp</label>
-          <input id="st-phone" placeholder="(DDD) 9 9999-9999"/>
-        </div>
-
-        <div class="field">
-          <label>Objetivo</label>
+        <div class="field"><label>Objetivo</label>
           <select id="st-goal">
-            <option>Hipertrofia</option>
-            <option>Emagrecimento</option>
-            <option>Resistência</option>
+            <option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option>
           </select>
         </div>
-
-        <div class="field">
-          <label>Nível</label>
-          <select id="st-level">
-            <option>Iniciante</option>
-            <option>Intermediário</option>
-            <option>Avançado</option>
-          </select>
+        <div class="field"><label>Nível</label>
+          <select id="st-level"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
         </div>
+        <div class="field"><label>Observações</label><textarea id="st-notes" rows="3"></textarea></div>
 
-        <div class="field">
-          <label>Observações</label>
-          <textarea id="st-notes" rows="3" placeholder="Ex.: Lesões, limitações..."></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary" type="submit">Salvar</button>
+          <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
         </div>
-
-        <button class="btn primary" type="submit">Salvar</button>
-        <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
       </form>
     </div>
   </div>
-
   <!-- MODAL: CICLO -->
   <div id="cycle-bg" class="modal-bg hidden">
     <div class="modal">
       <h2 id="cycle-title">Criar Ciclo</h2>
       <form id="form-cycle">
-        <input type="hidden" id="cycle-id"/>
-
-        <div class="field">
-          <label>Nome do Ciclo</label>
-          <input id="cycle-name" placeholder="Ex.: Hipertrofia Mês 1" required/>
-        </div>
-
-        <div class="field">
-          <small class="subtitle">Período (opcional)</small>
-        </div>
-
+        <input type="hidden" id="cycle-id">
+        <div class="field"><label>Nome do Ciclo</label><input id="cycle-name" placeholder="Ex.: Hipertrofia Mês 1" required/></div>
+        <div class="field"><small class="subtitle">Período (opcional)</small></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <div class="field" style="flex:1;min-width:160px">
-            <label>Início</label>
-            <input id="cycle-start" type="date"/>
-          </div>
-
-          <div class="field" style="flex:1;min-width:160px">
-            <label>Fim</label>
-            <input id="cycle-end" type="date"/>
-          </div>
+          <div class="field" style="flex:1;min-width:160px"><label>Início</label><input id="cycle-start" type="date"/></div>
+          <div class="field" style="flex:1;min-width:160px"><label>Fim</label><input id="cycle-end" type="date"/></div>
         </div>
-
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
           <button class="btn primary" type="submit">Salvar Ciclo</button>
           <button class="btn ghost" type="button" id="btn-cycle-cancel">Cancelar</button>
@@ -404,44 +350,26 @@ input,select,textarea{
       </form>
     </div>
   </div>
+
   <!-- MODAL: EXERCÍCIO -->
   <div id="ex-bg" class="modal-bg hidden">
     <div class="modal">
       <h2 id="ex-modal-title">Novo Exercício</h2>
       <form id="form-ex">
-        <input type="hidden" id="ex-id"/>
+        <input type="hidden" id="ex-id">
+        <div class="field"><label>Nome</label><input id="ex-name" required placeholder="Ex.: Supino Reto"/></div>
 
-        <div class="field">
-          <label>Nome</label>
-          <input id="ex-name" required placeholder="Ex.: Supino Reto"/>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <div class="field" style="flex:1;min-width:110px"><label>Séries</label><input id="ex-sets" type="number" min="1" step="1" placeholder="4"/></div>
+          <div class="field" style="flex:1;min-width:110px"><label>Repetições</label><input id="ex-reps" type="text" placeholder="10 ou 12-10-8"/></div>
         </div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <div class="field" style="flex:1;min-width:110px">
-            <label>Séries</label>
-            <input id="ex-sets" type="number" min="1" step="1" placeholder="4"/>
-          </div>
-          <div class="field" style="flex:1;min-width:110px">
-            <label>Repetições</label>
-            <input id="ex-reps" type="text" placeholder="10 ou 12-10-8"/>
-          </div>
+          <div class="field" style="flex:1;min-width:110px"><label>Carga</label><input id="ex-load" type="text" placeholder="30 kg"/></div>
+          <div class="field" style="flex:1;min-width:110px"><label>Descanso</label><input id="ex-rest" type="text" placeholder="60 s"/></div>
         </div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <div class="field" style="flex:1;min-width:110px">
-            <label>Carga</label>
-            <input id="ex-load" type="text" placeholder="30 kg"/>
-          </div>
-          <div class="field" style="flex:1;min-width:110px">
-            <label>Descanso</label>
-            <input id="ex-rest" type="text" placeholder="60 s"/>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Observações</label>
-          <textarea id="ex-notes" rows="3" placeholder="Ex.: postura, amplitude..."></textarea>
-        </div>
+        <div class="field"><label>Observações</label><textarea id="ex-notes" rows="3" placeholder="Ex.: manter postura; não travar cotovelos"></textarea></div>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn primary" type="submit">Salvar</button>
@@ -451,24 +379,40 @@ input,select,textarea{
     </div>
   </div>
 
-</main>
+  <!-- LOGIN ALUNO (CPF + Data de Nascimento) -->
+  <div id="student-login-bg" class="modal-bg hidden" style="z-index:2100">
+    <div class="modal" style="max-width:380px">
+      <h2>Entrar como Aluno</h2>
+      <p class="subtitle">Acesse seu treino preenchendo seus dados</p>
+      <form id="form-student-login">
+        <div class="field">
+          <label>CPF (somente números)</label>
+          <input id="stu-cpf" maxlength="11" placeholder="Somente números" required inputmode="numeric"/>
+        </div>
+        <div class="field">
+          <label>Data de nascimento</label>
+          <input id="stu-birth" type="date" required/>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn primary" type="submit">Entrar</button>
+          <button class="btn ghost" type="button" id="btn-stu-login-cancel">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
+</main>
 <!-- FIREBASE + LÓGICA -->
 <script type="module">
-import { 
-  initializeApp 
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
   GoogleAuthProvider, signInWithPopup, signOut,
   updateProfile, sendPasswordResetEmail, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-
 import {
   getFirestore, collection, addDoc, onSnapshot, query, where,
-  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc,
-  orderBy, getDocs
+  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, getDocs
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 /* CONFIG */
@@ -480,30 +424,26 @@ const firebaseConfig = {
   messagingSenderId: "236961358499",
   appId: "1:236961358499:web:40b7391c4c9b3405ff1516"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 /* HELPERS */
-const $ = id => document.getElementById(id);
-
+const $ = (id)=>document.getElementById(id);
 function showAlert(msg, ok=false){
   const box = $("alert");
+  if(!box) return alert(msg);
   box.textContent = msg;
   box.style.display = "block";
   box.classList.toggle("ok", ok);
   clearTimeout(showAlert._t);
   showAlert._t = setTimeout(()=> box.style.display="none", ok?1800:3500);
 }
+const wa = p => p ? `https://wa.me/55${p.replace(/\D/g,"")}` : null;
 
-const wa = phone => phone ? 
-  `https://wa.me/55${phone.replace(/\D/g,"")}` : null;
-
-/* Muda entre telas base */
+/* NAV */
 function go(view){
-  ["auth-card","app","train-view","days-view","ex-view"]
-    .forEach(id => $(id).classList.add("hidden"));
+  ["auth-card","app","train-view","days-view","ex-view"].forEach(id=>$(id).classList.add("hidden"));
   $(view).classList.remove("hidden");
 }
 
@@ -511,113 +451,79 @@ function go(view){
 $("go-signup").onclick = ()=> switchView("signup");
 $("go-reset").onclick  = ()=> switchView("reset");
 $("go-login").onclick  = ()=> switchView("login");
-
 function switchView(view){
-  ["form-login","form-signup","form-reset"]
-    .forEach(id => $(id).classList.add("hidden"));
-
+  ["form-login","form-signup","form-reset"].forEach(id=>$(id).classList.add("hidden"));
   $("go-login").classList.remove("hidden");
-
   if(view==="signup"){
     $("form-signup").classList.remove("hidden");
     $("view-title").textContent="Criar conta";
     $("view-sub").textContent="Cadastre-se e comece!";
-  }
-  else if(view==="reset"){
+  }else if(view==="reset"){
     $("form-reset").classList.remove("hidden");
     $("view-title").textContent="Recuperar senha";
     $("view-sub").textContent="Receba um link no email";
-  }
-  else{
+  }else{
     $("form-login").classList.remove("hidden");
     $("view-title").textContent="Entrar";
     $("view-sub").textContent="Gerencie seus alunos facilmente.";
     $("go-login").classList.add("hidden");
   }
 }
-/* =========================
-   AUTH: login / cadastro / reset / google / logout
-   ========================= */
+/* AUTH: login/cadastro/reset/google/logout */
 $("form-login").onsubmit = async(e)=>{
   e.preventDefault();
   try{
-    await signInWithEmailAndPassword(
-      auth, $("login-email").value, $("login-pass").value
-    );
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
+    await signInWithEmailAndPassword(auth, $("login-email").value, $("login-pass").value);
+  }catch(err){ showAlert("Erro: "+err.message); }
 };
-
 $("form-signup").onsubmit = async(e)=>{
   e.preventDefault();
   try{
-    const cred = await createUserWithEmailAndPassword(
-      auth, $("su-email").value, $("su-pass").value
-    );
+    const cred = await createUserWithEmailAndPassword(auth, $("su-email").value, $("su-pass").value);
     await updateProfile(cred.user, { displayName: $("su-name").value });
-
-    const uref = doc(db,"users",cred.user.uid);
-    await setDoc(uref, {
-      plan:"free", limit:5,
-      name:$("su-name").value, email:cred.user.email,
-      createdAt:serverTimestamp()
+    await setDoc(doc(db,"users",cred.user.uid), {
+      plan:"free", limit:5, name:$("su-name").value, email:cred.user.email, createdAt:serverTimestamp()
     });
-
     showAlert("Conta criada com sucesso!", true);
     switchView("login");
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
+  }catch(err){ showAlert("Erro: "+err.message); }
 };
-
 $("form-reset").onsubmit = async(e)=>{
   e.preventDefault();
   try{
     await sendPasswordResetEmail(auth, $("rs-email").value);
     showAlert("Email enviado!", true);
     switchView("login");
-  }catch(err){
-    showAlert(err.message);
-  }
+  }catch(err){ showAlert(err.message); }
 };
-
 $("btn-google").onclick = async()=>{
   try{
     const cred = await signInWithPopup(auth, new GoogleAuthProvider());
     const ref = doc(db,"users",cred.user.uid);
     const snap = await getDoc(ref);
     if(!snap.exists()){
-      await setDoc(ref, {
-        plan:"free", limit:5,
-        email:cred.user.email, name:cred.user.displayName||"",
-        createdAt:serverTimestamp()
-      });
+      await setDoc(ref, { plan:"free", limit:5, email:cred.user.email, name:cred.user.displayName||"", createdAt:serverTimestamp() });
     }
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
+  }catch(err){ showAlert("Erro: "+err.message); }
 };
+$("btn-logout").onclick = ()=>signOut(auth);
 
-$("btn-logout").onclick = ()=> signOut(auth);
-
-/* =========================
-   STATE / SUBSCRIBES
-   ========================= */
+/* STATE */
 let unsubStudents = null;
 let unsubCycles = null;
 let unsubDays = null;
 let unsubExercises = null;
-
 let currentUser = null;
 let currentPlan = { plan:"free", limit:5 };
-let currentStudent = null;   // {id, ...}
-let currentCycle = null;     // {id, ...}
-let currentDay = null;       // {id, ...}
+let currentStudent = null;
+let currentCycle = null;
+let currentDay = null;
 
-/* =========================
-   RENDER: CARD do ALUNO
-   ========================= */
+/* Modo Aluno */
+let isStudentMode = false;
+let currentStudentUser = null;
+
+/* Render de aluno */
 function renderStudentCard(st){
   const div = document.createElement("div");
   div.className="card-student";
@@ -629,68 +535,58 @@ function renderStudentCard(st){
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <span class="badge">🎯 ${st.goal||"—"}</span>
-      ${st.phone ? `<a class="btn-sm brand" href="${wa(st.phone)}" target="_blank">WhatsApp</a>`
-                  : `<span class="badge">Sem telefone</span>`}
+      ${st.phone ? `<a class="btn-sm brand" href="${wa(st.phone)}" target="_blank">WhatsApp</a>` : `<span class="badge">Sem telefone</span>`}
     </div>
     ${st.notes ? `<div class="badge" style="white-space:pre-wrap">📝 ${st.notes}</div>` : ""}
     <div class="actions">
-      <button class="btn-sm" data-edit>Editar</button>
-      <button class="btn-sm danger" data-del>Excluir</button>
+      ${isStudentMode ? "" : `<button class="btn-sm" data-edit>Editar</button>
+      <button class="btn-sm danger" data-del>Excluir</button>`}
     </div>
   `;
-
-  // Editar
-  div.querySelector("[data-edit]").onclick = ()=>{
-    $("modal-title").textContent="Editar Aluno";
-    $("st-id").value = st.id;
-    $("st-name").value = st.name || "";
-    $("st-phone").value = st.phone || "";
-    $("st-goal").value = st.goal || "Hipertrofia";
-    $("st-level").value = st.level || "Iniciante";
-    $("st-notes").value = st.notes || "";
-    $("modal-bg").classList.remove("hidden");
-  };
-
-  // Excluir
-  div.querySelector("[data-del]").onclick = async()=>{
-    if(confirm(`Excluir ${st.name}?`)){
-      await deleteDoc(doc(db,"students",st.id));
-    }
-  };
-
-  // Abrir treinos
+  if(!isStudentMode){
+    div.querySelector("[data-edit]").onclick = ()=>{
+      $("modal-title").textContent="Editar Aluno";
+      $("st-id").value = st.id;
+      $("st-name").value = st.name || "";
+      $("st-phone").value = st.phone || "";
+      $("st-cpf").value = st.cpf || "";
+      $("st-birth").value = st.birth || "";
+      $("st-goal").value = st.goal || "Hipertrofia";
+      $("st-level").value = st.level || "Iniciante";
+      $("st-notes").value = st.notes || "";
+      $("modal-bg").classList.remove("hidden");
+    };
+    div.querySelector("[data-del]").onclick = async()=>{
+      if(confirm(`Excluir ${st.name}?`)){
+        await deleteDoc(doc(db,"students",st.id));
+      }
+    };
+  }
+  // Ver treinos
   div.querySelector("[data-train]").onclick = ()=>{
     openTrainView(st);
   };
-
   return div;
 }
-
 function renderStudents(list){
   const wrap = $("students-list");
   wrap.innerHTML = "";
   const term = ($("search").value||"").toLowerCase();
-  list
-    .filter(s=> (s.name||"").toLowerCase().includes(term))
-    .forEach(s=> wrap.appendChild(renderStudentCard(s)));
+  list.filter(s=> (s.name||"").toLowerCase().includes(term))
+      .forEach(s=> wrap.appendChild(renderStudentCard(s)));
 }
 
-/* =========================
-   AUTH LISTENER
-   ========================= */
+/* Auth listener */
 onAuthStateChanged(auth, async(user)=>{
   if(user){
     currentUser = user;
+    isStudentMode = false;
+    currentStudentUser = null;
     $("user-pill").textContent = user.displayName || user.email;
-
-    // Plano
     const uref = doc(db,"users",user.uid);
     const usnap = await getDoc(uref);
     currentPlan = usnap.exists()? usnap.data() : { plan:"free", limit:5 };
-    $("plan-pill").textContent = currentPlan.plan==="pro"
-      ? "Plano: PRO (ilimitado)" : `Plano: Free (${currentPlan.limit})`;
-
-    // Subscribe alunos do usuário
+    $("plan-pill").textContent = currentPlan.plan==="pro" ? "Plano: PRO (ilimitado)" : `Plano: Free (${currentPlan.limit})`;
     if(unsubStudents) unsubStudents();
     const q = query(collection(db,"students"), where("ownerId","==",user.uid));
     unsubStudents = onSnapshot(q, snap=>{
@@ -699,27 +595,23 @@ onAuthStateChanged(auth, async(user)=>{
       renderStudents(arr);
       onAuthStateChanged._count = arr.length;
     });
-
     go("app");
   }else{
-    // Limpar subs
     if(unsubStudents) unsubStudents();
     if(unsubCycles) unsubCycles();
     if(unsubDays) unsubDays();
     if(unsubExercises) unsubExercises();
-
     currentUser = null;
     currentStudent = null;
     currentCycle = null;
     currentDay = null;
-
+    isStudentMode = false;
+    currentStudentUser = null;
     go("auth-card");
   }
 });
 
-/* =========================
-   SEARCH
-   ========================= */
+/* Search */
 $("search").oninput = ()=>{
   const cards = Array.from(document.querySelectorAll(".card-student"));
   const term = ($("search").value||"").toLowerCase();
@@ -729,10 +621,9 @@ $("search").oninput = ()=>{
   });
 };
 
-/* =========================
-   MODAL ALUNO (novo/editar)
-   ========================= */
+/* Modal aluno: adicionar/editar */
 $("btn-add").onclick = ()=>{
+  if(isStudentMode) return; // aluno não pode
   const count = onAuthStateChanged._count || 0;
   if(currentPlan.plan!=="pro" && count >= (currentPlan.limit||5)){
     showAlert("Limite do Plano Free atingido. Atualize para PRO para cadastrar mais alunos.");
@@ -743,24 +634,24 @@ $("btn-add").onclick = ()=>{
   $("form-student").reset();
   $("modal-bg").classList.remove("hidden");
 };
-
 $("btn-cancel").onclick = ()=> $("modal-bg").classList.add("hidden");
 
 $("form-student").onsubmit = async(e)=>{
   e.preventDefault();
+  if(isStudentMode) return;
   const id = $("st-id").value;
-
   const payload = {
-    ownerId: currentUser.uid,
+    ownerId: currentUser?.uid || null,
     name: $("st-name").value.trim(),
     phone: $("st-phone").value.trim(),
+    cpf: $("st-cpf").value.replace(/\D/g,"") || null,
+    birth: $("st-birth").value || null,
     goal: $("st-goal").value,
     level: $("st-level").value,
     notes: $("st-notes").value.trim(),
     updatedAt: serverTimestamp(),
     createdAt: serverTimestamp()
   };
-
   try{
     if(id){
       const ref = doc(db,"students",id);
@@ -776,120 +667,100 @@ $("form-student").onsubmit = async(e)=>{
     showAlert("Erro: "+err.message);
   }
 };
-/* =========================
-   TREINOS DO ALUNO — CICLOS
-   ========================= */
+/* TREINOS DO ALUNO — CICLOS */
 $("btn-back").onclick = ()=>{
   currentStudent = null;
   if(unsubCycles) unsubCycles();
-  go("app");
+  if(isStudentMode){
+    // aluno volta para "login" (ou poderíamos fechar e mostrar dias?)
+    go("auth-card");
+    isStudentMode = false;
+    currentStudentUser = null;
+  }else{
+    go("app");
+  }
 };
-
-// Abrir modal novo ciclo
+// novo ciclo (somente personal)
 $("btn-new-cycle").onclick = ()=>{
-  if(!currentStudent) return;
+  if(!currentStudent || isStudentMode) return;
   $("cycle-title").textContent = "Criar Ciclo";
   $("cycle-id").value = "";
   $("form-cycle").reset();
   $("cycle-bg").classList.remove("hidden");
 };
-
 $("btn-cycle-cancel").onclick = ()=> $("cycle-bg").classList.add("hidden");
 
-// Abre tela de treinos do aluno
 function openTrainView(student){
   currentStudent = student;
-  $("train-title").textContent = `${student.name} — Treinos`;
+  $("train-title").textContent = `${student.name} — Treinos${isStudentMode ? " (visualização)" : ""}`;
   go("train-view");
   subscribeCycles(student.id);
 }
 
-// OUVINTE em ciclos
 function subscribeCycles(studentId){
   if(unsubCycles) unsubCycles();
-
   const cyclesRef = collection(db, "students", studentId, "cycles");
-
   unsubCycles = onSnapshot(cyclesRef, snap=>{
-    const arr=[];
-    snap.forEach(d=> arr.push({ id:d.id, ...d.data() }));
-
+    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
     arr.sort((a,b)=>{
-      const as = (a.startDate||"");
-      const bs = (b.startDate||"");
+      const as=(a.startDate||""); const bs=(b.startDate||"");
       if(as===bs) return (a.name||"").localeCompare(b.name||"");
-      return as < bs ? -1 : 1;
+      return as<bs?-1:1;
     });
-
     renderCycles(arr);
   });
 }
 
-// Render cards de ciclos
 function renderCycles(list){
   const empty = $("cycles-empty");
   const wrap = $("cycles-list");
-
   wrap.innerHTML = "";
-
-  if(!list.length){
-    empty.classList.remove("hidden");
-    return;
-  }
+  if(!list.length){ empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
 
   list.forEach(c=>{
     const card = document.createElement("div");
     card.className="card-cycle";
-
-    const period = (c.startDate && c.endDate)
-      ? formatPeriod(c.startDate, c.endDate)
-      : "Sem período";
-
+    const period = c.startDate && c.endDate ? formatPeriod(c.startDate, c.endDate) : "Sem período";
     card.innerHTML = `
       <div style="min-width:220px">
-        <strong>${c.name || "(Sem nome)"}</strong>
+        <strong>${c.name||"(Sem nome)"}</strong>
         <div class="badge" style="margin-top:6px">${period}</div>
       </div>
       <div class="cycle-actions">
         <button class="btn-sm" data-open>📅 Abrir dias</button>
-        <button class="btn-sm" data-edit>✏️ Renomear/Período</button>
-        <button class="btn-sm danger" data-del>🗑 Excluir</button>
+        ${isStudentMode ? "" : `
+          <button class="btn-sm" data-edit>✏️ Renomear/Período</button>
+          <button class="btn-sm danger" data-del>🗑 Excluir</button>
+        `}
       </div>
     `;
-
-    // Abrir dias
     card.querySelector("[data-open]").onclick = ()=>{
-      currentCycle = { id:c.id, ...c };
+      currentCycle = { id: c.id, ...c };
       openDaysView();
     };
-
-    // Editar ciclo
-    card.querySelector("[data-edit]").onclick = ()=>{
-      $("cycle-title").textContent = "Editar Ciclo";
-      $("cycle-id").value = c.id;
-      $("cycle-name").value = c.name || "";
-      $("cycle-start").value = c.startDate || "";
-      $("cycle-end").value = c.endDate || "";
-      $("cycle-bg").classList.remove("hidden");
-    };
-
-    // Excluir ciclo
-    card.querySelector("[data-del]").onclick = async()=>{
-      if(confirm(`Excluir ciclo "${c.name}"?`)){
-        await deleteDoc(doc(db,"students",currentStudent.id,"cycles",c.id));
-      }
-    };
-
+    if(!isStudentMode){
+      card.querySelector("[data-edit]").onclick = ()=>{
+        $("cycle-title").textContent = "Editar Ciclo";
+        $("cycle-id").value = c.id;
+        $("cycle-name").value = c.name || "";
+        $("cycle-start").value = c.startDate || "";
+        $("cycle-end").value = c.endDate || "";
+        $("cycle-bg").classList.remove("hidden");
+      };
+      card.querySelector("[data-del]").onclick = async()=>{
+        if(confirm(`Excluir ciclo "${c.name}"?`)){
+          await deleteDoc(doc(db,"students",currentStudent.id,"cycles",c.id));
+        }
+      };
+    }
     wrap.appendChild(card);
   });
 }
 
-// Salvar ciclo (novo/editar)
 $("form-cycle").onsubmit = async(e)=>{
   e.preventDefault();
-  if(!currentStudent) return showAlert("Aluno inválido.");
-
+  if(!currentStudent || isStudentMode) return showAlert("Operação não permitida.");
   const id = $("cycle-id").value;
   const data = {
     name: $("cycle-name").value.trim(),
@@ -897,10 +768,8 @@ $("form-cycle").onsubmit = async(e)=>{
     endDate: $("cycle-end").value || null,
     updatedAt: serverTimestamp()
   };
-
   try{
     const cyclesRef = collection(db, "students", currentStudent.id, "cycles");
-
     if(id){
       await updateDoc(doc(cyclesRef, id), data);
       showAlert("Ciclo atualizado ✅", true);
@@ -908,102 +777,70 @@ $("form-cycle").onsubmit = async(e)=>{
       await addDoc(cyclesRef, { ...data, createdAt: serverTimestamp() });
       showAlert("Ciclo criado ✅", true);
     }
-
     $("cycle-bg").classList.add("hidden");
   }catch(err){
     showAlert("Erro: "+err.message);
   }
 };
-/* =========================
-   DIAS DO CICLO (7 DIAS)
-   ========================= */
+/* DIAS DO CICLO */
 $("btn-back-cycles").onclick = ()=>{
   currentCycle = null;
   if(unsubDays) unsubDays();
   go("train-view");
 };
 
-// Recriar os 7 dias padrão
 $("btn-regen-days").onclick = async()=>{
-  if(!currentCycle) return;
+  if(!currentCycle || isStudentMode) return;
   await ensure7Days();
   showAlert("Dias verificados/criados ✅", true);
 };
 
-// Abre view de dias do ciclo atual
 function openDaysView(){
-  $("days-title").textContent = `${currentCycle.name || "Ciclo"} — Dias`;
+  $("days-title").textContent = `${currentCycle.name||"Ciclo"} — Dias`;
   go("days-view");
   subscribeDays(currentStudent.id, currentCycle.id);
 }
-
-// Ouvinte de dias do ciclo
 function subscribeDays(studentId, cycleId){
   if(unsubDays) unsubDays();
-
-  const ref = collection(
-    db, "students", studentId, "cycles", cycleId, "days"
-  );
-
+  const ref = collection(db, "students", studentId, "cycles", cycleId, "days");
   unsubDays = onSnapshot(ref, snap=>{
-    const arr=[]; 
-    snap.forEach(d=> arr.push({ id:d.id, ...d.data() }));
-
-    // Ordena por 'order'
-    arr.sort((a,b)=>(a.order||0)-(b.order||0));
-
+    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
+    arr.sort((a,b)=> (a.order||0) - (b.order||0));
     renderDaysGrid(arr);
-
     if(!arr.length) $("days-empty").classList.remove("hidden");
     else $("days-empty").classList.add("hidden");
   });
 }
-
-// Garante que existam 7 dias padrão
 async function ensure7Days(){
   const mapDays = [
     {id:"seg", name:"SEGUNDA", order:1},
-    {id:"ter", name:"TERÇA",   order:2},
-    {id:"qua", name:"QUARTA",  order:3},
-    {id:"qui", name:"QUINTA",  order:4},
-    {id:"sex", name:"SEXTA",   order:5},
-    {id:"sab", name:"SÁBADO",  order:6},
+    {id:"ter", name:"TERÇA", order:2},
+    {id:"qua", name:"QUARTA", order:3},
+    {id:"qui", name:"QUINTA", order:4},
+    {id:"sex", name:"SEXTA", order:5},
+    {id:"sab", name:"SÁBADO", order:6},
     {id:"dom", name:"DOMINGO", order:7},
   ];
-
-  const daysRef = collection(
-    db, "students", currentStudent.id, "cycles", currentCycle.id, "days"
-  );
-
+  const daysRef = collection(db, "students", currentStudent.id, "cycles", currentCycle.id, "days");
   const snap = await getDocs(daysRef);
   const existing = {};
   snap.forEach(d=> existing[d.id] = true);
-
-  // Cria os que faltam
   for(const d of mapDays){
     if(!existing[d.id]){
       await setDoc(doc(daysRef, d.id), {
-        name: d.name,
-        order: d.order,
-        exercisesCount: 0,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        name: d.name, order: d.order, exercisesCount: 0,
+        createdAt: serverTimestamp(), updatedAt: serverTimestamp()
       });
     }
   }
 }
-
-// Renderiza cards dos dias
 function renderDaysGrid(days){
   const grid = $("days-grid");
   grid.innerHTML = "";
-
   days.forEach(d=>{
     const card = document.createElement("div");
     card.className="day-card";
-
     const count = d.exercisesCount || 0;
-
     card.innerHTML = `
       <div class="day-top">
         <div class="day-name">${d.name}</div>
@@ -1013,44 +850,33 @@ function renderDaysGrid(days){
         <button class="btn-xs brand" data-open>Ver exercícios</button>
       </div>
     `;
-
-    // Abre lista de exercícios do dia
     card.querySelector("[data-open]").onclick = ()=>{
-      openExercisesView(d);  // define currentDay e navega
+      openExercisesView(d);
     };
-
     grid.appendChild(card);
   });
 }
-/* =========================
-   EXERCÍCIOS DO DIA — CRUD
-   ========================= */
+/* EXERCÍCIOS DO DIA — CRUD */
 $("btn-back-days").onclick = ()=>{
   if(unsubExercises) unsubExercises();
   currentDay = null;
   go("days-view");
 };
-
-// Botão + exercício
 $("btn-new-ex").onclick = ()=>{
-  if(!currentDay) return;
+  if(!currentDay || isStudentMode) return;
   $("ex-modal-title").textContent = "Novo Exercício";
   $("ex-id").value = "";
   $("form-ex").reset();
   $("ex-bg").classList.remove("hidden");
 };
-
 $("btn-ex-cancel").onclick = ()=> $("ex-bg").classList.add("hidden");
 
-// Abre e escuta exercícios do dia
 function openExercisesView(dayDoc){
   currentDay = dayDoc;
-  $("ex-title").textContent = `${currentCycle.name || "Ciclo"} — ${dayDoc.name}`;
+  $("ex-title").textContent = `${currentCycle.name||"Ciclo"} — ${dayDoc.name}`;
   go("ex-view");
   subscribeExercises();
 }
-
-// Referência base para exercícios
 function exCollectionRef(){
   return collection(
     db,
@@ -1060,104 +886,71 @@ function exCollectionRef(){
     "exercises"
   );
 }
-
-// Listener exercícios
 function subscribeExercises(){
   if(unsubExercises) unsubExercises();
-
   const ref = exCollectionRef();
-
   unsubExercises = onSnapshot(ref, snap=>{
-    const arr=[];
-    snap.forEach(d=> arr.push({ id:d.id, ...d.data() }));
-
-    arr.sort((a,b)=>(a.order||0)-(b.order||0));
+    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
+    arr.sort((a,b)=> (a.order||0) - (b.order||0));
     renderExercises(arr);
-
-    // Atualiza contador no doc do dia ✅
-    updateDoc(
-      doc(
-        db,
-        "students", currentStudent.id,
-        "cycles", currentCycle.id,
-        "days", currentDay.id
-      ),
-      {
-        exercisesCount: arr.length,
-        updatedAt: serverTimestamp()
-      }
-    ).catch(()=>{});
+    // contador no dia
+    updateDoc(doc(db,"students",currentStudent.id,"cycles",currentCycle.id,"days",currentDay.id), {
+      exercisesCount: arr.length, updatedAt: serverTimestamp()
+    }).catch(()=>{});
   });
 }
-
-// Render cards de exercício
 function renderExercises(list){
   const empty = $("ex-empty");
   const wrap = $("ex-list");
-
   wrap.innerHTML = "";
-
-  if(!list.length){
-    empty.classList.remove("hidden");
-    return;
-  }
+  if(!list.length){ empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
-
   list.forEach(ex=>{
     const card = document.createElement("div");
     card.className="ex-card";
-
     card.innerHTML = `
       <div class="ex-top">
-        <div class="ex-name">${ex.name || "(Sem nome)"}</div>
+        <div class="ex-name">${ex.name||"(Sem nome)"}</div>
         <div class="ex-actions">
-          <button class="btn-xs" data-edit>✏️ Editar</button>
-          <button class="btn-xs danger" data-del>🗑 Excluir</button>
+          ${isStudentMode ? "" : `
+            <button class="btn-xs" data-edit>✏️ Editar</button>
+            <button class="btn-xs danger" data-del>🗑 Excluir</button>
+          `}
         </div>
       </div>
       <div class="ex-line">
-        <span class="ex-chip">Séries: <b>${ex.sets || "—"}</b></span>
-        <span class="ex-chip">Reps: <b>${ex.reps || "—"}</b></span>
-        <span class="ex-chip">Carga: <b>${ex.load || "—"}</b></span>
-        <span class="ex-chip">Descanso: <b>${ex.rest || "—"}</b></span>
+        <span class="ex-chip">Séries: <b>${ex.sets||"—"}</b></span>
+        <span class="ex-chip">Reps: <b>${ex.reps||"—"}</b></span>
+        <span class="ex-chip">Carga: <b>${ex.load||"—"}</b></span>
+        <span class="ex-chip">Descanso: <b>${ex.rest||"—"}</b></span>
       </div>
-      ${ex.notes
-        ? `<div class="ex-line" style="color:var(--sub)">Obs: ${ex.notes}</div>`
-        : ""
-      }
+      ${ex.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${ex.notes}</div>`:""}
     `;
-
-    // Editar
-    card.querySelector("[data-edit]").onclick = ()=>{
-      $("ex-modal-title").textContent = "Editar Exercício";
-      $("ex-id").value = ex.id;
-      $("ex-name").value = ex.name || "";
-      $("ex-sets").value = ex.sets || "";
-      $("ex-reps").value = ex.reps || "";
-      $("ex-load").value = ex.load || "";
-      $("ex-rest").value = ex.rest || "";
-      $("ex-notes").value = ex.notes || "";
-      $("ex-bg").classList.remove("hidden");
-    };
-
-    // Excluir
-    card.querySelector("[data-del]").onclick = async()=>{
-      if(confirm(`Excluir "${ex.name || 'exercício'}"?`)){
-        await deleteDoc(doc(exCollectionRef(), ex.id));
-      }
-    };
-
+    if(!isStudentMode){
+      card.querySelector("[data-edit]").onclick = ()=>{
+        $("ex-modal-title").textContent = "Editar Exercício";
+        $("ex-id").value = ex.id;
+        $("ex-name").value = ex.name || "";
+        $("ex-sets").value = ex.sets || "";
+        $("ex-reps").value = ex.reps || "";
+        $("ex-load").value = ex.load || "";
+        $("ex-rest").value = ex.rest || "";
+        $("ex-notes").value = ex.notes || "";
+        $("ex-bg").classList.remove("hidden");
+      };
+      card.querySelector("[data-del]").onclick = async()=>{
+        if(confirm(`Excluir "${ex.name||'exercício'}"?`)){
+          await deleteDoc(doc(exCollectionRef(), ex.id));
+        }
+      };
+    }
     wrap.appendChild(card);
   });
 }
-
-// Criar/editar exercício
 $("form-ex").onsubmit = async(e)=>{
   e.preventDefault();
-  if(!currentDay) return showAlert("Dia inválido.");
-
+  if(!currentDay || isStudentMode) return showAlert("Operação não permitida.");
   const id = $("ex-id").value;
-
   const data = {
     name: $("ex-name").value.trim(),
     sets: Number($("ex-sets").value || 0) || null,
@@ -1167,36 +960,60 @@ $("form-ex").onsubmit = async(e)=>{
     notes: $("ex-notes").value.trim() || null,
     updatedAt: serverTimestamp()
   };
-
   if(!data.name) return showAlert("Informe o nome do exercício.");
-
   try{
-    const ref = exCollectionRef();
-
     if(id){
-      await updateDoc(doc(ref, id), data);
+      await updateDoc(doc(exCollectionRef(), id), data);
       showAlert("Exercício atualizado ✅", true);
     }else{
-      const snap = await getDocs(ref);
+      const snap = await getDocs(exCollectionRef());
       const order = snap.size + 1;
-
-      await addDoc(ref, {
-        ...data,
-        order,
-        createdAt: serverTimestamp()
-      });
-
+      await addDoc(exCollectionRef(), { ...data, order, createdAt: serverTimestamp() });
       showAlert("Exercício adicionado ✅", true);
     }
-
     $("ex-bg").classList.add("hidden");
   }catch(err){
     showAlert("Erro: "+err.message);
   }
 };
-/* =========================
-   Utils
-   ========================= */
+
+/* LOGIN DO ALUNO (CPF + NASC) */
+$("btn-open-student-login").onclick = () => {
+  $("student-login-bg").classList.remove("hidden");
+};
+$("btn-stu-login-cancel").onclick = () => {
+  $("student-login-bg").classList.add("hidden");
+};
+function cleanCpf(v){ return (v||"").replace(/\D/g,""); }
+$("form-student-login").onsubmit = async(e)=>{
+  e.preventDefault();
+  const cpf = cleanCpf($("stu-cpf").value);
+  const birth = $("stu-birth").value;
+  if(!cpf || !birth){ showAlert("Informe CPF e nascimento corretamente"); return; }
+  try{
+    const q = query(collection(db,"students"), where("cpf","==",cpf), where("birth","==",birth));
+    const snap = await getDocs(q);
+    if(snap.empty){ showAlert("Aluno não encontrado. Fale com seu personal."); return; }
+    const docSnap = snap.docs[0];
+    const st = { id: docSnap.id, ...docSnap.data() };
+    if(st.active===false){ showAlert("Aluno inativo. Contate seu personal."); return; }
+    isStudentMode = true;
+    currentStudentUser = st;
+    $("student-login-bg").classList.add("hidden");
+    showAlert("Bem-vindo! ✅", true);
+    currentStudent = { id: st.id, name: st.name };
+    $("train-title").textContent = `${st.name} — Treinos (visualização)`;
+    // esconder botões globais
+    $("btn-add")?.classList.add("hidden");
+    $("btn-new-cycle")?.classList.add("hidden");
+    $("btn-new-ex")?.classList.add("hidden");
+    go("train-view");
+    subscribeCycles(st.id);
+  }catch(err){
+    showAlert("Erro: "+err.message);
+  }
+};
+/* Utils */
 function formatPeriod(yyyy1, yyyy2){
   const f = s=>{
     if(!s) return "";
@@ -1207,8 +1024,6 @@ function formatPeriod(yyyy1, yyyy2){
   return `${f(yyyy1)} — ${f(yyyy2)}`;
 }
 
-/* ✅ Removeu-se a função duplicada openTrainView
-   que ANTES estava vazia e quebrava o sistema!!! ✅ */
 </script>
 </body>
 </html>
