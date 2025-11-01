@@ -5,260 +5,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MeuTreino PRO</title>
 
+<!-- Fonte -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg: #fafafa;
-  --panel:#ffffff;
-  --border:#e6e6e6;
-  --text:#111;
-  --sub:#555;
-  --muted:#f3f3f3;
-  --brand:#009c3b;
-  --brand-dark:#026a29;
-  --danger:#e54848;
+:root{
+  --bg:#fafafa; --panel:#fff; --border:#e6e6e6; --text:#111; --sub:#555; --muted:#f3f3f3;
+  --brand:#009c3b; --brand-dark:#026a29; --danger:#e54848; --ok:#18a34a;
 }
-
 *{box-sizing:border-box}
-body{
-  margin:0;width:100%;height:100%;
-  font-family:'Inter',sans-serif;
-  background:var(--bg);color:var(--text);
-}
+html,body{height:100%}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
 .hidden{display:none!important}
-/* LOGIN */
-.wrap{
-  min-height:100vh;
-  display:flex;justify-content:center;align-items:center;padding:16px;
-}
+
+/* ------------ Layouts ------------- */
+.wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
 .card{
-  width:100%;max-width:420px;
-  background:var(--panel);
-  border-radius:16px;
-  border:1px solid var(--border);
-  padding:26px;
+  width:100%;max-width:420px;background:var(--panel);border-radius:16px;border:1px solid var(--border);padding:26px
 }
-.brand{
-  display:flex;align-items:center;gap:12px;font-size:20px;font-weight:bold;
-}
-.brand-logo{
-  width:40px;height:40px;
-  background:var(--brand);
-  display:flex;align-items:center;justify-content:center;
-  border-radius:8px;color:#fff;font-size:22px;
-}
-.pro{color:var(--brand-dark);font-weight:700}
+.brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:700}
+.brand-logo{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;border-radius:8px;font-size:22px}
+.pro{color:var(--brand-dark);font-weight:800}
 .title{font-size:20px;margin:12px 0 6px}
 .subtitle{font-size:14px;color:var(--sub);margin-bottom:14px}
 
-.field{display:flex;flex-direction:column;margin-bottom:14px}
-input,select,textarea{
-  padding:12px;border-radius:10px;font-size:15px;
-  border:1px solid var(--border);background:var(--muted);
-}
+/* ------------ Form ------------- */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+input,select,textarea{padding:12px;border-radius:10px;font-size:15px;border:1px solid var(--border);background:var(--muted)}
 textarea{resize:vertical}
-.btn{
-  width:100%;padding:12px;margin-top:2px;
-  border:none;border-radius:10px;
-  font-weight:600;cursor:pointer;
-}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:600;cursor:pointer}
 .btn.primary{background:var(--brand);color:#fff}
 .btn.google{background:#fff;border:1px solid #ccc;color:#333}
 .btn.ghost{background:var(--panel);border:1px solid var(--border);color:var(--text)}
-
-.linkbar{display:flex;justify-content:space-between;margin-top:10px;gap:10px;flex-wrap:wrap}
+.linkbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;margin-top:10px}
 .link{border:none;background:none;color:var(--brand-dark);font-size:14px;cursor:pointer}
-/* ALERT */
-.alert{
-  display:none;padding:10px;font-size:14px;margin-bottom:12px;border-radius:8px;background:#ffd8d8;color:#8a0000;
-}
+
+/* Alert */
+.alert{display:none;padding:10px;font-size:14px;margin-bottom:12px;border-radius:8px;background:#ffd8d8;color:#8a0000;white-space:pre-line}
 .alert.ok{background:#daf5d8;color:#084d19}
 
-/* APP: LISTA DE ALUNOS */
-.app,.view{width:100%;max-width:1100px;margin:auto;padding:20px}
-.topbar{
-  display:grid;grid-template-columns:1fr auto auto;gap:12px;
-  align-items:center;margin-bottom:18px;
-}
+/* ------------ App ------------- */
+.app,.view,.week-view{width:100%;max-width:1100px;margin:auto;padding:20px}
+.topbar{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:18px}
 .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.pill{
-  padding:6px 12px;background:var(--muted);
-  border-radius:12px;border:1px solid var(--border);font-size:14px;
-}
+.pill{padding:6px 12px;background:var(--muted);border-radius:12px;border:1px solid var(--border);font-size:14px}
 .search{max-width:320px}
 .grid{display:grid;gap:16px}
 @media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
 
-.card-student{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;position:relative;
-}
-.badge{
-  background:var(--muted);
-  padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub);
-}
+.card-student{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.badge{background:var(--muted);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub)}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn-sm{
-  padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;
-  border:1px solid var(--border);background:var(--muted);
-}
+.btn-sm{padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--muted)}
 .btn-sm.brand{background:var(--brand);color:#fff;border:none}
 .btn-sm.danger{background:var(--danger);color:#fff;border:none}
+.btn-xs{padding:6px 8px;border-radius:8px;font-size:12px;border:1px solid var(--border);background:var(--muted);cursor:pointer}
 
-/* BOTÃO TREINOS NO TOPO DO CARD */
-.train-top{
-  position:absolute;top:12px;right:12px;
-  padding:8px 10px;border-radius:999px;font-size:13px;cursor:pointer;
-  background:var(--brand);color:#fff;border:none;display:flex;gap:6px;align-items:center;
-}
-/* MODAIS GENÉRICOS */
-.modal-bg{
-  position:fixed;inset:0;background:rgba(0,0,0,.45);
-  display:flex;align-items:center;justify-content:center;
-}
-.modal{
-  width:90%;max-width:460px;background:var(--panel);
-  padding:22px;border-radius:16px;
-  border:1px solid var(--border);
-}
-.modal h2{margin:0 0 14px}
+/* Espaço extra no botão WhatsApp */
+.actions .btn-sm.brand[href^="https://wa.me"]{margin-left:auto}
+.actions .btn-sm.brand + .btn-sm{margin-left:8px}
 
-/* VIEW: TÍTULOS/HEADERS */
-.view-header{
-  display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;
-}
-.back{
-  border:none;background:var(--panel);border:1px solid var(--border);
-  padding:10px 12px;border-radius:10px;cursor:pointer
-}
-.helper{
-  background:var(--panel);border:1px dashed var(--border);border-radius:12px;padding:16px;color:var(--sub)
-}
+/* FAB */
+.fab{position:fixed;right:22px;bottom:22px;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;border:none;font-size:26px;box-shadow:0 10px 20px rgba(0,0,0,.15);cursor:pointer}
 
-/* CICLOS */
-.list{display:grid;gap:12px}
-.card-cycle{
-  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
-  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-}
-.cycle-actions{display:flex;gap:8px;flex-wrap:wrap}
+/* Views */
+.view-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.back{padding:8px 12px;border-radius:8px;background:var(--panel);border:1px solid var(--border);cursor:pointer}
+.helper{padding:14px;background:#fff7d1;border:1px dashed #e3c54b;border-radius:12px;color:#5c4a00}
 
-/* DIAS */
+/* Days / Exercises */
 .days-grid{display:grid;gap:12px}
-@media(min-width:720px){.days-grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1024px){.days-grid{grid-template-columns:repeat(4,1fr)}}
-.day-card{
-  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
-  display:flex;flex-direction:column;gap:6px
-}
-.day-top{display:flex;justify-content:space-between;align-items:center}
-.day-name{font-weight:700}
-.day-count{font-size:12px;color:var(--sub)}
-.day-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.btn-xs{padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--muted);font-size:12px;cursor:pointer}
-.btn-xs.brand{background:var(--brand);color:#fff;border:none}
+@media(min-width:700px){.days-grid{grid-template-columns:repeat(2,1fr)}}
+.day-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+.day-top{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:8px}
+.day-actions{display:flex;gap:8px}
 
-/* EXERCÍCIOS */
-.ex-card{
-  background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;
-  display:flex;flex-direction:column;gap:8px
-}
-.ex-top{
-  display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap
-}
+.list{display:flex;flex-direction:column;gap:12px}
+.ex-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ex-top{display:flex;justify-content:space-between;gap:10px}
 .ex-name{font-weight:700}
-.ex-line{
-  display:flex;gap:8px;flex-wrap:wrap;
-  font-size:14px;color:#222
-}
-.ex-chip{
-  background:var(--muted);border:1px solid var(--border);
-  padding:6px 10px;border-radius:999px
-}
-.ex-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ex-line{display:flex;flex-wrap:wrap;gap:8px}
+.ex-chip{background:var(--muted);border:1px solid var(--border);padding:4px 8px;border-radius:999px;font-size:12px}
 
-/* FAB de adicionar aluno */
-.fab{
-  position:fixed;right:22px;bottom:22px;
-  width:54px;height:54px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--brand);color:#fff;border:none;font-size:26px;
-  box-shadow:0 10px 20px rgba(0,0,0,.15);cursor:pointer;
-}
+/* Week */
+.week-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.day-box{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;cursor:pointer}
+.ex-list{margin-top:10px;padding-left:10px;font-size:14px}
+.ex-list div{margin-bottom:6px}
 
-/* VIEW ESPECIAL DO ALUNO: acordeão semanal */
-.week{
-  display:grid;gap:10px;max-width:900px;margin:0 auto;
-}
-.week-day{
-  background:var(--panel);border:1px solid var(--border);border-radius:12px;
-  overflow:hidden;
-}
-.week-head{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 14px;cursor:pointer;font-weight:700;
-}
-.week-body{
-  display:none;padding:12px 14px;border-top:1px dashed var(--border);
-}
-.week-day.open .week-body{display:block}
-.week-empty{
-  background:var(--panel);border:1px dashed var(--border);border-radius:12px;
-  padding:16px;color:var(--sub);text-align:center;
-}
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{width:100%;max-width:520px;background:var(--panel);border-radius:16px;border:1px solid var(--border);padding:20px}
+
+/* Pequenos toques */
+hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
 </style>
 </head>
 <body>
 <main class="wrap">
 
-  <!-- LOGIN -->
+  <!-- ============ AUTH CARD ============ -->
   <section id="auth-card" class="card">
     <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
     <h2 class="title" id="view-title">Entrar</h2>
     <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
     <div id="alert" class="alert"></div>
 
-    <form id="form-login">
-      <div class="field"><label>Email</label><input id="login-email" type="email" required/></div>
-      <div class="field"><label>Senha</label><input id="login-pass" type="password" required/></div>
-      <button class="btn primary">Entrar</button>
+    <!-- Login Personal -->
+    <form id="form-login" class="block">
+      <div class="field"><label>Email</label><input id="login-email" type="email" required></div>
+      <div class="field"><label>Senha</label><input id="login-pass" type="password" required></div>
+      <button class="btn primary" type="submit">Entrar</button>
     </form>
 
-    <form id="form-signup" class="hidden">
-      <div class="field"><label>Nome completo</label><input id="su-name" required/></div>
-      <div class="field"><label>Email</label><input id="su-email" type="email" required/></div>
-      <div class="field"><label>Senha (6+)</label><input id="su-pass" type="password" minlength="6" required/></div>
-      <button class="btn primary">Criar conta</button>
+    <!-- Signup Personal -->
+    <form id="form-signup" class="block hidden">
+      <div class="field"><label>Nome completo</label><input id="su-name"></div>
+      <div class="field"><label>Email</label><input id="su-email" type="email"></div>
+      <div class="field"><label>Senha (6+)</label><input id="su-pass" type="password" minlength="6"></div>
+      <button class="btn primary" type="submit">Criar conta</button>
     </form>
 
-    <form id="form-reset" class="hidden">
-      <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email" required/></div>
-      <button class="btn primary">Enviar link</button>
+    <!-- Reset Password -->
+    <form id="form-reset" class="block hidden">
+      <div class="field"><label>Email cadastrado</label><input id="rs-email" type="email"></div>
+      <button class="btn primary" type="submit">Enviar link</button>
     </form>
 
-    <div class="hr"></div>
-    <button id="btn-google" class="btn google">Entrar com Google</button>
+    <button id="btn-google" class="btn google" style="margin-top:10px">Entrar com Google</button>
 
     <div class="linkbar">
       <button class="link" id="go-signup">Criar conta</button>
       <button class="link" id="go-reset">Esqueci a senha</button>
-    </div>
-
-    <!-- BOTÃO DE ACESSO PARA ALUNO -->
-    <div class="linkbar">
-      <button class="link" id="btn-open-student-login">Sou Aluno</button>
       <button class="link hidden" id="go-login">Voltar login</button>
     </div>
+
+    <div class="linkbar">
+      <button class="link" id="btn-open-student-login">Sou Aluno</button>
+    </div>
   </section>
-  <!-- APP: MEUS ALUNOS -->
+
+  <!-- ============ APP: LISTA DE ALUNOS ============ -->
   <section id="app" class="app hidden">
     <div class="topbar">
       <strong>Meus Alunos</strong>
-      <input id="search" class="search" type="text" placeholder="Pesquisar por nome..."/>
+      <input id="search" class="search" type="text" placeholder="Pesquisar por nome...">
       <div class="tools">
         <span class="pill" id="plan-pill">Plano: Free (5)</span>
         <span class="pill" id="user-pill">...</span>
@@ -267,10 +161,10 @@ textarea{resize:vertical}
     </div>
 
     <div id="students-list" class="grid"></div>
-    <button id="btn-add" class="fab">+</button>
+    <button id="btn-add" class="fab" title="Novo Aluno">+</button>
   </section>
 
-  <!-- VIEW: TREINOS DO ALUNO (CICLOS) -->
+  <!-- ============ VIEW: CICLOS ============ -->
   <section id="train-view" class="view hidden">
     <div class="view-header">
       <button id="btn-back" class="back">← Voltar</button>
@@ -279,15 +173,11 @@ textarea{resize:vertical}
         <button id="btn-new-cycle" class="btn ghost" style="width:auto">+ Criar Ciclo</button>
       </div>
     </div>
-
-    <div id="cycles-empty" class="helper hidden">
-      Nenhum ciclo encontrado. Clique em <b>+ Criar Ciclo</b> para começar.
-    </div>
-
+    <div id="cycles-empty" class="helper hidden">Nenhum ciclo encontrado. Clique em <b>+ Criar Ciclo</b> para começar.</div>
     <div id="cycles-list" class="list"></div>
   </section>
 
-  <!-- VIEW: DIAS DO CICLO -->
+  <!-- ============ VIEW: DIAS ============ -->
   <section id="days-view" class="view hidden">
     <div class="view-header">
       <button id="btn-back-cycles" class="back">← Voltar aos ciclos</button>
@@ -300,38 +190,41 @@ textarea{resize:vertical}
     <div id="days-grid" class="days-grid"></div>
   </section>
 
-  <!-- VIEW: EXERCÍCIOS DO DIA -->
+  <!-- ============ VIEW: EXERCÍCIOS ============ -->
   <section id="ex-view" class="view hidden">
     <div class="view-header">
       <button id="btn-back-days" class="back">← Voltar aos dias</button>
       <h2 id="ex-title" style="margin:0">Dia — Exercícios</h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button id="btn-new-ex" class="btn ghost" style="width:auto">+ Novo Exercício</button>
-      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+      <button id="btn-new-ex" class="btn ghost" style="width:auto">+ Novo Exercício</button>
     </div>
     <div id="ex-empty" class="helper hidden">Nenhum exercício cadastrado para este dia.</div>
     <div id="ex-list" class="list"></div>
   </section>
-  <!-- MODAL: CADASTRAR / EDITAR ALUNO -->
+
+  <!-- ============ VIEW: SEMANA (ALUNO) ============ -->
+  <section id="week-view" class="week-view hidden">
+    <div class="week-header">
+      <div>
+        <h2 style="margin:0" id="week-student-name">Treino da Semana</h2>
+        <div id="week-personal" class="subtitle"></div>
+        <div id="week-cycle" class="subtitle"></div>
+      </div>
+      <button id="btn-week-back" class="back" style="border:1px solid var(--border)">← Sair</button>
+    </div>
+    <div id="week-days"></div>
+  </section>
+
+  <!-- ============ MODAL: ALUNO ============ -->
   <div id="modal-bg" class="modal-bg hidden">
     <div class="modal">
       <h2 id="modal-title">Novo Aluno</h2>
       <form id="form-student">
-        <input type="hidden" id="st-id">
-
-        <div class="field"><label>Nome</label><input id="st-name" required/></div>
-        <div class="field"><label>WhatsApp</label><input id="st-phone"/></div>
-
-        <!-- Campos para login do aluno -->
-        <div class="field">
-          <label>CPF (somente números)</label>
-          <input id="st-cpf" maxlength="11" placeholder="Somente números" inputmode="numeric"/>
-        </div>
-        <div class="field">
-          <label>Nascimento</label>
-          <input id="st-birth" type="date"/>
-        </div>
-
+        <div class="field"><label>Nome</label><input id="st-name" required></div>
+        <div class="field"><label>WhatsApp</label><input id="st-phone" inputmode="tel" placeholder="(DDD) 99999-9999"></div>
+        <div class="field"><label>CPF (11 dígitos — será o ID do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric"></div>
+        <div class="field"><label>Data de Nascimento</label><input id="st-birth" type="date" required></div>
         <div class="field"><label>Objetivo</label>
           <select id="st-goal">
             <option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option>
@@ -341,7 +234,6 @@ textarea{resize:vertical}
           <select id="st-level"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select>
         </div>
         <div class="field"><label>Observações</label><textarea id="st-notes" rows="3"></textarea></div>
-
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn primary" type="submit">Salvar</button>
           <button class="btn ghost" type="button" id="btn-cancel">Cancelar</button>
@@ -350,17 +242,17 @@ textarea{resize:vertical}
     </div>
   </div>
 
-  <!-- MODAL: CICLO -->
+  <!-- ============ MODAL: CICLO ============ -->
   <div id="cycle-bg" class="modal-bg hidden">
     <div class="modal">
       <h2 id="cycle-title">Criar Ciclo</h2>
       <form id="form-cycle">
         <input type="hidden" id="cycle-id">
-        <div class="field"><label>Nome do Ciclo</label><input id="cycle-name" placeholder="Ex.: Hipertrofia Mês 1" required/></div>
+        <div class="field"><label>Nome do Ciclo</label><input id="cycle-name" placeholder="Ex.: Hipertrofia Mês 1" required></div>
         <div class="field"><small class="subtitle">Período (opcional)</small></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <div class="field" style="flex:1;min-width:160px"><label>Início</label><input id="cycle-start" type="date"/></div>
-          <div class="field" style="flex:1;min-width:160px"><label>Fim</label><input id="cycle-end" type="date"/></div>
+          <div class="field" style="flex:1;min-width:160px"><label>Início</label><input id="cycle-start" type="date"></div>
+          <div class="field" style="flex:1;min-width:160px"><label>Fim</label><input id="cycle-end" type="date"></div>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
           <button class="btn primary" type="submit">Salvar Ciclo</button>
@@ -370,26 +262,22 @@ textarea{resize:vertical}
     </div>
   </div>
 
-  <!-- MODAL: EXERCÍCIO -->
+  <!-- ============ MODAL: EXERCÍCIO ============ -->
   <div id="ex-bg" class="modal-bg hidden">
     <div class="modal">
       <h2 id="ex-modal-title">Novo Exercício</h2>
       <form id="form-ex">
         <input type="hidden" id="ex-id">
-        <div class="field"><label>Nome</label><input id="ex-name" required placeholder="Ex.: Supino Reto"/></div>
-
+        <div class="field"><label>Nome</label><input id="ex-name" required placeholder="Ex.: Supino Reto"></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <div class="field" style="flex:1;min-width:110px"><label>Séries</label><input id="ex-sets" type="number" min="1" step="1" placeholder="4"/></div>
-          <div class="field" style="flex:1;min-width:110px"><label>Repetições</label><input id="ex-reps" type="text" placeholder="10 ou 12-10-8"/></div>
+          <div class="field" style="flex:1;min-width:110px"><label>Séries</label><input id="ex-sets" type="number" min="1" step="1" placeholder="4"></div>
+          <div class="field" style="flex:1;min-width:110px"><label>Repetições</label><input id="ex-reps" type="text" placeholder="10 ou 12-10-8"></div>
         </div>
-
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <div class="field" style="flex:1;min-width:110px"><label>Carga</label><input id="ex-load" type="text" placeholder="30 kg"/></div>
-          <div class="field" style="flex:1;min-width:110px"><label>Descanso</label><input id="ex-rest" type="text" placeholder="60 s"/></div>
+          <div class="field" style="flex:1;min-width:110px"><label>Carga</label><input id="ex-load" type="text" placeholder="30 kg"></div>
+          <div class="field" style="flex:1;min-width:110px"><label>Descanso</label><input id="ex-rest" type="text" placeholder="60 s"></div>
         </div>
-
         <div class="field"><label>Observações</label><textarea id="ex-notes" rows="3" placeholder="Ex.: manter postura; não travar cotovelos"></textarea></div>
-
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn primary" type="submit">Salvar</button>
           <button class="btn ghost" type="button" id="btn-ex-cancel">Cancelar</button>
@@ -397,20 +285,17 @@ textarea{resize:vertical}
       </form>
     </div>
   </div>
-  <!-- LOGIN ALUNO (CPF + Data de Nascimento) -->
+
+  <!-- ============ MODAL: LOGIN ALUNO ============ -->
   <div id="student-login-bg" class="modal-bg hidden" style="z-index:2100">
     <div class="modal" style="max-width:380px">
       <h2>Entrar como Aluno</h2>
-      <p class="subtitle">Acesse seus treinos da semana</p>
+      <p class="subtitle">Acesse seu treino com CPF (11 dígitos) + Data de Nascimento.</p>
       <form id="form-student-login">
-        <div class="field">
-          <label>CPF (somente números)</label>
-          <input id="stu-cpf" maxlength="11" placeholder="Somente números" required inputmode="numeric"/>
-        </div>
-        <div class="field">
-          <label>Data de nascimento</label>
-          <input id="stu-birth" type="date" required/>
-        </div>
+        <div class="field"><label>CPF (somente números)</label>
+          <input id="stu-cpf" maxlength="11" placeholder="Somente números" required inputmode="numeric"></div>
+        <div class="field"><label>Data de nascimento</label>
+          <input id="stu-birth" type="date" required></div>
         <div style="display:flex;gap:8px;margin-top:12px">
           <button class="btn primary" type="submit">Entrar</button>
           <button class="btn ghost" type="button" id="btn-stu-login-cancel">Cancelar</button>
@@ -419,426 +304,437 @@ textarea{resize:vertical}
     </div>
   </div>
 
-  <!-- VIEW: SEMANA DO ALUNO (apenas visualização) -->
-  <section id="student-week-view" class="view hidden">
-    <div class="view-header">
-      <button id="btn-student-back" class="back">← Voltar</button>
-      <h2 id="student-title" style="margin:0">Treinos da Semana</h2>
-    </div>
-    <div id="student-week-empty" class="week-empty hidden">Nenhum treino cadastrado. Fale com seu personal.</div>
-    <div id="student-week" class="week"></div>
-  </section>
-
 </main>
-<!-- FIREBASE + LÓGICA -->
+
+<!-- ===================== JS ÚNICO (Firebase + App) ===================== -->
 <script type="module">
+/* --------------- Firebase Imports --------------- */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
-  getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  GoogleAuthProvider, signInWithPopup, signOut, signInAnonymously,
-  updateProfile, sendPasswordResetEmail, onAuthStateChanged
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+  createUserWithEmailAndPassword, sendPasswordResetEmail,
+  GoogleAuthProvider, signInWithPopup, signOut, signInAnonymously
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import {
-  getFirestore, collection, addDoc, onSnapshot, query, where,
-  serverTimestamp, doc, deleteDoc, updateDoc, getDoc, setDoc, getDocs, orderBy
+  getFirestore, collection, doc, addDoc, getDoc, getDocs,
+  updateDoc, deleteDoc, query, where, setDoc, serverTimestamp,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-/* CONFIG */
+/* --------------- SEU CONFIG AQUI --------------- */
 const firebaseConfig = {
-  apiKey: "AIzaSyBsPf40matUV8So60OHb0h4oRwMRWaB0ho",
-  authDomain: "acdm-70082.firebaseapp.com",
-  projectId: "acdm-70082",
-  storageBucket: "acdm-70082.firebasestorage.app",
-  messagingSenderId: "236961358499",
-  appId: "1:236961358499:web:40b7391c4c9b3405ff1516"
+  apiKey: "SUA_API_KEY",
+  authDomain: "SUA_AUTH_DOMAIN",
+  projectId: "SUA_PROJECT_ID",
+  storageBucket: "SUA_STORAGE_BUCKET",
+  messagingSenderId: "SUA_SENDER_ID",
+  appId: "SUA_APP_ID"
 };
-const app = initializeApp(firebaseConfig);
+/* -------------- FIM CONFIG -------------- */
+
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 
-/* HELPERS */
+/* --------------- Helpers UI --------------- */
 const $ = (id)=>document.getElementById(id);
-function showAlert(msg, ok=false){
-  const box = $("alert");
-  if(!box) return alert(msg);
-  box.textContent = msg;
-  box.style.display = "block";
-  box.classList.toggle("ok", ok);
+const $$=(sel)=>Array.from(document.querySelectorAll(sel));
+const alertBox = $("alert");
+function showAlert(msg, ok=false, ms = ok ? 1800 : 3500){
+  if(!alertBox){ alert(msg); return; }
+  alertBox.innerText = msg;
+  alertBox.classList.remove("hidden","ok");
+  if (ok) alertBox.classList.add("ok");
+  alertBox.style.display = "block";
   clearTimeout(showAlert._t);
-  showAlert._t = setTimeout(()=> box.style.display="none", ok?1800:3500);
+  showAlert._t = setTimeout(()=> alertBox.style.display = "none", ms);
 }
-const wa = p => p ? `https://wa.me/55${p.replace(/\D/g,"")}` : null;
+function hideAlert(){ if(alertBox) alertBox.style.display = "none"; }
+function show(el){ el?.classList?.remove("hidden"); }
+function hide(el){ el?.classList?.add("hidden"); }
 
-/* NAV */
-function go(view){
-  ["auth-card","app","train-view","days-view","ex-view","student-week-view"].forEach(id=>$(id).classList.add("hidden"));
-  $(view).classList.remove("hidden");
-}
-/* Troca telas login/cadastro */
-$("go-signup").onclick = ()=> switchView("signup");
-$("go-reset").onclick  = ()=> switchView("reset");
-$("go-login").onclick  = ()=> switchView("login");
-function switchView(view){
-  ["form-login","form-signup","form-reset"].forEach(id=>$(id).classList.add("hidden"));
-  $("go-login").classList.remove("hidden");
-  if(view==="signup"){
-    $("form-signup").classList.remove("hidden");
-    $("view-title").textContent="Criar conta";
-    $("view-sub").textContent="Cadastre-se e comece!";
-  }else if(view==="reset"){
-    $("form-reset").classList.remove("hidden");
-    $("view-title").textContent="Recuperar senha";
-    $("view-sub").textContent="Receba um link no email";
-  }else{
-    $("form-login").classList.remove("hidden");
-    $("view-title").textContent="Entrar";
-    $("view-sub").textContent="Gerencie seus alunos facilmente.";
-    $("go-login").classList.add("hidden");
-  }
-}
-
-/* AUTH: login/cadastro/reset/google/logout */
-$("form-login").onsubmit = async(e)=>{
-  e.preventDefault();
-  try{
-    await signInWithEmailAndPassword(auth, $("login-email").value, $("login-pass").value);
-  }catch(err){ showAlert("Erro: "+err.message); }
-};
-$("form-signup").onsubmit = async(e)=>{
-  e.preventDefault();
-  try{
-    const cred = await createUserWithEmailAndPassword(auth, $("su-email").value, $("su-pass").value);
-    await updateProfile(cred.user, { displayName: $("su-name").value });
-    await setDoc(doc(db,"users",cred.user.uid), {
-      plan:"free", limit:5, name:$("su-name").value, email:cred.user.email, createdAt:serverTimestamp()
-    });
-    showAlert("Conta criada com sucesso!", true);
-    switchView("login");
-  }catch(err){ showAlert("Erro: "+err.message); }
-};
-$("form-reset").onsubmit = async(e)=>{
-  e.preventDefault();
-  try{
-    await sendPasswordResetEmail(auth, $("rs-email").value);
-    showAlert("Email enviado!", true);
-    switchView("login");
-  }catch(err){ showAlert(err.message); }
-};
-$("btn-google").onclick = async()=>{
-  try{
-    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
-    const ref = doc(db,"users",cred.user.uid);
-    const snap = await getDoc(ref);
-    if(!snap.exists()){
-      await setDoc(ref, { plan:"free", limit:5, email:cred.user.email, name:cred.user.displayName||"", createdAt:serverTimestamp() });
-    }
-  }catch(err){ showAlert("Erro: "+err.message); }
-};
-$("btn-logout").onclick = ()=>signOut(auth);
-
-/* STATE */
-let unsubStudents = null;
-let unsubCycles = null;
-let unsubDays = null;
-let unsubExercises = null;
-let currentUser = null;
-let currentPlan = { plan:"free", limit:5 };
-let currentStudent = null;
-let currentCycle = null;
-let currentDay = null;
-
-/* Modo Aluno */
+/* --------------- Estado Global --------------- */
 let isStudentMode = false;
-let currentStudentUser = null;
+let currentUser   = null;             // personal
+let currentPlan   = { plan:"free", limit:5 };
+let studentsCache = [];               // alunos do personal
 
-/* Render de aluno */
-function renderStudentCard(st){
-  const div = document.createElement("div");
-  div.className="card-student";
-  div.innerHTML = `
-    <button class="train-top" data-train><span>🏋</span> Treinos</button>
-    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-      <strong>${st.name}</strong>
-      <span class="badge">${st.level||"—"}</span>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <span class="badge">🎯 ${st.goal||"—"}</span>
-      ${st.phone ? `<a class="btn-sm brand" href="${wa(st.phone)}" target="_blank">WhatsApp</a>` : `<span class="badge">Sem telefone</span>`}
-    </div>
-    ${st.notes ? `<div class="badge" style="white-space:pre-wrap">📝 ${st.notes}</div>` : ""}
-    <div class="actions">
-      ${isStudentMode ? "" : `<button class="btn-sm" data-edit>Editar</button>
-      <button class="btn-sm danger" data-del>Excluir</button>`}
-    </div>
-  `;
-  if(!isStudentMode){
-    div.querySelector("[data-edit]")?.addEventListener("click", ()=>{
-      $("modal-title").textContent="Editar Aluno";
-      $("st-id").value = st.id;
-      $("st-name").value = st.name || "";
-      $("st-phone").value = st.phone || "";
-      $("st-cpf").value = st.cpf || "";
-      $("st-birth").value = st.birth || "";
-      $("st-goal").value = st.goal || "Hipertrofia";
-      $("st-level").value = st.level || "Iniciante";
-      $("st-notes").value = st.notes || "";
-      $("modal-bg").classList.remove("hidden");
-    });
-    div.querySelector("[data-del]")?.addEventListener("click", async()=>{
-      if(confirm(`Excluir ${st.name}?`)){
-        await deleteDoc(doc(db,"students",st.id));
-      }
-    });
+let unsubStudents = null, unsubCycles = null, unsubDays = null, unsubEx = null;
+
+let currentStudent = null;            // {id, ...}
+let currentCycle   = null;
+let currentDay     = null;
+
+/* --------------- Views / Navegação --------------- */
+const VIEWS = ["auth-card","app","train-view","days-view","ex-view","week-view"];
+let currentView = "auth-card";
+
+function applySecurityView(){
+  if(isStudentMode){
+    hide($("btn-add")); hide($("plan-pill")); hide($("user-pill"));
+    hide($("btn-new-cycle")); hide($("btn-new-ex"));
+  }else{
+    show($("btn-add")); show($("plan-pill")); show($("user-pill"));
+    show($("btn-new-cycle")); show($("btn-new-ex"));
   }
-  div.querySelector("[data-train]").onclick = ()=>{
-    openTrainView(st);
-  };
-  return div;
 }
-function renderStudents(list){
-  const wrap = $("students-list");
-  wrap.innerHTML = "";
-  const term = ($("search").value||"").toLowerCase();
-  list.filter(s=> (s.name||"").toLowerCase().includes(term))
-      .forEach(s=> wrap.appendChild(renderStudentCard(s)));
+function goTo(viewId){
+  VIEWS.forEach(id => $(id)?.classList.add("hidden"));
+  $(viewId)?.classList.remove("hidden");
+  currentView = viewId;
+  applySecurityView();
 }
 
-/* Auth listener */
-onAuthStateChanged(auth, async(user)=>{
+/* --------------- AUTH STATE (Personal) --------------- */
+onAuthStateChanged(auth, async (user)=>{
   if(user && !isStudentMode){
     currentUser = user;
-    $("user-pill").textContent = user.displayName || user.email;
-    const uref = doc(db,"users",user.uid);
-    const usnap = await getDoc(uref);
-    currentPlan = usnap.exists()? usnap.data() : { plan:"free", limit:5 };
-    $("plan-pill").textContent = currentPlan.plan==="pro" ? "Plano: PRO (ilimitado)" : `Plano: Free (${currentPlan.limit})`;
-    if(unsubStudents) unsubStudents();
-    const q = query(collection(db,"students"), where("ownerId","==",user.uid));
-    unsubStudents = onSnapshot(q, snap=>{
-      const arr=[]; snap.forEach(d=>arr.push({id:d.id, ...d.data()}));
-      arr.sort((a,b)=> (a.name||"").localeCompare(b.name||""));
-      renderStudents(arr);
-      onAuthStateChanged._count = arr.length;
-    });
-    go("app");
+    $("user-pill").innerText = user.email || "Personal";
+    await ensureUserDoc();
+    await startStudentsSnapshot();
+    goTo("app");
   }else{
     if(!isStudentMode){
-      if(unsubStudents) unsubStudents();
-      if(unsubCycles) unsubCycles();
-      if(unsubDays) unsubDays();
-      if(unsubExercises) unsubExercises();
+      resetRealtime(); resetContext();
       currentUser = null;
-      currentStudent = null;
-      currentCycle = null;
-      currentDay = null;
-      go("auth-card");
+      goTo("auth-card");
     }
   }
 });
 
-/* Search */
-$("search").oninput = ()=>{
-  const cards = Array.from(document.querySelectorAll(".card-student"));
-  const term = ($("search").value||"").toLowerCase();
-  cards.forEach(c=>{
-    const name = (c.querySelector("strong")?.textContent||"").toLowerCase();
-    c.style.display = name.includes(term) ? "" : "none";
+async function ensureUserDoc(){
+  if(!auth.currentUser) return;
+  const uref = doc(db,"users",auth.currentUser.uid);
+  const usnap = await getDoc(uref);
+  if(!usnap.exists()){
+    await setDoc(uref,{ plan:"free", limit:5, email:auth.currentUser.email||"", createdAt:serverTimestamp() },{merge:true});
+    currentPlan = { plan:"free", limit:5 };
+  }else{
+    currentPlan = usnap.data() || { plan:"free", limit:5 };
+  }
+  $("plan-pill").innerText = currentPlan.plan === "pro" ? "Plano: PRO (ilimitado)" : `Plano: Free (${currentPlan.limit||5})`;
+}
+
+/* --------------- Login / Signup / Reset --------------- */
+$("form-login")?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  try{
+    await signInWithEmailAndPassword(auth, $("login-email").value.trim(), $("login-pass").value);
+    hideAlert();
+  }catch(err){ showAlert("Erro ao entrar: "+err.message); }
+});
+$("btn-google")?.addEventListener("click", async ()=>{
+  try{ await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch(err){ showAlert("Erro: "+err.message); }
+});
+
+$("go-signup")?.addEventListener("click", ()=>{
+  hide($("form-login")); hide($("btn-google"));
+  show($("form-signup")); show($("go-login"));
+  hide($("go-signup"));   show($("go-reset"));
+  $("view-title").innerText="Criar conta";
+  $("view-sub").innerText="Cadastre-se para atender seus alunos.";
+  hideAlert();
+});
+$("go-login")?.addEventListener("click", ()=>{
+  show($("form-login")); show($("btn-google"));
+  hide($("form-signup")); hide($("form-reset")); hide($("go-login"));
+  show($("go-signup"));   show($("go-reset"));
+  $("view-title").innerText="Entrar";
+  $("view-sub").innerText="Gerencie seus alunos facilmente.";
+  hideAlert();
+});
+$("go-reset")?.addEventListener("click", ()=>{
+  hide($("form-login")); hide($("form-signup")); hide($("btn-google"));
+  show($("form-reset")); show($("go-login"));
+  hide($("go-reset"));   hide($("go-signup"));
+  $("view-title").innerText="Recuperar Senha";
+  $("view-sub").innerText="Informe seu email cadastrado.";
+  hideAlert();
+});
+$("form-signup")?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  try{
+    await createUserWithEmailAndPassword(auth, $("su-email").value.trim(), $("su-pass").value);
+    showAlert("Conta criada com sucesso!", true);
+    $("go-login").click();
+  }catch(err){ showAlert(err.message); }
+});
+$("form-reset")?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  try{
+    await sendPasswordResetEmail(auth, $("rs-email").value.trim());
+    showAlert("Email enviado!", true);
+    $("go-login").click();
+  }catch(err){ showAlert(err.message); }
+});
+$("btn-logout")?.addEventListener("click", async ()=>{
+  isStudentMode = false;
+  await signOut(auth).catch(()=>{});
+  resetRealtime(); resetContext();
+  goTo("auth-card");
+  showAlert("Você saiu ✅", true);
+});
+
+/* --------------- Lista de Alunos (Personal) --------------- */
+async function startStudentsSnapshot(){
+  if(!auth.currentUser) return;
+  unsubStudents?.();
+  const qOwner = query(collection(db,"students"), where("ownerId","==", auth.currentUser.uid));
+  unsubStudents = onSnapshot(qOwner, (snap)=>{
+    const arr = [];
+    snap.forEach(d => arr.push({ id:d.id, ...d.data() }));
+    arr.sort((a,b)=> (a.name||"").localeCompare(b.name||""));
+    studentsCache = arr;
+    renderStudents();
   });
-};
-/* Modal aluno: adicionar/editar */
-$("btn-add").onclick = ()=>{
-  if(isStudentMode) return;
-  const count = onAuthStateChanged._count || 0;
-  if(currentPlan.plan!=="pro" && count >= (currentPlan.limit||5)){
+}
+$("search")?.addEventListener("input", renderStudents);
+
+function onlyDigits(s){ return (s||"").replace(/\D/g,""); }
+function isCpf11(s){ return /^\d{11}$/.test(onlyDigits(s)); }
+
+function studentCardHTML(st){
+  return `
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <strong>${st.name||"(Sem nome)"}</strong>
+      <span class="badge">${st.level||"—"}</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span class="badge">🎯 ${st.goal||"—"}</span>
+      ${st.phone
+        ? `<a class="btn-sm brand" style="margin-left:auto" href="https://wa.me/55${onlyDigits(st.phone)}" target="_blank" rel="noopener">WhatsApp</a>`
+        : `<span class="badge" style="margin-left:auto">Sem telefone</span>`}
+    </div>
+    ${st.notes ? `<div class="badge" style="white-space:pre-wrap">📝 ${st.notes}</div>` : ""}
+    <div class="actions">
+      <button class="btn-sm brand" data-train>Treinos</button>
+      <button class="btn-sm" data-edit>Editar</button>
+      <button class="btn-sm danger" data-del>Excluir</button>
+    </div>
+  `;
+}
+
+function renderStudents(){
+  const term = ($("search")?.value||"").toLowerCase();
+  $("students-list").innerHTML = "";
+  studentsCache
+    .filter(s => (s.name||"").toLowerCase().includes(term))
+    .forEach(st=>{
+      const card = document.createElement("div");
+      card.className = "card-student";
+      card.innerHTML = studentCardHTML(st);
+      card.querySelector("[data-train]").onclick = ()=> openTrainView(st);
+      card.querySelector("[data-edit]").onclick  = ()=> openStudentModal(st);
+      card.querySelector("[data-del]").onclick   = ()=> deleteStudent(st);
+      $("students-list").appendChild(card);
+    });
+}
+
+/* Novo aluno */
+$("btn-add")?.addEventListener("click", ()=>{
+  if((currentPlan.plan||"free")!=="pro" && studentsCache.length >= (currentPlan.limit||5)){
     showAlert("Limite do Plano Free atingido. Atualize para PRO para cadastrar mais alunos.");
     return;
   }
-  $("modal-title").textContent="Novo Aluno";
-  $("st-id").value = "";
+  $("modal-title").innerText = "Novo Aluno";
   $("form-student").reset();
   $("modal-bg").classList.remove("hidden");
-};
-$("btn-cancel").onclick = ()=> $("modal-bg").classList.add("hidden");
+});
+$("btn-cancel")?.addEventListener("click", ()=> $("modal-bg").classList.add("hidden"));
 
-$("form-student").onsubmit = async(e)=>{
+/* Editar Aluno */
+function openStudentModal(st){
+  $("modal-title").innerText = "Editar Aluno";
+  $("st-name").value  = st.name  || "";
+  $("st-phone").value = st.phone || "";
+  $("st-cpf").value   = st.id    || st.cpf || ""; // ID é o CPF neste modelo
+  $("st-birth").value = st.birth || "";
+  $("st-goal").value  = st.goal  || "Hipertrofia";
+  $("st-level").value = st.level || "Iniciante";
+  $("st-notes").value = st.notes || "";
+  $("modal-bg").classList.remove("hidden");
+}
+
+/* Salvar Aluno (ID = CPF) */
+$("form-student").addEventListener("submit", async (e)=>{
   e.preventDefault();
-  if(isStudentMode) return;
-  const id = $("st-id").value;
+  const cpf = onlyDigits($("st-cpf").value);
   const payload = {
-    ownerId: currentUser?.uid || null,
-    name: $("st-name").value.trim(),
-    phone: $("st-phone").value.trim(),
-    cpf: ($("st-cpf").value||"").replace(/\D/g,"") || null,
-    birth: $("st-birth").value || null,
-    goal: $("st-goal").value,
+    ownerId: auth.currentUser?.uid || null,
+    name: ($("st-name").value||"").trim(),
+    phone: onlyDigits($("st-phone").value),
+    cpf,
+    birth: $("st-birth").value,
+    goal:  $("st-goal").value,
     level: $("st-level").value,
-    notes: $("st-notes").value.trim(),
+    notes: ($("st-notes").value||"").trim(),
     updatedAt: serverTimestamp(),
-    createdAt: serverTimestamp()
   };
+  if(!payload.name) return showAlert("Nome obrigatório!");
+  if(!isCpf11(cpf)) return showAlert("CPF deve ter 11 dígitos!");
+  if(!payload.birth) return showAlert("Selecione a data de nascimento!");
+
   try{
-    if(id){
-      const ref = doc(db,"students",id);
-      delete payload.createdAt;
-      await updateDoc(ref, payload);
-      showAlert("Aluno atualizado ✅", true);
-    }else{
-      await addDoc(collection(db,"students"), payload);
+    const ref = doc(db,"students", cpf);
+    const snap= await getDoc(ref);
+    if(!snap.exists()){
+      await setDoc(ref, { ...payload, createdAt: serverTimestamp() });
       showAlert("Aluno cadastrado ✅", true);
+    }else{
+      await setDoc(ref, payload, { merge:true });
+      showAlert("Aluno atualizado ✅", true);
     }
     $("modal-bg").classList.add("hidden");
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
-};
+  }catch(err){ showAlert("Erro ao salvar: "+err.message); }
+});
 
-/* TREINOS DO ALUNO — CICLOS */
-$("btn-back").onclick = ()=>{
-  currentStudent = null;
-  if(unsubCycles) unsubCycles();
-  if(isStudentMode){
-    // no modo aluno, voltar leva ao login
-    isStudentMode = false;
-    currentStudentUser = null;
-    go("auth-card");
-  }else{
-    go("app");
-  }
-};
-// novo ciclo (somente personal)
-$("btn-new-cycle").onclick = ()=>{
-  if(!currentStudent || isStudentMode) return;
-  $("cycle-title").textContent = "Criar Ciclo";
+/* Excluir Aluno */
+async function deleteStudent(st){
+  if(!confirm(`Excluir ${st.name}?`)) return;
+  try{
+    await deleteDoc(doc(db,"students", st.id || st.cpf));
+    showAlert("Aluno removido ✅", true);
+  }catch(err){ showAlert("Erro ao excluir: "+err.message); }
+}
+
+/* --------------- Ciclos --------------- */
+function openTrainView(st){
+  if(isStudentMode) return;
+  currentStudent = st;
+  $("train-title").innerText = `${st.name} — Treinos`;
+  goTo("train-view");
+  startCyclesSnapshot();
+}
+$("btn-new-cycle")?.addEventListener("click", ()=>{
+  if(isStudentMode || !currentStudent) return;
+  $("cycle-title").innerText = "Novo Ciclo";
   $("cycle-id").value = "";
   $("form-cycle").reset();
   $("cycle-bg").classList.remove("hidden");
-};
-$("btn-cycle-cancel").onclick = ()=> $("cycle-bg").classList.add("hidden");
+});
+$("btn-cycle-cancel")?.addEventListener("click", ()=> $("cycle-bg").classList.add("hidden"));
 
-function openTrainView(student){
-  currentStudent = student;
-  $("train-title").textContent = `${student.name} — Treinos${isStudentMode ? " (visualização)" : ""}`;
-  go("train-view");
-  subscribeCycles(student.id);
+function cycleHTML(c){
+  const period = (c.start && c.end)
+    ? `📅 ${formatDate(c.start)} — ${formatDate(c.end)}`
+    : "📅 Sem período";
+  return `
+    <strong>${c.name||"Sem nome"}</strong>
+    <small>${period}</small>
+    <div class="actions" style="margin-top:8px">
+      <button class="btn-sm brand" data-open>Dias</button>
+      ${isStudentMode ? "" : `
+      <button class="btn-sm" data-edit>Editar</button>
+      <button class="btn-sm danger" data-del>Excluir</button>`}
+    </div>
+  `;
 }
-
-function subscribeCycles(studentId){
-  if(unsubCycles) unsubCycles();
-  const cyclesRef = collection(db, "students", studentId, "cycles");
-  unsubCycles = onSnapshot(cyclesRef, snap=>{
-    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
-    arr.sort((a,b)=>{
-      const as=(a.startDate||""); const bs=(b.startDate||"");
-      if(as===bs) return (a.name||"").localeCompare(b.name||"");
-      return as<bs?-1:1;
-    });
+let cyclesCache = [];
+function renderCycles(list){
+  const wrap = $("cycles-list");
+  const empty = $("cycles-empty");
+  if(!list.length){ show(empty); hide(wrap); return; }
+  hide(empty); show(wrap);
+  wrap.innerHTML = "";
+  list.forEach(c=>{
+    const div = document.createElement("div");
+    div.className="card-student";
+    div.innerHTML = cycleHTML(c);
+    div.querySelector("[data-open]").onclick = ()=> openDays(c);
+    if(!isStudentMode){
+      div.querySelector("[data-edit]").onclick = ()=> openCycleModal(c);
+      div.querySelector("[data-del]").onclick = ()=> deleteCycle(c);
+    }
+    wrap.appendChild(div);
+  });
+}
+let unsubCyclesFn = null;
+async function startCyclesSnapshot(){
+  if(!currentStudent) return;
+  const ref = collection(db,"students", currentStudent.id || currentStudent.cpf, "cycles");
+  unsubCyclesFn?.(); unsubCyclesFn = onSnapshot(ref, snap=>{
+    const arr=[]; snap.forEach(d=>arr.push({id:d.id, ...d.data()}));
+    arr.sort((a,b)=> (a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+    cyclesCache = arr;
     renderCycles(arr);
   });
 }
-
-function renderCycles(list){
-  const empty = $("cycles-empty");
-  const wrap = $("cycles-list");
-  wrap.innerHTML = "";
-  if(!list.length){ empty.classList.remove("hidden"); return; }
-  empty.classList.add("hidden");
-
-  list.forEach(c=>{
-    const card = document.createElement("div");
-    card.className="card-cycle";
-    const period = c.startDate && c.endDate ? formatPeriod(c.startDate, c.endDate) : "Sem período";
-    card.innerHTML = `
-      <div style="min-width:220px">
-        <strong>${c.name||"(Sem nome)"}</strong>
-        <div class="badge" style="margin-top:6px">${period}</div>
-      </div>
-      <div class="cycle-actions">
-        <button class="btn-sm" data-open>📅 Abrir dias</button>
-        ${isStudentMode ? "" : `
-          <button class="btn-sm" data-edit>✏️ Renomear/Período</button>
-          <button class="btn-sm danger" data-del>🗑 Excluir</button>
-        `}
-      </div>
-    `;
-    card.querySelector("[data-open]").onclick = ()=>{
-      currentCycle = { id: c.id, ...c };
-      openDaysView();
-    };
-    if(!isStudentMode){
-      card.querySelector("[data-edit]")?.addEventListener("click", ()=>{
-        $("cycle-title").textContent = "Editar Ciclo";
-        $("cycle-id").value = c.id;
-        $("cycle-name").value = c.name || "";
-        $("cycle-start").value = c.startDate || "";
-        $("cycle-end").value = c.endDate || "";
-        $("cycle-bg").classList.remove("hidden");
-      });
-      card.querySelector("[data-del]")?.addEventListener("click", async()=>{
-        if(confirm(`Excluir ciclo "${c.name}"?`)){
-          await deleteDoc(doc(db,"students",currentStudent.id,"cycles",c.id));
-        }
-      });
-    }
-    wrap.appendChild(card);
-  });
+function openCycleModal(c){
+  $("cycle-title").innerText = "Editar Ciclo";
+  $("cycle-id").value   = c.id;
+  $("cycle-name").value = c.name || "";
+  $("cycle-start").value= c.start || "";
+  $("cycle-end").value  = c.end || "";
+  $("cycle-bg").classList.remove("hidden");
 }
-
-$("form-cycle").onsubmit = async(e)=>{
+$("form-cycle")?.addEventListener("submit", async (e)=>{
   e.preventDefault();
-  if(!currentStudent || isStudentMode) return showAlert("Operação não permitida.");
-  const id = $("cycle-id").value;
-  const data = {
+  if(isStudentMode || !currentStudent) return;
+  const payload = {
     name: $("cycle-name").value.trim(),
-    startDate: $("cycle-start").value || null,
-    endDate: $("cycle-end").value || null,
+    start: $("cycle-start").value || null,
+    end:   $("cycle-end").value   || null,
     updatedAt: serverTimestamp()
   };
+  if(!payload.name) return showAlert("Nome obrigatório!");
+  const sid = currentStudent.id || currentStudent.cpf;
+  const id  = $("cycle-id").value;
+  const cref= id ? doc(db,"students",sid,"cycles",id) : doc(db,"students",sid,"cycles",crypto.randomUUID());
   try{
-    const cyclesRef = collection(db, "students", currentStudent.id, "cycles");
-    if(id){
-      await updateDoc(doc(cyclesRef, id), data);
-      showAlert("Ciclo atualizado ✅", true);
-    }else{
-      await addDoc(cyclesRef, { ...data, createdAt: serverTimestamp() });
-      showAlert("Ciclo criado ✅", true);
-    }
+    if(!id) payload.createdAt = serverTimestamp();
+    await setDoc(cref, payload, { merge:true });
     $("cycle-bg").classList.add("hidden");
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
-};
-
-/* DIAS DO CICLO */
-$("btn-back-cycles").onclick = ()=>{
-  currentCycle = null;
-  if(unsubDays) unsubDays();
-  go("train-view");
-};
-
-$("btn-regen-days").onclick = async()=>{
-  if(!currentCycle || isStudentMode) return;
-  await ensure7Days();
-  showAlert("Dias verificados/criados ✅", true);
-};
-
-function openDaysView(){
-  $("days-title").textContent = `${currentCycle.name||"Ciclo"} — Dias`;
-  go("days-view");
-  subscribeDays(currentStudent.id, currentCycle.id);
+  }catch(err){ showAlert("Erro ao salvar ciclo: "+err.message); }
+});
+async function deleteCycle(c){
+  if(!confirm(`Excluir ciclo "${c.name}"?`)) return;
+  try{
+    await deleteDoc(doc(db,"students", currentStudent.id || currentStudent.cpf, "cycles", c.id));
+    showAlert("Ciclo removido ✅", true);
+  }catch(err){ showAlert("Erro: "+err.message); }
 }
-function subscribeDays(studentId, cycleId){
-  if(unsubDays) unsubDays();
-  const ref = collection(db, "students", studentId, "cycles", cycleId, "days");
-  unsubDays = onSnapshot(ref, snap=>{
-    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
-    arr.sort((a,b)=> (a.order||0) - (b.order||0));
-    renderDaysGrid(arr);
-    if(!arr.length) $("days-empty").classList.remove("hidden");
-    else $("days-empty").classList.add("hidden");
+
+/* --------------- Dias --------------- */
+let unsubDaysFn = null;
+function openDays(cycle){
+  currentCycle = cycle;
+  $("days-title").innerText = `${cycle.name}`;
+  goTo("days-view");
+  startDaysSnapshot();
+}
+function startDaysSnapshot(){
+  if(!currentStudent || !currentCycle) return;
+  const ref = collection(db, "students", currentStudent.id || currentStudent.cpf, "cycles", currentCycle.id, "days");
+  unsubDaysFn?.(); unsubDaysFn = onSnapshot(ref, snap=>{
+    const arr=[]; snap.forEach(d=> arr.push({id:d.id, ...d.data()}));
+    arr.sort((a,b)=>(a.order||0)-(b.order||0));
+    renderDays(arr);
   });
 }
+function dayHTML(d){
+  return `
+    <div class="day-top"><span>${d.name}</span><span>${d.exercisesCount || 0} ex.</span></div>
+    <div class="day-actions"><button class="btn-sm brand" data-open>Ver exercícios</button></div>
+  `;
+}
+function renderDays(list){
+  const wrap = $("days-grid"), empty = $("days-empty");
+  if(!list.length){ show(empty); hide(wrap); return; }
+  hide(empty); show(wrap);
+  wrap.innerHTML = "";
+  list.forEach(day=>{
+    const el = document.createElement("div");
+    el.className="day-card";
+    el.innerHTML = dayHTML(day);
+    el.querySelector("[data-open]").onclick = ()=> openExercises(day);
+    wrap.appendChild(el);
+  });
+}
+$("btn-regen-days")?.addEventListener("click", ensure7Days);
 async function ensure7Days(){
-  const mapDays = [
+  if(!currentCycle) return;
+  const DAYS = [
     {id:"seg", name:"SEGUNDA", order:1},
     {id:"ter", name:"TERÇA", order:2},
     {id:"qua", name:"QUARTA", order:3},
@@ -847,316 +743,381 @@ async function ensure7Days(){
     {id:"sab", name:"SÁBADO", order:6},
     {id:"dom", name:"DOMINGO", order:7},
   ];
-  const daysRef = collection(db, "students", currentStudent.id, "cycles", currentCycle.id, "days");
-  const snap = await getDocs(daysRef);
-  const existing = {};
-  snap.forEach(d=> existing[d.id] = true);
-  for(const d of mapDays){
-    if(!existing[d.id]){
-      await setDoc(doc(daysRef, d.id), {
-        name: d.name, order: d.order, exercisesCount: 0,
-        createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+  const ref = collection(db,"students", currentStudent.id || currentStudent.cpf, "cycles", currentCycle.id, "days");
+  const existing = await getDocs(ref);
+  const ids={}; existing.forEach(d=> ids[d.id]=true);
+  for(const d of DAYS){
+    if(!ids[d.id]){
+      await setDoc(doc(ref,d.id), {
+        name:d.name, order:d.order, exercisesCount:0, createdAt:serverTimestamp(), updatedAt:serverTimestamp()
       });
     }
   }
-}
-function renderDaysGrid(days){
-  const grid = $("days-grid");
-  grid.innerHTML = "";
-  days.forEach(d=>{
-    const card = document.createElement("div");
-    card.className="day-card";
-    const count = d.exercisesCount || 0;
-    card.innerHTML = `
-      <div class="day-top">
-        <div class="day-name">${d.name}</div>
-        <div class="day-count">${count} exercício(s)</div>
-      </div>
-      <div class="day-actions">
-        <button class="btn-xs brand" data-open>Ver exercícios</button>
-      </div>
-    `;
-    card.querySelector("[data-open]").onclick = ()=>{
-      openExercisesView(d);
-    };
-    grid.appendChild(card);
-  });
+  showAlert("Dias recriados ✅", true);
 }
 
-/* EXERCÍCIOS DO DIA — CRUD */
-$("btn-back-days").onclick = ()=>{
-  if(unsubExercises) unsubExercises();
-  currentDay = null;
-  go("days-view");
-};
-$("btn-new-ex").onclick = ()=>{
-  if(!currentDay || isStudentMode) return;
-  $("ex-modal-title").textContent = "Novo Exercício";
-  $("ex-id").value = "";
-  $("form-ex").reset();
-  $("ex-bg").classList.remove("hidden");
-};
-$("btn-ex-cancel").onclick = ()=> $("ex-bg").classList.add("hidden");
-
-function openExercisesView(dayDoc){
-  currentDay = dayDoc;
-  $("ex-title").textContent = `${currentCycle.name||"Ciclo"} — ${dayDoc.name}`;
-  go("ex-view");
+/* --------------- Exercícios --------------- */
+let unsubExFn = null;
+function openExercises(day){
+  currentDay = day;
+  $("ex-title").innerText = `${currentCycle.name} — ${day.name}`;
+  goTo("ex-view");
   subscribeExercises();
 }
-function exCollectionRef(){
-  return collection(
-    db,
-    "students", currentStudent.id,
-    "cycles", currentCycle.id,
-    "days", currentDay.id,
-    "exercises"
-  );
-}
 function subscribeExercises(){
-  if(unsubExercises) unsubExercises();
-  const ref = exCollectionRef();
-  unsubExercises = onSnapshot(ref, snap=>{
-    const arr=[]; snap.forEach(d=>arr.push({ id:d.id, ...d.data() }));
-    arr.sort((a,b)=> (a.order||0) - (b.order||0));
+  if(!currentStudent || !currentCycle || !currentDay) return;
+  const ref = collection(
+    db, "students", currentStudent.id || currentStudent.cpf,
+    "cycles", currentCycle.id, "days", currentDay.id, "exercises"
+  );
+  unsubExFn?.(); unsubExFn = onSnapshot(ref, snap=>{
+    const arr=[]; snap.forEach(d=> arr.push({id:d.id, ...d.data()}));
+    arr.sort((a,b)=> (a.order||0)-(b.order||0));
     renderExercises(arr);
-    updateDoc(doc(db,"students",currentStudent.id,"cycles",currentCycle.id,"days",currentDay.id), {
+    updateDoc(doc(db, "students", currentStudent.id || currentStudent.cpf, "cycles", currentCycle.id, "days", currentDay.id), {
       exercisesCount: arr.length, updatedAt: serverTimestamp()
     }).catch(()=>{});
   });
 }
-function renderExercises(list){
-  const empty = $("ex-empty");
-  const wrap = $("ex-list");
-  wrap.innerHTML = "";
-  if(!list.length){ empty.classList.remove("hidden"); return; }
-  empty.classList.add("hidden");
-  list.forEach(ex=>{
-    const card = document.createElement("div");
-    card.className="ex-card";
-    card.innerHTML = `
+$("btn-new-ex")?.addEventListener("click", ()=>{
+  if(isStudentMode) return showAlert("Aluno não pode editar!");
+  $("ex-id").value = "";
+  $("ex-modal-title").innerText="Novo Exercício";
+  $("form-ex").reset();
+  $("ex-bg").classList.remove("hidden");
+});
+$("btn-ex-cancel")?.addEventListener("click", ()=> $("ex-bg").classList.add("hidden"));
+$("form-ex")?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  if(isStudentMode) return;
+  const id = $("ex-id").value;
+  const data = {
+    name: $("ex-name").value.trim(),
+    sets: $("ex-sets").value.trim(),
+    reps: $("ex-reps").value.trim(),
+    load: $("ex-load").value.trim(),
+    rest: $("ex-rest").value.trim(),
+    notes: $("ex-notes").value.trim(),
+    updatedAt: serverTimestamp()
+  };
+  if(!data.name) return showAlert("Informe o nome do exercício.");
+  const ref = collection(
+    db, "students", currentStudent.id || currentStudent.cpf,
+    "cycles", currentCycle.id, "days", currentDay.id, "exercises"
+  );
+  try{
+    if(id){
+      await updateDoc(doc(ref,id), data);
+      showAlert("Exercício atualizado ✅", true);
+    }else{
+      const snap = await getDocs(ref);
+      const order = snap.size + 1;
+      await addDoc(ref, { ...data, order, createdAt: serverTimestamp() });
+      showAlert("Exercício adicionado ✅", true);
+    }
+    $("ex-bg").classList.add("hidden");
+  }catch(err){ showAlert("Erro: "+err.message); }
+});
+function exHTML(e){
+  return `
+    <div class="ex-card">
       <div class="ex-top">
-        <div class="ex-name">${ex.name||"(Sem nome)"}</div>
+        <div class="ex-name">${e.name}</div>
+        ${!isStudentMode ? `
         <div class="ex-actions">
-          ${isStudentMode ? "" : `
-            <button class="btn-xs" data-edit>✏️ Editar</button>
-            <button class="btn-xs danger" data-del>🗑 Excluir</button>
-          `}
-        </div>
+          <button class="btn-xs" data-edit>✏️</button>
+          <button class="btn-xs danger" data-del>🗑</button>
+        </div>` : ""}
       </div>
       <div class="ex-line">
-        <span class="ex-chip">Séries: <b>${ex.sets||"—"}</b></span>
-        <span class="ex-chip">Reps: <b>${ex.reps||"—"}</b></span>
-        <span class="ex-chip">Carga: <b>${ex.load||"—"}</b></span>
-        <span class="ex-chip">Descanso: <b>${ex.rest||"—"}</b></span>
+        <span class="ex-chip"><b>${e.sets||"—"}</b> séries</span>
+        <span class="ex-chip">${e.reps||"—"} reps</span>
+        <span class="ex-chip">${e.load||"—"}</span>
+        <span class="ex-chip">${e.rest||"—"}</span>
       </div>
-      ${ex.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${ex.notes}</div>`:""}
-    `;
+      ${e.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${e.notes}</div>` : ""}
+    </div>
+  `;
+}
+function renderExercises(list){
+  const wrap = $("ex-list");
+  wrap.innerHTML = "";
+  if(!list.length){ show($("ex-empty")); return; }
+  hide($("ex-empty"));
+  list.forEach(e=>{
+    const card = document.createElement("div");
+    card.innerHTML = exHTML(e);
     if(!isStudentMode){
-      card.querySelector("[data-edit]")?.addEventListener("click", ()=>{
-        $("ex-modal-title").textContent = "Editar Exercício";
-        $("ex-id").value = ex.id;
-        $("ex-name").value = ex.name || "";
-        $("ex-sets").value = ex.sets || "";
-        $("ex-reps").value = ex.reps || "";
-        $("ex-load").value = ex.load || "";
-        $("ex-rest").value = ex.rest || "";
-        $("ex-notes").value = ex.notes || "";
+      card.querySelector("[data-edit]").onclick = ()=>{
+        $("ex-id").value = e.id;
+        $("ex-modal-title").innerText="Editar Exercício";
+        $("ex-name").value=e.name||"";
+        $("ex-sets").value=e.sets||"";
+        $("ex-reps").value=e.reps||"";
+        $("ex-load").value=e.load||"";
+        $("ex-rest").value=e.rest||"";
+        $("ex-notes").value=e.notes||"";
         $("ex-bg").classList.remove("hidden");
-      });
-      card.querySelector("[data-del]")?.addEventListener("click", async()=>{
-        if(confirm(`Excluir "${ex.name||'exercício'}"?`)){
-          await deleteDoc(doc(exCollectionRef(), ex.id));
+      };
+      card.querySelector("[data-del]").onclick = async()=>{
+        if(confirm("Excluir exercício?")){
+          await deleteDoc(doc(
+            db, "students", currentStudent.id || currentStudent.cpf,
+            "cycles", currentCycle.id, "days", currentDay.id, "exercises", e.id
+          ));
         }
-      });
+      };
     }
     wrap.appendChild(card);
   });
 }
-$("form-ex").onsubmit = async(e)=>{
-  e.preventDefault();
-  if(!currentDay || isStudentMode) return showAlert("Operação não permitida.");
-  const id = $("ex-id").value;
-  const data = {
-    name: $("ex-name").value.trim(),
-    sets: Number($("ex-sets").value || 0) || null,
-    reps: $("ex-reps").value.trim() || null,
-    load: $("ex-load").value.trim() || null,
-    rest: $("ex-rest").value.trim() || null,
-    notes: $("ex-notes").value.trim() || null,
-    updatedAt: serverTimestamp()
-  };
-  if(!data.name) return showAlert("Informe o nome do exercício.");
-  try{
-    if(id){
-      await updateDoc(doc(exCollectionRef(), id), data);
-      showAlert("Exercício atualizado ✅", true);
-    }else{
-      const snap = await getDocs(exCollectionRef());
-      const order = snap.size + 1;
-      await addDoc(exCollectionRef(), { ...data, order, createdAt: serverTimestamp() });
-      showAlert("Exercício adicionado ✅", true);
-    }
-    $("ex-bg").classList.add("hidden");
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
-};
 
-/* Utils */
-function formatPeriod(yyyy1, yyyy2){
-  const f = s=>{
-    if(!s) return "";
-    const [y,m,d] = s.split("-");
-    if(!y||!m||!d) return s;
-    return `${d}/${m}/${y}`;
-  };
-  return `${f(yyyy1)} — ${f(yyyy2)}`;
+/* --------------- Modo Aluno: Treino da Semana --------------- */
+const DAY_ORDER = ["seg","ter","qua","qui","sex","sab","dom"];
+const DAY_LABEL = { seg:"SEGUNDA", ter:"TERÇA", qua:"QUARTA", qui:"QUINTA", sex:"SEXTA", sab:"SÁBADO", dom:"DOMINGO" };
+function todayId(){ return ["dom","seg","ter","qua","qui","sex","sab"][new Date().getDay()]; }
+function toDate(s){ if(!s) return null; const [y,m,d]=s.split("-").map(Number); return new Date(y,(m||1)-1,d||1); }
+function formatDate(d){
+  if(!d) return "";
+  const t = typeof d === "string" ? new Date(d) : d.toDate?.() || null;
+  if(!t) return "";
+  return t.toLocaleDateString("pt-BR",{timeZone:"UTC"});
 }
-/* ============ MODO ALUNO ============ */
-$("btn-open-student-login").onclick = () => {
-  $("student-login-bg").classList.remove("hidden");
-};
-$("btn-stu-login-cancel").onclick = () => {
-  $("student-login-bg").classList.add("hidden");
-};
-
-function cleanCpf(v){ return (v||"").replace(/\D/g,""); }
-const weekOrder = ["seg","ter","qua","qui","sex","sab","dom"];
-const weekNames = {
-  seg:"SEGUNDA", ter:"TERÇA", qua:"QUARTA", qui:"QUINTA",
-  sex:"SEXTA", sab:"SÁBADO", dom:"DOMINGO"
-};
-
-$("form-student-login").onsubmit = async(e)=>{
-  e.preventDefault();
-  const cpf = cleanCpf($("stu-cpf").value);
-  const birth = $("stu-birth").value;
-  if(!cpf || !birth){ showAlert("Informe CPF e nascimento corretamente"); return; }
-  try{
-    // Busca aluno pelo CPF+nasc
-    const qAl = query(collection(db,"students"), where("cpf","==",cpf), where("birth","==",birth));
-    const sAl = await getDocs(qAl);
-    if(sAl.empty){ showAlert("Aluno não encontrado. Fale com seu personal."); return; }
-    const stDoc = sAl.docs[0];
-    const st = { id: stDoc.id, ...stDoc.data() };
-    if(st.active===false){ showAlert("Aluno inativo. Contate seu personal."); return; }
-
-    // Login anônimo para liberar leitura
-    await signInAnonymously(auth);
-
-    isStudentMode = true;
-    currentStudentUser = st;
-    $("student-login-bg").classList.add("hidden");
-
-    $("student-title").textContent = `Treinos da Semana — ${st.name||"Aluno"}`;
-    await loadStudentWeek(st.id); // renderiza a semana
-    go("student-week-view");
-  }catch(err){
-    showAlert("Erro: "+err.message);
-  }
-};
-
-/* Voltar no modo aluno -> volta pro login */
-$("btn-student-back").onclick = ()=>{
-  isStudentMode = false;
-  currentStudentUser = null;
-  go("auth-card");
-};
-
-/* Carregar semana do aluno (pega ciclo 'mais recente' e lista dias) */
-async function loadStudentWeek(studentId){
-  const weekWrap = $("student-week");
-  const empty = $("student-week-empty");
-  weekWrap.innerHTML = "";
-  empty.classList.add("hidden");
-
-  // 1) pega ciclos e escolhe o mais "recente"
-  const cyclesRef = collection(db,"students",studentId,"cycles");
-  const csSnap = await getDocs(cyclesRef);
-  if(csSnap.empty){ empty.classList.remove("hidden"); return; }
-
-  const cycles = [];
-  csSnap.forEach(d=> cycles.push({id:d.id, ...d.data()}));
-  // regra: se houver startDate, ordenar por startDate desc; senão por createdAt (não confiável na regra)
-  cycles.sort((a,b)=>{
-    const as=a.startDate||"", bs=b.startDate||"";
-    if(as===bs) return (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);
-    return as>bs? -1: 1;
+async function pickActiveCycle(studentId){
+  const ref = collection(db,"students",studentId,"cycles");
+  const snap = await getDocs(ref);
+  if(snap.empty) return null;
+  const cycles=[];
+  snap.forEach(d=>{
+    const c = { id:d.id, ...d.data() };
+    c._start = toDate(c.start); c._end = toDate(c.end);
+    c._created = c.createdAt?.seconds || 0;
+    cycles.push(c);
   });
-  const sel = cycles[0];
-
-  // 2) pega dias e ordena por order (seg..dom)
-  const daysRef = collection(db,"students",studentId,"cycles",sel.id,"days");
+  const now=new Date();
+  const covering = cycles.filter(c=> c._start && c._end && c._start<=now && now<=c._end)
+                         .sort((a,b)=> (a._start?.getTime()||0) - (b._start?.getTime()||0));
+  if(covering.length) return covering[0];
+  cycles.sort((a,b)=> (b._start?.getTime()||0)-(a._start?.getTime()||0) || (b._created - a._created));
+  return cycles[0];
+}
+async function fetchWeek(studentId, cycleId){
+  const daysRef = collection(db,"students",studentId,"cycles",cycleId,"days");
   const dSnap = await getDocs(daysRef);
-  if(dSnap.empty){ empty.textContent="Nenhum dia cadastrado neste ciclo."; empty.classList.remove("hidden"); return; }
-  const days = [];
-  dSnap.forEach(d=> days.push({id:d.id, ...d.data()}));
-  days.sort((a,b)=> (a.order||0)-(b.order||0));
-
-  // 3) monta acordeão, cada dia carrega seus exercícios
-  for(const d of days){
-    const dayBox = document.createElement("div");
-    dayBox.className = "week-day";
-    dayBox.innerHTML = `
-      <div class="week-head">
-        <span>${d.name||weekNames[d.id]||"DIA"}</span>
-        <span class="badge">${d.exercisesCount||0} exercício(s)</span>
+  const map={};
+  dSnap.forEach(d=>{ map[d.id] = { id:d.id, ...d.data(), exercises:[] }; });
+  for(const id of DAY_ORDER){
+    if(!map[id]) map[id]={ id, name:DAY_LABEL[id], order:DAY_ORDER.indexOf(id)+1, exercises:[] };
+    const exRef = collection(db,"students",studentId,"cycles",cycleId,"days",id,"exercises");
+    const exSnap= await getDocs(exRef);
+    const list=[]; exSnap.forEach(e=> list.push({id:e.id, ...e.data()}));
+    list.sort((a,b)=> (a.order||0)-(b.order||0));
+    map[id].exercises=list;
+  }
+  return map;
+}
+function renderWeek(map){
+  const wrap = $("week-days");
+  wrap.innerHTML = "";
+  const today = todayId();
+  for(const id of DAY_ORDER){
+    const d = map[id];
+    const box = document.createElement("div");
+    box.className="day-box";
+    box.dataset.day = id;
+    const isToday = id===today;
+    box.innerHTML = `
+      <div class="day-top">
+        <span>${DAY_LABEL[id]}</span>
+        <span>${(d.exercises?.length||0)} exercício(s)</span>
       </div>
-      <div class="week-body"><div class="list" data-body></div></div>
-    `;
-    const head = dayBox.querySelector(".week-head");
-    const body = dayBox.querySelector(".week-body");
-    const bodyList = dayBox.querySelector("[data-body]");
-
-    head.addEventListener("click", async()=>{
-      const opened = dayBox.classList.toggle("open");
-      if(opened && !dayBox._loaded){
-        // carrega exercícios do dia
-        const exRef = collection(db,"students",studentId,"cycles",sel.id,"days",d.id,"exercises");
-        const exSnap = await getDocs(exRef);
-        const exs = [];
-        exSnap.forEach(x=> exs.push({id:x.id, ...x.data()}));
-        exs.sort((a,b)=> (a.order||0)-(b.order||0));
-
-        if(!exs.length){
-          bodyList.innerHTML = `<div class="helper">Nenhum exercício neste dia.</div>`;
-        }else{
-          bodyList.innerHTML = "";
-          exs.forEach(ex=>{
-            const c = document.createElement("div");
-            c.className="ex-card";
-            c.innerHTML = `
-              <div class="ex-top">
-                <div class="ex-name">${ex.name||"(Sem nome)"}</div>
-              </div>
-              <div class="ex-line">
-                <span class="ex-chip">Séries: <b>${ex.sets||"—"}</b></span>
-                <span class="ex-chip">Reps: <b>${ex.reps||"—"}</b></span>
-                <span class="ex-chip">Carga: <b>${ex.load||"—"}</b></span>
-                <span class="ex-chip">Descanso: <b>${ex.rest||"—"}</b></span>
-              </div>
-              ${ex.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${ex.notes}</div>`:""}
-            `;
-            bodyList.appendChild(c);
-          });
+      <div class="ex-list" style="${isToday?'':'display:none'}">
+        ${
+          (d.exercises?.length||0)
+            ? d.exercises.map(e=>`
+                <div>
+                  <b>${e.name||"(Sem nome)"}</b>
+                  — Séries: ${e.sets||"—"} | Reps: ${e.reps||"—"} | Carga: ${e.load||"—"} | Desc: ${e.rest||"—"}
+                  ${e.notes? `<div style="opacity:.75">Obs: ${e.notes}</div>`:""}
+                </div>
+              `).join("")
+            : `<div style="opacity:.7">Sem exercícios cadastrados.</div>`
         }
-        dayBox._loaded = true;
-      }
+      </div>
+    `;
+    box.addEventListener("click", (ev)=>{
+      if(ev.target.closest("a,button")) return;
+      const cont = box.querySelector(".ex-list");
+      const open = cont.style.display !== "none";
+      cont.style.display = open ? "none" : "block";
     });
-
-    weekWrap.appendChild(dayBox);
+    if(isToday){ box.style.borderColor="var(--brand)"; }
+    wrap.appendChild(box);
+  }
+}
+async function openWeekView(studentDoc){
+  try{
+    isStudentMode = true;
+    currentStudent = studentDoc;
+    const cycle = await pickActiveCycle(studentDoc.id || studentDoc.cpf);
+    $("week-student-name").innerText = studentDoc.name || "Seu Treino";
+    $("week-cycle").innerText =
+      cycle ? (cycle.name || "Ciclo") + (cycle.start&&cycle.end ? ` (${formatDate(cycle.start)} — ${formatDate(cycle.end)})` : "")
+            : "Sem ciclo ativo";
+    if(!cycle){
+      goTo("week-view");
+      $("week-days").innerHTML = `<div class="day-box"><div class="day-top"><span>Sem ciclo</span><span>0 ex.</span></div><div class="ex-list" style="display:block">Peça ao seu personal para cadastrar um ciclo.</div></div>`;
+      return;
+    }
+    const week = await fetchWeek(studentDoc.id || studentDoc.cpf, cycle.id);
+    goTo("week-view");
+    renderWeek(week);
+    showAlert("Bons treinos! 💪", true);
+  }catch(err){
+    console.error(err);
+    showAlert("Erro ao carregar a semana: "+err.message);
   }
 }
 
-/* Botões extras do login aluno */
-$("btn-open-student-login").addEventListener("click", ()=> {
-  $("go-login").classList.remove("hidden");
+/* --------------- Login Aluno --------------- */
+$("btn-open-student-login")?.addEventListener("click", ()=>{
+  $("stu-cpf").value = "";
+  $("stu-birth").value = "";
+  $("student-login-bg").classList.remove("hidden");
 });
-$("btn-stu-login-cancel").addEventListener("click", ()=> {
-  $("go-login").classList.add("hidden");
+$("btn-stu-login-cancel")?.addEventListener("click", ()=> $("student-login-bg").classList.add("hidden"));
+
+$("form-student-login")?.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  let cpf = onlyDigits($("stu-cpf").value);
+  let birth = $("stu-birth").value;
+  if(cpf.length !== 11) return showAlert("CPF deve ter 11 números!");
+  if(!birth) return showAlert("Informe a data de nascimento!");
+
+  try{
+    await signInAnonymously(auth).catch(()=>{});
+    // Busca por ID (CPF) primeiro
+    const ref = doc(db,"students", cpf);
+    const snap= await getDoc(ref);
+    if(snap.exists()){
+      const st = { id:cpf, ...snap.data() };
+      if(st.birth !== birth) return showAlert("Dados não conferem. Verifique CPF e data.", false);
+      $("student-login-bg").classList.add("hidden");
+      await openWeekView(st);
+      return;
+    }
+    // Fallback: query por cpf+birth (caso tenha migração)
+    const q = query(collection(db,"students"), where("cpf","==",cpf), where("birth","==",birth));
+    const qs= await getDocs(q);
+    if(qs.empty) return showAlert("Aluno não encontrado. Fale com seu personal!");
+    if(qs.size > 1) return showAlert("CPF em mais de um cadastro. Fale com seu personal.");
+    const st2 = { id:qs.docs[0].id, ...qs.docs[0].data() };
+    $("student-login-bg").classList.add("hidden");
+    await openWeekView(st2);
+  }catch(err){
+    showAlert("Erro: "+err.message);
+  }
 });
 
+/* --------------- Navegação --------------- */
+function resetRealtime(){
+  unsubStudents?.(); unsubStudents=null;
+  unsubCycles?.();   unsubCycles=null;
+  unsubDays?.();     unsubDays=null;
+  unsubEx?.();       unsubEx=null;
+}
+function resetContext(){ currentStudent=null; currentCycle=null; currentDay=null; }
+
+function navBack(){
+  if(isStudentMode){
+    if(currentView==="ex-view"){ goTo("days-view"); return; }
+    if(currentView==="days-view" || currentView==="train-view"){ goTo("week-view"); return; }
+    if(currentView==="week-view"){
+      if(confirm("Deseja sair da área do aluno?")){
+        isStudentMode = false; resetRealtime(); resetContext(); goTo("auth-card");
+      }
+      return;
+    }
+    goTo("week-view");
+  }else{
+    if(currentView==="ex-view"){ goTo("days-view"); return; }
+    if(currentView==="days-view"){ goTo("train-view"); return; }
+    if(currentView==="train-view"){ goTo("app"); return; }
+    goTo("app");
+  }
+}
+$("btn-back")?.addEventListener("click", navBack);
+$("btn-back-cycles")?.addEventListener("click", navBack);
+$("btn-back-days")?.addEventListener("click", navBack);
+$("btn-week-back")?.addEventListener("click", ()=>{
+  if(!isStudentMode){ goTo("app"); return; }
+  if(confirm("Quer sair da área do aluno?")){
+    isStudentMode=false; resetRealtime(); resetContext(); goTo("auth-card");
+  }
+});
+
+/* --------------- UX --------------- */
+$("login-email")?.setAttribute("placeholder","email@exemplo.com");
+$("login-pass")?.setAttribute("placeholder","••••••••");
+$("su-pass")?.setAttribute("placeholder","mínimo 6 dígitos");
+
+/* Enter -> próximo campo */
+$$("input").forEach(inp=>{
+  inp.addEventListener("keypress",(ev)=>{
+    if(ev.key==="Enter"){
+      const form = inp.closest("form");
+      if(form){
+        ev.preventDefault();
+        const focusable = [...form.querySelectorAll("input,button")];
+        const idx = focusable.indexOf(inp);
+        if(idx>=0 && idx<focusable.length-1) focusable[idx+1].focus();
+      }
+    }
+  });
+});
 </script>
+
+<!--
+===============================
+ REGRAS FIRESTORE (SUGESTÃO)
+===============================
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // PERSONAL (users)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ALUNOS por CPF como ID
+    match /students/{studentId} {
+      // leitura: personal (dono) e aluno logado anon se cpf+nascimento batem
+      allow read: if (
+        request.auth != null && request.auth.uid == resource.data.ownerId
+      ) || (
+        request.auth != null && request.auth.token.firebase.sign_in_provider == "anonymous"
+        && request.query != null
+        && request.query.cpf == resource.data.cpf
+        && request.query.birth == resource.data.birth
+      );
+
+      // escrita: apenas o personal dono
+      allow write: if request.auth != null && request.auth.uid == resource.data.ownerId;
+    }
+
+    // Subcoleções (cycles/days/exercises)
+    match /students/{studentId}/{sub=**}/{docId} {
+      allow read: if (
+        request.auth != null && request.auth.uid == get(/databases/$(database)/documents/students/$(studentId)).data.ownerId
+      ) || (
+        request.auth != null && request.auth.token.firebase.sign_in_provider == "anonymous"
+      );
+      allow write: if request.auth != null
+        && request.auth.uid == get(/databases/$(database)/documents/students/$(studentId)).data.ownerId;
+    }
+  }
+}
+-->
 </body>
 </html>
