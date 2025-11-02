@@ -321,14 +321,15 @@ import {
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-/* --------------- SEU CONFIG AQUI --------------- */
+/* --------------- CONFIG DO SEU PROJETO --------------- */
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SUA_AUTH_DOMAIN",
-  projectId: "SUA_PROJECT_ID",
-  storageBucket: "SUA_STORAGE_BUCKET",
-  messagingSenderId: "SUA_SENDER_ID",
-  appId: "SUA_APP_ID"
+  apiKey: "AIzaSyBsPf40matUV8So60OHb0h4oRwMRWaB0ho",
+  authDomain: "acdm-70082.firebaseapp.com",
+  projectId: "acdm-70082",
+  storageBucket: "acdm-70082.firebasestorage.app",
+  messagingSenderId: "236961358499",
+  appId: "1:236961358499:web:40b7391c4c9b3405ff1516",
+  measurementId: "G-BR85P1C0X8"
 };
 /* -------------- FIM CONFIG -------------- */
 
@@ -995,6 +996,7 @@ $("form-student-login")?.addEventListener("submit", async (e)=>{
   if(!birth) return showAlert("Informe a data de nascimento!");
 
   try{
+    // Aluno entra anonimamente (somente leitura)
     await signInAnonymously(auth).catch(()=>{});
     // Busca por ID (CPF) primeiro
     const ref = doc(db,"students", cpf);
@@ -1079,42 +1081,52 @@ $$("input").forEach(inp=>{
 
 <!--
 ===============================
- REGRAS FIRESTORE (SUGESTÃO)
+ 🔒 REGRAS FIRESTORE (COLE EM: Firestore Database > Regras)
 ===============================
+⚠️ IMPORTANTE: Em app 100% client-side, não é possível checar "CPF+Nascimento"
+nas regras durante a leitura sem backend. A regra abaixo:
+
+- ✅ Personal (dono) lê/escreve TUDO dos seus alunos
+- ✅ Aluno (anônimo) consegue LER somente (para visualização no app)
+- ❌ Aluno NÃO consegue escrever/editar nada
+
+Se quiser blindar 100% para que um anônimo NÃO possa ler outros alunos
+adivinhando CPF, é necessário backend (Cloud Functions) para emitir um "ticket"
+de acesso por usuário. Posso te mandar isso depois.
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // PERSONAL (users)
+    // USERS (personais)
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // ALUNOS por CPF como ID
+    // ALUNOS (ID = CPF)
     match /students/{studentId} {
-      // leitura: personal (dono) e aluno logado anon se cpf+nascimento batem
-      allow read: if (
-        request.auth != null && request.auth.uid == resource.data.ownerId
-      ) || (
-        request.auth != null && request.auth.token.firebase.sign_in_provider == "anonymous"
-        && request.query != null
-        && request.query.cpf == resource.data.cpf
-        && request.query.birth == resource.data.birth
-      );
 
-      // escrita: apenas o personal dono
-      allow write: if request.auth != null && request.auth.uid == resource.data.ownerId;
+      // Personal dono: lê e escreve
+      allow read, write: if request.auth != null
+        && request.auth.uid == resource.data.ownerId;
+
+      // Aluno logado anonimamente: somente leitura
+      allow read: if request.auth != null
+        && request.auth.token.firebase.sign_in_provider == "anonymous";
+
+      // NUNCA permitir escrita para anônimo
+      allow write: if false;
     }
 
     // Subcoleções (cycles/days/exercises)
     match /students/{studentId}/{sub=**}/{docId} {
-      allow read: if (
-        request.auth != null && request.auth.uid == get(/databases/$(database)/documents/students/$(studentId)).data.ownerId
-      ) || (
-        request.auth != null && request.auth.token.firebase.sign_in_provider == "anonymous"
-      );
-      allow write: if request.auth != null
+      // Personal dono
+      allow read, write: if request.auth != null
         && request.auth.uid == get(/databases/$(database)/documents/students/$(studentId)).data.ownerId;
+
+      // Aluno anônimo: somente leitura
+      allow read: if request.auth != null
+        && request.auth.token.firebase.sign_in_provider == "anonymous";
     }
   }
 }
