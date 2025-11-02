@@ -216,15 +216,15 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <div id="week-days"></div>
   </section>
 
-  <!-- ============ MODAL: ALUNO (PERSONAL) ============ -->
+  <!-- ============ MODAL: ALUNO ============ -->
   <div id="modal-bg" class="modal-bg hidden">
     <div class="modal">
       <h2 id="modal-title">Novo Aluno</h2>
       <form id="form-student">
         <div class="field"><label>Nome</label><input id="st-name" required></div>
         <div class="field"><label>WhatsApp</label><input id="st-phone" inputmode="tel" placeholder="(DDD) 99999-9999"></div>
-        <div class="field"><label>CPF (11 dígitos — será o ID do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric" placeholder="Somente números"></div>
-        <div class="field"><label>Data de Nascimento</label><input id="st-birth" type="text" required placeholder="DD/MM/AAAA" maxlength="10" inputmode="numeric"></div>
+        <div class="field"><label>CPF (11 dígitos — será o ID do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric"></div>
+        <div class="field"><label>Data de Nascimento</label><input id="st-birth" type="text" placeholder="DD/MM/AAAA" maxlength="10" inputmode="numeric" required></div>
         <div class="field"><label>Objetivo</label>
           <select id="st-goal">
             <option>Hipertrofia</option><option>Emagrecimento</option><option>Resistência</option>
@@ -295,8 +295,7 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
         <div class="field"><label>CPF (somente números)</label>
           <input id="stu-cpf" maxlength="11" placeholder="Somente números" required inputmode="numeric"></div>
         <div class="field"><label>Data de nascimento</label>
-          <input id="stu-birth" type="text" placeholder="DD/MM/AAAA" maxlength="10" required inputmode="numeric">
-        </div>
+          <input id="stu-birth" type="text" placeholder="DD/MM/AAAA" maxlength="10" required inputmode="numeric"></div>
         <div style="display:flex;gap:8px;margin-top:12px">
           <button class="btn primary" type="submit">Entrar</button>
           <button class="btn ghost" type="button" id="btn-stu-login-cancel">Cancelar</button>
@@ -345,7 +344,8 @@ const alertBox = $("alert");
 function showAlert(msg, ok=false, ms = ok ? 1800 : 3500){
   if(!alertBox){ alert(msg); return; }
   alertBox.innerText = msg;
-  alertBox.classList.toggle("ok", ok);
+  alertBox.classList.remove("hidden","ok");
+  if (ok) alertBox.classList.add("ok");
   alertBox.style.display = "block";
   clearTimeout(showAlert._t);
   showAlert._t = setTimeout(()=> alertBox.style.display = "none", ms);
@@ -354,37 +354,35 @@ function hideAlert(){ if(alertBox) alertBox.style.display = "none"; }
 function show(el){ el?.classList?.remove("hidden"); }
 function hide(el){ el?.classList?.add("hidden"); }
 
-/* --------------- Máscara e Validação de Data (DD/MM/AAAA) --------------- */
-function maskDateInput(input){
-  input?.addEventListener("input",(e)=>{
-    let v = e.target.value.replace(/\D/g,"").slice(0,8);
-    if(v.length >= 5) v = v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4);
-    else if(v.length >= 3) v = v.slice(0,2)+"/"+v.slice(2);
-    e.target.value = v;
-  });
-  input?.addEventListener("blur",(e)=>{
-    const v = e.target.value.trim();
-    if(!v) return;
-    if(!isValidBRDate(v)){
-      e.target.focus();
-      showAlert("Data inválida. Use DD/MM/AAAA.");
-    }
-  });
-}
-function isValidBRDate(str){
-  // Formato básico
-  if(!/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return false;
-  const [d,m,y] = str.split("/").map(n=>parseInt(n,10));
-  if(m<1||m>12) return false;
-  if(d<1||d>31) return false;
-  const mdays = [31,(y%4===0 && (y%100!==0 || y%400===0))?29:28,31,30,31,30,31,31,30,31,30,31];
-  if(d>mdays[m-1]) return false;
-  // (opcional) restringir anos plausíveis
-  if(y<1900 || y>2100) return false;
-  return true;
-}
+/* --------------- Máscaras & Utilidades --------------- */
 function onlyDigits(s){ return (s||"").replace(/\D/g,""); }
 function isCpf11(s){ return /^\d{11}$/.test(onlyDigits(s)); }
+function maskDateBR(input){
+  input.addEventListener("input", (e)=>{
+    let v = e.target.value.replace(/\D/g,"").slice(0,8);
+    if (v.length > 4) v = v.slice(0,2)+"/"+v.slice(2,4)+"/"+v.slice(4);
+    else if (v.length > 2) v = v.slice(0,2)+"/"+v.slice(2);
+    e.target.value = v;
+  });
+}
+function isValidDateBR(str){
+  if(!/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return false;
+  const [d,m,y] = str.split("/").map(Number);
+  const dt = new Date(y, m-1, d);
+  return dt.getFullYear()===y && (dt.getMonth()+1)===m && dt.getDate()===d;
+}
+function ymdToBr(ymd){
+  // Converte "AAAA-MM-DD" -> "DD/MM/AAAA"
+  if(!ymd || !/^\d{4}-\d{2}-\d{2}$/.test(ymd)) return ymd;
+  const [y,m,d] = ymd.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+/* Aplica máscara nos campos de data */
+["st-birth","cycle-start","cycle-end","stu-birth"].forEach(id=>{
+  const el = $(id);
+  if(el) maskDateBR(el);
+});
 
 /* --------------- Estado Global --------------- */
 let isStudentMode = false;
@@ -578,7 +576,7 @@ function openStudentModal(st){
   $("modal-title").innerText = "Editar Aluno";
   $("st-name").value  = st.name  || "";
   $("st-phone").value = st.phone || "";
-  $("st-cpf").value   = st.id    || st.cpf || ""; // ID é o CPF
+  $("st-cpf").value   = st.id    || st.cpf || ""; // ID é o CPF neste modelo
   $("st-birth").value = st.birth || "";
   $("st-goal").value  = st.goal  || "Hipertrofia";
   $("st-level").value = st.level || "Iniciante";
@@ -586,25 +584,27 @@ function openStudentModal(st){
   $("modal-bg").classList.remove("hidden");
 }
 
-/* Salvar Aluno (ID = CPF) */
+/* --------------- Salvar Aluno (ID = CPF) --------------- */
 $("form-student").addEventListener("submit", async (e)=>{
   e.preventDefault();
   const cpf = onlyDigits($("st-cpf").value);
-  const birth = $("st-birth").value.trim();
+  const birthBR = ($("st-birth").value||"").trim();
+
+  if(!($("st-name").value||"").trim()) return showAlert("Nome obrigatório!");
+  if(!isCpf11(cpf)) return showAlert("CPF deve ter 11 dígitos!");
+  if(!isValidDateBR(birthBR)) return showAlert("Data inválida! Use DD/MM/AAAA");
+
   const payload = {
     ownerId: auth.currentUser?.uid || null,
     name: ($("st-name").value||"").trim(),
     phone: onlyDigits($("st-phone").value),
     cpf,
-    birth, // salva DD/MM/AAAA
+    birth: birthBR, // 🚩 salva exatamente DD/MM/AAAA
     goal:  $("st-goal").value,
     level: $("st-level").value,
     notes: ($("st-notes").value||"").trim(),
     updatedAt: serverTimestamp(),
   };
-  if(!payload.name) return showAlert("Nome obrigatório!");
-  if(!isCpf11(cpf)) return showAlert("CPF deve ter 11 dígitos!");
-  if(!isValidBRDate(birth)) return showAlert("Data inválida. Use DD/MM/AAAA");
 
   try{
     const ref = doc(db,"students", cpf);
@@ -647,7 +647,7 @@ $("btn-new-cycle")?.addEventListener("click", ()=>{
 $("btn-cycle-cancel")?.addEventListener("click", ()=> $("cycle-bg").classList.add("hidden"));
 
 function cycleHTML(c){
-  const period = (c.start && c.end && isValidBRDate(c.start) && isValidBRDate(c.end))
+  const period = (c.start && c.end)
     ? `📅 ${c.start} — ${c.end}`
     : "📅 Sem período";
   return `
@@ -704,16 +704,17 @@ $("form-cycle")?.addEventListener("submit", async (e)=>{
   if(isStudentMode || !currentStudent) return;
   const start = $("cycle-start").value.trim();
   const end   = $("cycle-end").value.trim();
-  if(start && !isValidBRDate(start)) return showAlert("Início inválido (DD/MM/AAAA)");
-  if(end   && !isValidBRDate(end))   return showAlert("Fim inválido (DD/MM/AAAA)");
+  if(start && !isValidDateBR(start)) return showAlert("Data de início inválida (DD/MM/AAAA)");
+  if(end   && !isValidDateBR(end))   return showAlert("Data de fim inválida (DD/MM/AAAA)");
 
   const payload = {
     name: $("cycle-name").value.trim(),
-    start: start || null,
+    start: start || null, // salva DD/MM/AAAA ou null
     end:   end   || null,
     updatedAt: serverTimestamp()
   };
   if(!payload.name) return showAlert("Nome obrigatório!");
+
   const sid = currentStudent.id || currentStudent.cpf;
   const id  = $("cycle-id").value;
   const cref= id ? doc(db,"students",sid,"cycles",id) : doc(db,"students",sid,"cycles",crypto.randomUUID());
@@ -912,10 +913,12 @@ function renderExercises(list){
 const DAY_ORDER = ["seg","ter","qua","qui","sex","sab","dom"];
 const DAY_LABEL = { seg:"SEGUNDA", ter:"TERÇA", qua:"QUARTA", qui:"QUINTA", sex:"SEXTA", sab:"SÁBADO", dom:"DOMINGO" };
 function todayId(){ return ["dom","seg","ter","qua","qui","sex","sab"][new Date().getDay()]; }
-function toDateBR(str){ // "DD/MM/AAAA" -> Date (local)
-  if(!isValidBRDate(str)) return null;
-  const [d,m,y] = str.split("/").map(n=>parseInt(n,10));
-  return new Date(y, m-1, d);
+function formatDate(d){
+  if(!d) return "";
+  const t = typeof d === "string" ? d : d.toDate?.() || null;
+  if(!t) return "";
+  // aqui aceitamos tanto BR quanto Y-M-D e exibimos em BR
+  return /^\d{4}-\d{2}-\d{2}$/.test(t) ? ymdToBr(t) : t;
 }
 async function pickActiveCycle(studentId){
   const ref = collection(db,"students",studentId,"cycles");
@@ -924,16 +927,10 @@ async function pickActiveCycle(studentId){
   const cycles=[];
   snap.forEach(d=>{
     const c = { id:d.id, ...d.data() };
-    c._start = toDateBR(c.start||"");
-    c._end   = toDateBR(c.end||"");
-    c._created = d.data()?.createdAt?.seconds || 0;
+    c._created = c.createdAt?.seconds || 0;
     cycles.push(c);
   });
-  const now=new Date();
-  const covering = cycles.filter(c=> c._start && c._end && c._start<=now && now<=c._end)
-                         .sort((a,b)=> (a._start?.getTime()||0) - (b._start?.getTime()||0));
-  if(covering.length) return covering[0];
-  cycles.sort((a,b)=> (b._start?.getTime()||0)-(a._start?.getTime()||0) || (b._created - a._created));
+  cycles.sort((a,b)=> (b._created - a._created));
   return cycles[0];
 }
 async function fetchWeek(studentId, cycleId){
@@ -997,7 +994,7 @@ async function openWeekView(studentDoc){
     const cycle = await pickActiveCycle(studentDoc.id || studentDoc.cpf);
     $("week-student-name").innerText = studentDoc.name || "Seu Treino";
     $("week-cycle").innerText =
-      cycle ? (cycle.name || "Ciclo") + (cycle.start&&cycle.end ? ` (${cycle.start} — ${cycle.end})` : "")
+      cycle ? (cycle.name || "Ciclo") + (cycle.start&&cycle.end ? ` (${formatDate(cycle.start)} — ${formatDate(cycle.end)})` : "")
             : "Sem ciclo ativo";
     if(!cycle){
       goTo("week-view");
@@ -1025,32 +1022,37 @@ $("btn-stu-login-cancel")?.addEventListener("click", ()=> $("student-login-bg").
 $("form-student-login")?.addEventListener("submit", async (e)=>{
   e.preventDefault();
   let cpf = onlyDigits($("stu-cpf").value);
-  let birth = $("stu-birth").value.trim();
+  let birthBR = ($("stu-birth").value||"").trim();
   if(cpf.length !== 11) return showAlert("CPF deve ter 11 números!");
-  if(!isValidBRDate(birth)) return showAlert("Data inválida. Use DD/MM/AAAA!");
+  if(!isValidDateBR(birthBR)) return showAlert("Data inválida! Use DD/MM/AAAA");
 
   try{
-    // Aluno entra anonimamente (somente leitura)
     await signInAnonymously(auth).catch(()=>{});
     // Busca por ID (CPF) primeiro
     const ref = doc(db,"students", cpf);
     const snap= await getDoc(ref);
     if(snap.exists()){
       const st = { id:cpf, ...snap.data() };
-      // compara formato DD/MM/AAAA
-      if((st.birth||"") !== birth) return showAlert("Dados não conferem. Verifique CPF e data.");
+      // compatibilidade: se salvo como YYYY-MM-DD, converte para BR antes de comparar
+      const savedBirth = /^\d{4}-\d{2}-\d{2}$/.test(st.birth) ? ymdToBr(st.birth) : (st.birth||"");
+      if(savedBirth !== birthBR) return showAlert("Dados não conferem. Verifique CPF e data.", false);
       $("student-login-bg").classList.add("hidden");
       await openWeekView(st);
       return;
     }
-    // Fallback: query por cpf+birth (caso tenha migração)
-    const q = query(collection(db,"students"), where("cpf","==",cpf), where("birth","==",birth));
+    // Fallback: query por cpf+birth
+    const q = query(collection(db,"students"), where("cpf","==",cpf));
     const qs= await getDocs(q);
     if(qs.empty) return showAlert("Aluno não encontrado. Fale com seu personal!");
-    if(qs.size > 1) return showAlert("CPF em mais de um cadastro. Fale com seu personal.");
-    const st2 = { id:qs.docs[0].id, ...qs.docs[0].data() };
+    let found = null;
+    qs.forEach(d=>{
+      const data=d.data();
+      const savedBirth = /^\d{4}-\d{2}-\d{2}$/.test(data.birth) ? ymdToBr(data.birth) : (data.birth||"");
+      if(savedBirth===birthBR) found = { id:d.id, ...data };
+    });
+    if(!found) return showAlert("Dados não conferem. Fale com seu personal.");
     $("student-login-bg").classList.add("hidden");
-    await openWeekView(st2);
+    await openWeekView(found);
   }catch(err){
     showAlert("Erro: "+err.message);
   }
@@ -1112,12 +1114,6 @@ $$("input").forEach(inp=>{
     }
   });
 });
-
-/* Ativa máscara nos campos de data (aluno + personal + ciclo) */
-maskDateInput($("stu-birth"));
-maskDateInput($("st-birth"));
-maskDateInput($("cycle-start"));
-maskDateInput($("cycle-end"));
 </script>
 </body>
 </html>
