@@ -117,7 +117,21 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <!-- Login Personal -->
     <form id="form-login" class="block">
       <div class="field"><label>Email</label><input id="login-email" type="email" required></div>
-      <div class="field"><label>Senha</label><input id="login-pass" type="password" required></div>
+
+      <!-- Campo de senha com olho + aviso de Caps -->
+      <div class="field">
+        <label>Senha</label>
+        <div style="position:relative">
+          <input id="login-pass" type="password" required style="padding-right:40px">
+          <span id="toggle-pass"
+            style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
+                   cursor:pointer;font-size:18px;color:#555">👁️</span>
+        </div>
+        <div id="caps-alert" style="color:#c00;font-size:13px;display:none;margin-top:4px;">
+          ⚠️ Caps Lock está ativado
+        </div>
+      </div>
+
       <button class="btn primary" type="submit">Entrar</button>
     </form>
 
@@ -147,7 +161,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
       <button class="link" id="btn-open-student-login">Sou Aluno</button>
     </div>
   </section>
-
   <!-- ============ APP: LISTA DE ALUNOS ============ -->
   <section id="app" class="app hidden">
     <div class="topbar">
@@ -378,6 +391,26 @@ function ymdToBr(ymd){
   return `${d}/${m}/${y}`;
 }
 
+// Capitaliza só a primeira letra
+function capitalize(str){
+  if(!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+// Formata carga (kg)
+function formatLoad(val){
+  if(!val) return "—";
+  const v = String(val).trim();
+  return /^\d+$/.test(v) ? v + " kg" : v;
+}
+
+// Formata descanso (segundos)
+function formatRest(val){
+  if(!val) return "—";
+  const v = String(val).trim();
+  return /^\d+$/.test(v) ? v + " segundos" : v;
+}
+
 /* Aplica máscara nos campos de data */
 ["st-birth","cycle-start","cycle-end","stu-birth"].forEach(id=>{
   const el = $(id);
@@ -558,6 +591,7 @@ function renderStudents(){
       $("students-list").appendChild(card);
     });
 }
+
 /* Novo aluno */
 $("btn-add")?.addEventListener("click", ()=>{
   if((currentPlan.plan||"free")!=="pro" && studentsCache.length >= (currentPlan.limit||5)){
@@ -575,7 +609,7 @@ function openStudentModal(st){
   $("modal-title").innerText = "Editar Aluno";
   $("st-name").value  = st.name  || "";
   $("st-phone").value = st.phone || "";
-  $("st-cpf").value   = st.cpf || "";
+  $("st-cpf").value   = st.cpf   || "";
   $("st-birth").value = st.birth || "";
   $("st-goal").value  = st.goal  || "Hipertrofia";
   $("st-level").value = st.level || "Iniciante";
@@ -642,7 +676,6 @@ async function deleteStudent(st){
     showAlert("Aluno removido ✅", true);
   }catch(err){ showAlert("Erro ao excluir: "+err.message); }
 }
-
 /* --------------- Ciclos --------------- */
 function openTrainView(st){
   if(isStudentMode) return;
@@ -843,7 +876,7 @@ $("form-ex")?.addEventListener("submit", async (e)=>{
   if(isStudentMode) return;
   const id = $("ex-id").value;
   const data = {
-    name: $("ex-name").value.trim(),
+    name: capitalize($("ex-name").value.trim()),
     sets: $("ex-sets").value.trim(),
     reps: $("ex-reps").value.trim(),
     load: $("ex-load").value.trim(),
@@ -873,7 +906,7 @@ function exHTML(e){
   return `
     <div class="ex-card">
       <div class="ex-top">
-        <div class="ex-name">${e.name}</div>
+        <div class="ex-name">${capitalize(e.name)}</div>
         ${!isStudentMode ? `
         <div class="ex-actions">
           <button class="btn-xs" data-edit>✏️</button>
@@ -882,9 +915,9 @@ function exHTML(e){
       </div>
       <div class="ex-line">
         <span class="ex-chip"><b>${e.sets||"—"}</b> séries</span>
-        <span class="ex-chip">${e.reps||"—"} reps</span>
-        <span class="ex-chip">${e.load||"—"}</span>
-        <span class="ex-chip">${e.rest||"—"}</span>
+        <span class="ex-chip"><b>${e.reps||"—"}</b> reps</span>
+        <span class="ex-chip">${formatLoad(e.load)}</span>
+        <span class="ex-chip">${formatRest(e.rest)}</span>
       </div>
       ${e.notes ? `<div class="ex-line" style="color:var(--sub)">Obs: ${e.notes}</div>` : ""}
     </div>
@@ -981,8 +1014,8 @@ function renderWeek(map){
           (d.exercises?.length||0)
             ? d.exercises.map(e=>`
                 <div>
-                  <b>${e.name||"(Sem nome)"}</b>
-                  — Séries: ${e.sets||"—"} | Reps: ${e.reps||"—"} | Carga: ${e.load||"—"} | Desc: ${e.rest||"—"}
+                  <b>${capitalize(e.name)||"(Sem nome)"}</b>
+                  — Séries: ${e.sets||"—"} | Reps: ${e.reps||"—"} | Carga: ${formatLoad(e.load)} | Desc: ${formatRest(e.rest)}
                   ${e.notes? `<div style="opacity:.75">Obs: ${e.notes}</div>`:""}
                 </div>
               `).join("")
@@ -1061,6 +1094,7 @@ $("form-student-login")?.addEventListener("submit", async (e)=>{
     showAlert("Erro: "+err.message);
   }
 });
+
 /* --------------- Navegação --------------- */
 function resetRealtime(){
   unsubStudents?.(); unsubStudents=null;
@@ -1102,6 +1136,19 @@ $("btn-week-back")?.addEventListener("click", ()=>{
 $("login-email")?.setAttribute("placeholder","email@exemplo.com");
 $("login-pass")?.setAttribute("placeholder","••••••••");
 $("su-pass")?.setAttribute("placeholder","mínimo 6 dígitos");
+
+// Aviso de CAPS LOCK no campo de senha do login
+$("login-pass")?.addEventListener("keyup", (e)=>{
+  const caps = e.getModifierState && e.getModifierState("CapsLock");
+  if($("caps-alert")) $("caps-alert").style.display = caps ? "block" : "none";
+});
+
+// Mostrar / ocultar senha (olhinho)
+$("toggle-pass")?.addEventListener("click", ()=>{
+  const inp = $("login-pass");
+  if(!inp) return;
+  inp.type = inp.type === "password" ? "text" : "password";
+});
 
 /* Enter -> próximo campo */
 $$("input").forEach(inp=>{
