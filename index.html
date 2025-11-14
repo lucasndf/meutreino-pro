@@ -558,7 +558,6 @@ function renderStudents(){
       $("students-list").appendChild(card);
     });
 }
-
 /* Novo aluno */
 $("btn-add")?.addEventListener("click", ()=>{
   if((currentPlan.plan||"free")!=="pro" && studentsCache.length >= (currentPlan.limit||5)){
@@ -576,7 +575,7 @@ function openStudentModal(st){
   $("modal-title").innerText = "Editar Aluno";
   $("st-name").value  = st.name  || "";
   $("st-phone").value = st.phone || "";
-  $("st-cpf").value   = st.id    || st.cpf || ""; // ID é o CPF neste modelo
+  $("st-cpf").value   = st.cpf || "";
   $("st-birth").value = st.birth || "";
   $("st-goal").value  = st.goal  || "Hipertrofia";
   $("st-level").value = st.level || "Iniciante";
@@ -584,7 +583,7 @@ function openStudentModal(st){
   $("modal-bg").classList.remove("hidden");
 }
 
-/* --------------- Salvar Aluno (ID = CPF) --------------- */
+/* --------------- Salvar Aluno (CPF como campo, ID auto) --------------- */
 $("form-student").addEventListener("submit", async (e)=>{
   e.preventDefault();
   const cpf = onlyDigits($("st-cpf").value);
@@ -599,7 +598,7 @@ $("form-student").addEventListener("submit", async (e)=>{
     name: ($("st-name").value||"").trim(),
     phone: onlyDigits($("st-phone").value),
     cpf,
-    birth: birthBR, // 🚩 salva exatamente DD/MM/AAAA
+    birth: birthBR,
     goal:  $("st-goal").value,
     level: $("st-level").value,
     notes: ($("st-notes").value||"").trim(),
@@ -607,24 +606,39 @@ $("form-student").addEventListener("submit", async (e)=>{
   };
 
   try{
-    const ref = doc(db,"students", cpf);
-    const snap= await getDoc(ref);
-    if(!snap.exists()){
-      await setDoc(ref, { ...payload, createdAt: serverTimestamp() });
+    // procura se já existe aluno com esse CPF para ESTE personal
+    const q = query(
+      collection(db,"students"),
+      where("ownerId","==", auth.currentUser.uid),
+      where("cpf","==", cpf)
+    );
+    const qsnap = await getDocs(q);
+
+    if(qsnap.empty){
+      // cria aluno novo (ID gerado automaticamente)
+      await addDoc(collection(db,"students"), {
+        ...payload,
+        createdAt: serverTimestamp()
+      });
       showAlert("Aluno cadastrado ✅", true);
     }else{
-      await setDoc(ref, payload, { merge:true });
+      // atualiza o primeiro aluno encontrado com esse CPF
+      const docRef = qsnap.docs[0].ref;
+      await updateDoc(docRef, payload);
       showAlert("Aluno atualizado ✅", true);
     }
+
     $("modal-bg").classList.add("hidden");
-  }catch(err){ showAlert("Erro ao salvar: "+err.message); }
+  }catch(err){
+    showAlert("Erro ao salvar: "+err.message);
+  }
 });
 
 /* Excluir Aluno */
 async function deleteStudent(st){
   if(!confirm(`Excluir ${st.name}?`)) return;
   try{
-    await deleteDoc(doc(db,"students", st.id || st.cpf));
+    await deleteDoc(doc(db,"students", st.id));
     showAlert("Aluno removido ✅", true);
   }catch(err){ showAlert("Erro ao excluir: "+err.message); }
 }
@@ -683,7 +697,7 @@ function renderCycles(list){
 let unsubCyclesFn = null;
 async function startCyclesSnapshot(){
   if(!currentStudent) return;
-  const ref = collection(db,"students", currentStudent.id || currentStudent.cpf, "cycles");
+  const ref = collection(db,"students", currentStudent.id, "cycles");
   unsubCyclesFn?.(); unsubCyclesFn = onSnapshot(ref, snap=>{
     const arr=[]; snap.forEach(d=>arr.push({id:d.id, ...d.data()}));
     arr.sort((a,b)=> (a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
@@ -715,7 +729,7 @@ $("form-cycle")?.addEventListener("submit", async (e)=>{
   };
   if(!payload.name) return showAlert("Nome obrigatório!");
 
-  const sid = currentStudent.id || currentStudent.cpf;
+  const sid = currentStudent.id;
   const id  = $("cycle-id").value;
   const cref= id ? doc(db,"students",sid,"cycles",id) : doc(db,"students",sid,"cycles",crypto.randomUUID());
   try{
@@ -727,7 +741,7 @@ $("form-cycle")?.addEventListener("submit", async (e)=>{
 async function deleteCycle(c){
   if(!confirm(`Excluir ciclo "${c.name}"?`)) return;
   try{
-    await deleteDoc(doc(db,"students", currentStudent.id || currentStudent.cpf, "cycles", c.id));
+    await deleteDoc(doc(db,"students", currentStudent.id, "cycles", c.id));
     showAlert("Ciclo removido ✅", true);
   }catch(err){ showAlert("Erro: "+err.message); }
 }
@@ -742,7 +756,7 @@ function openDays(cycle){
 }
 function startDaysSnapshot(){
   if(!currentStudent || !currentCycle) return;
-  const ref = collection(db, "students", currentStudent.id || currentStudent.cpf, "cycles", currentCycle.id, "days");
+  const ref = collection(db, "students", currentStudent.id, "cycles", currentCycle.id, "days");
   unsubDaysFn?.(); unsubDaysFn = onSnapshot(ref, snap=>{
     const arr=[]; snap.forEach(d=> arr.push({id:d.id, ...d.data()}));
     arr.sort((a,b)=>(a.order||0)-(b.order||0));
@@ -780,7 +794,7 @@ async function ensure7Days(){
     {id:"sab", name:"SÁBADO", order:6},
     {id:"dom", name:"DOMINGO", order:7},
   ];
-  const ref = collection(db,"students", currentStudent.id || currentStudent.cpf, "cycles", currentCycle.id, "days");
+  const ref = collection(db,"students", currentStudent.id, "cycles", currentCycle.id, "days");
   const existing = await getDocs(ref);
   const ids={}; existing.forEach(d=> ids[d.id]=true);
   for(const d of DAYS){
@@ -804,14 +818,14 @@ function openExercises(day){
 function subscribeExercises(){
   if(!currentStudent || !currentCycle || !currentDay) return;
   const ref = collection(
-    db, "students", currentStudent.id || currentStudent.cpf,
+    db, "students", currentStudent.id,
     "cycles", currentCycle.id, "days", currentDay.id, "exercises"
   );
   unsubExFn?.(); unsubExFn = onSnapshot(ref, snap=>{
     const arr=[]; snap.forEach(d=> arr.push({id:d.id, ...d.data()}));
     arr.sort((a,b)=> (a.order||0)-(b.order||0));
     renderExercises(arr);
-    updateDoc(doc(db, "students", currentStudent.id || currentStudent.cpf, "cycles", currentCycle.id, "days", currentDay.id), {
+    updateDoc(doc(db, "students", currentStudent.id, "cycles", currentCycle.id, "days", currentDay.id), {
       exercisesCount: arr.length, updatedAt: serverTimestamp()
     }).catch(()=>{});
   });
@@ -839,7 +853,7 @@ $("form-ex")?.addEventListener("submit", async (e)=>{
   };
   if(!data.name) return showAlert("Informe o nome do exercício.");
   const ref = collection(
-    db, "students", currentStudent.id || currentStudent.cpf,
+    db, "students", currentStudent.id,
     "cycles", currentCycle.id, "days", currentDay.id, "exercises"
   );
   try{
@@ -899,7 +913,7 @@ function renderExercises(list){
       card.querySelector("[data-del]").onclick = async()=>{
         if(confirm("Excluir exercício?")){
           await deleteDoc(doc(
-            db, "students", currentStudent.id || currentStudent.cpf,
+            db, "students", currentStudent.id,
             "cycles", currentCycle.id, "days", currentDay.id, "exercises", e.id
           ));
         }
@@ -908,7 +922,6 @@ function renderExercises(list){
     wrap.appendChild(card);
   });
 }
-
 /* --------------- Modo Aluno: Treino da Semana --------------- */
 const DAY_ORDER = ["seg","ter","qua","qui","sex","sab","dom"];
 const DAY_LABEL = { seg:"SEGUNDA", ter:"TERÇA", qua:"QUARTA", qui:"QUINTA", sex:"SEXTA", sab:"SÁBADO", dom:"DOMINGO" };
@@ -991,7 +1004,7 @@ async function openWeekView(studentDoc){
   try{
     isStudentMode = true;
     currentStudent = studentDoc;
-    const cycle = await pickActiveCycle(studentDoc.id || studentDoc.cpf);
+    const cycle = await pickActiveCycle(studentDoc.id);
     $("week-student-name").innerText = studentDoc.name || "Seu Treino";
     $("week-cycle").innerText =
       cycle ? (cycle.name || "Ciclo") + (cycle.start&&cycle.end ? ` (${formatDate(cycle.start)} — ${formatDate(cycle.end)})` : "")
@@ -1001,7 +1014,7 @@ async function openWeekView(studentDoc){
       $("week-days").innerHTML = `<div class="day-box"><div class="day-top"><span>Sem ciclo</span><span>0 ex.</span></div><div class="ex-list" style="display:block">Peça ao seu personal para cadastrar um ciclo.</div></div>`;
       return;
     }
-    const week = await fetchWeek(studentDoc.id || studentDoc.cpf, cycle.id);
+    const week = await fetchWeek(studentDoc.id, cycle.id);
     goTo("week-view");
     renderWeek(week);
     showAlert("Bons treinos! 💪", true);
@@ -1028,36 +1041,26 @@ $("form-student-login")?.addEventListener("submit", async (e)=>{
 
   try{
     await signInAnonymously(auth).catch(()=>{});
-    // Busca por ID (CPF) primeiro
-    const ref = doc(db,"students", cpf);
-    const snap= await getDoc(ref);
-    if(snap.exists()){
-      const st = { id:cpf, ...snap.data() };
-      // compatibilidade: se salvo como YYYY-MM-DD, converte para BR antes de comparar
-      const savedBirth = /^\d{4}-\d{2}-\d{2}$/.test(st.birth) ? ymdToBr(st.birth) : (st.birth||"");
-      if(savedBirth !== birthBR) return showAlert("Dados não conferem. Verifique CPF e data.", false);
-      $("student-login-bg").classList.add("hidden");
-      await openWeekView(st);
-      return;
-    }
-    // Fallback: query por cpf+birth
+
     const q = query(collection(db,"students"), where("cpf","==",cpf));
     const qs= await getDocs(q);
     if(qs.empty) return showAlert("Aluno não encontrado. Fale com seu personal!");
+
     let found = null;
     qs.forEach(d=>{
       const data=d.data();
       const savedBirth = /^\d{4}-\d{2}-\d{2}$/.test(data.birth) ? ymdToBr(data.birth) : (data.birth||"");
       if(savedBirth===birthBR) found = { id:d.id, ...data };
     });
+
     if(!found) return showAlert("Dados não conferem. Fale com seu personal.");
+
     $("student-login-bg").classList.add("hidden");
     await openWeekView(found);
   }catch(err){
     showAlert("Erro: "+err.message);
   }
 });
-
 /* --------------- Navegação --------------- */
 function resetRealtime(){
   unsubStudents?.(); unsubStudents=null;
