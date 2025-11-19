@@ -227,7 +227,7 @@ textarea{resize:vertical}
   font-size:13px
 }
 
-/* Modal */
+/* Modal base */
 .modal-bg{
   position:fixed;inset:0;background:rgba(0,0,0,.35);
   display:flex;align-items:center;justify-content:center;padding:16px
@@ -492,7 +492,27 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     </div>
   </div>
 
+  <!-- ============ MODAL PREMIUM: SAIR DO TREINO (ALUNO) ============ -->
+  <div id="exit-student-bg" class="modal-bg hidden" style="z-index:2200">
+    <div class="modal" style="max-width:420px">
+      <h2 style="margin-top:0;display:flex;align-items:center;gap:8px;font-size:18px">
+        <span>🔒</span> Sair do treino?
+      </h2>
+      <p class="subtitle" style="margin-bottom:4px">
+        Tem certeza que deseja sair da área do aluno agora?
+      </p>
+      <p class="subtitle">
+        O temporizador será pausado automaticamente.
+      </p>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap">
+        <button type="button" id="exit-student-cancel" class="btn ghost" style="width:auto">❌ Cancelar</button>
+        <button type="button" id="exit-student-confirm" class="btn primary" style="width:auto">Sair</button>
+      </div>
+    </div>
+  </div>
+
 </main>
+
 <!-- ===================== JS ÚNICO (Firebase + App) ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
@@ -712,7 +732,8 @@ $("btn-google")?.addEventListener("click",async()=>{
 $("go-signup")?.addEventListener("click",()=>{
   hide($("form-login")); hide($("btn-google"));
   show($("form-signup")); show($("go-login"));
-  hide($("go-signup"));   show($("go-reset"));
+  hide($("go-signup"));
+  show($("go-reset"));
   $("view-title").innerText="Criar conta";
   $("view-sub").innerText="Cadastre-se para atender seus alunos.";
   hideAlert();
@@ -720,7 +741,8 @@ $("go-signup")?.addEventListener("click",()=>{
 $("go-login")?.addEventListener("click",()=>{
   show($("form-login")); show($("btn-google"));
   hide($("form-signup")); hide($("form-reset")); hide($("go-login"));
-  show($("go-signup"));   show($("go-reset"));
+  show($("go-signup"));
+  show($("go-reset"));
   $("view-title").innerText="Entrar";
   $("view-sub").innerText="Gerencie seus alunos facilmente.";
   hideAlert();
@@ -728,7 +750,8 @@ $("go-login")?.addEventListener("click",()=>{
 $("go-reset")?.addEventListener("click",()=>{
   hide($("form-login")); hide($("form-signup")); hide($("btn-google"));
   show($("form-reset")); show($("go-login"));
-  hide($("go-reset"));   hide($("go-signup"));
+  hide($("go-reset"));
+  hide($("go-signup"));
   $("view-title").innerText="Recuperar Senha";
   $("view-sub").innerText="Informe seu email cadastrado.";
   hideAlert();
@@ -900,6 +923,7 @@ async function deleteStudent(st){
     showAlert("Aluno removido ✅",true);
   }catch(err){ showAlert("Erro ao excluir: "+err.message); }
 }
+
 /* --------- Ciclos --------- */
 let cyclesCache=[];
 function openTrainView(st){
@@ -1497,6 +1521,29 @@ function resetRealtime(){
 }
 function resetContext(){ currentStudent=null; currentCycle=null; currentDay=null; weekStudentId=null; }
 
+/* MODAL PREMIUM: SAIR DO TREINO (ALUNO) */
+const exitStudentBg = $("exit-student-bg");
+const exitCancelBtn = $("exit-student-cancel");
+const exitConfirmBtn = $("exit-student-confirm");
+
+function openExitStudentModal(){
+  if(!exitStudentBg) return;
+  exitStudentBg.classList.remove("hidden");
+}
+exitCancelBtn?.addEventListener("click",()=>{
+  exitStudentBg?.classList.add("hidden");
+});
+exitConfirmBtn?.addEventListener("click",()=>{
+  exitStudentBg?.classList.add("hidden");
+  pauseSessionTimer();
+  stopAllExTimers();
+  isStudentMode=false;
+  resetRealtime();
+  resetContext();
+  goTo("auth-card");
+  showAlert("Você saiu da área do aluno ✅",true);
+});
+
 function navBack(){
   if(isStudentMode){
     if(currentView==="day-session-view"){ // volta para lista de dias, sem sair do aluno
@@ -1508,9 +1555,7 @@ function navBack(){
     if(currentView==="ex-view"){ goTo("days-view"); return; }
     if(currentView==="days-view" || currentView==="train-view"){ goTo("week-view"); return; }
     if(currentView==="week-view"){
-      if(confirm("Deseja sair da área do aluno?")){
-        isStudentMode=false; resetRealtime(); resetContext(); goTo("auth-card");
-      }
+      openExitStudentModal();
       return;
     }
     goTo("week-view");
@@ -1526,9 +1571,7 @@ $("btn-back-cycles")?.addEventListener("click",navBack);
 $("btn-back-days")?.addEventListener("click",navBack);
 $("btn-week-back")?.addEventListener("click",()=>{
   if(!isStudentMode){ goTo("app"); return; }
-  if(confirm("Quer sair da área do aluno?")){
-    isStudentMode=false; resetRealtime(); resetContext(); goTo("auth-card");
-  }
+  openExitStudentModal();
 });
 $("btn-session-back")?.addEventListener("click",()=>{
   stopAllExTimers();
