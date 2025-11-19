@@ -16,25 +16,51 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overscroll-behavior-y:none; /* evita atualizar arrastando pra cima (pull-to-refresh) */
+}
 .hidden{display:none!important}
 
 /* ------------ Layouts ------------- */
-.wrap{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
+.wrap{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:16px;
+}
 .card{
-  width:100%;max-width:420px;background:var(--panel);border-radius:16px;border:1px solid var(--border);padding:26px
+  width:100%;
+  max-width:420px;
+  background:var(--panel);
+  border-radius:16px;
+  border:1px solid var(--border);
+  padding:26px;
 }
 .brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:700}
-.brand-logo{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;border-radius:8px;font-size:22px}
+.brand-logo{
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  background:var(--brand);color:#fff;border-radius:8px;font-size:22px
+}
 .pro{color:var(--brand-dark);font-weight:800}
 .title{font-size:20px;margin:12px 0 6px}
 .subtitle{font-size:14px;color:var(--sub);margin-bottom:14px}
 
 /* ------------ Form ------------- */
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-input,select,textarea{padding:12px;border-radius:10px;font-size:15px;border:1px solid var(--border);background:var(--muted)}
+input,select,textarea{
+  padding:12px;border-radius:10px;font-size:15px;
+  border:1px solid var(--border);background:var(--muted)
+}
 textarea{resize:vertical}
-.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:600;cursor:pointer}
+.btn{
+  width:100%;padding:12px;border:none;border-radius:10px;
+  font-weight:600;cursor:pointer
+}
 .btn.primary{background:var(--brand);color:#fff}
 .btn.google{background:#fff;border:1px solid #ccc;color:#333}
 .btn.ghost{background:var(--panel);border:1px solid var(--border);color:var(--text)}
@@ -42,7 +68,10 @@ textarea{resize:vertical}
 .link{border:none;background:none;color:var(--brand-dark);font-size:14px;cursor:pointer}
 
 /* Alert */
-.alert{display:none;padding:10px;font-size:14px;margin-bottom:12px;border-radius:8px;background:#ffd8d8;color:#8a0000;white-space:pre-line}
+.alert{
+  display:none;padding:10px;font-size:14px;margin-bottom:12px;
+  border-radius:8px;background:#ffd8d8;color:#8a0000;white-space:pre-line
+}
 .alert.ok{background:#daf5d8;color:#084d19}
 
 /* Password */
@@ -69,46 +98,102 @@ textarea{resize:vertical}
 .caps-hint{margin-top:4px;font-size:12px;color:#b45309;display:none}
 
 /* ------------ App ------------- */
-.app,.view,.week-view{width:100%;max-width:1100px;margin:auto;padding:20px}
-.topbar{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:18px}
+.app,.view,.week-view{
+  width:100%;max-width:1100px;margin:auto;padding:20px
+}
+.topbar{
+  display:grid;grid-template-columns:1fr auto auto;
+  gap:12px;align-items:center;margin-bottom:18px
+}
 .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.pill{padding:6px 12px;background:var(--muted);border-radius:12px;border:1px solid var(--border);font-size:14px}
+.pill{
+  padding:6px 12px;background:var(--muted);
+  border-radius:12px;border:1px solid var(--border);font-size:14px
+}
 .search{max-width:320px}
 .grid{display:grid;gap:16px}
 @media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
 
-.card-student{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.badge{background:var(--muted);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--sub)}
+.card-student{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px
+}
+.badge{
+  background:var(--muted);padding:6px 10px;border-radius:999px;
+  font-size:12px;color:var(--sub)
+}
 .actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn-sm{padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--muted)}
+.btn-sm{
+  padding:8px 10px;border-radius:8px;font-size:13px;
+  cursor:pointer;border:1px solid var(--border);background:var(--muted)
+}
 .btn-sm.brand{background:var(--brand);color:#fff;border:none}
 .btn-sm.danger{background:var(--danger);color:#fff;border:none}
-.btn-xs{padding:6px 8px;border-radius:8px;font-size:12px;border:1px solid var(--border);background:var(--muted);cursor:pointer}
+.btn-xs{
+  padding:6px 8px;border-radius:8px;font-size:12px;
+  border:1px solid var(--border);background:var(--muted);cursor:pointer
+}
 
 /* FAB */
-.fab{position:fixed;right:22px;bottom:22px;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;border:none;font-size:26px;box-shadow:0 10px 20px rgba(0,0,0,.15);cursor:pointer}
+.fab{
+  position:fixed;right:22px;bottom:22px;width:54px;height:54px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--brand);color:#fff;border:none;font-size:26px;
+  box-shadow:0 10px 20px rgba(0,0,0,.15);cursor:pointer
+}
 
 /* Views */
-.view-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-.back{padding:8px 12px;border-radius:8px;background:var(--panel);border:1px solid var(--border);cursor:pointer}
-.helper{padding:14px;background:#fff7d1;border:1px dashed #e3c54b;border-radius:12px;color:#5c4a00}
+.view-header{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:12px
+}
+.back{
+  padding:8px 12px;border-radius:8px;background:var(--panel);
+  border:1px solid var(--border);cursor:pointer
+}
+.helper{
+  padding:14px;background:#fff7d1;border:1px dashed #e3c54b;
+  border-radius:12px;color:#5c4a00
+}
 
 /* Days / Exercises (personal) */
 .days-grid{display:grid;gap:12px}
 @media(min-width:700px){.days-grid{grid-template-columns:repeat(2,1fr)}}
-.day-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
-.day-top{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:8px}
+.day-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:14px
+}
+.day-top{
+  display:flex;justify-content:space-between;
+  align-items:center;font-weight:700;margin-bottom:8px
+}
 .day-actions{display:flex;gap:8px}
 .list{display:flex;flex-direction:column;gap:12px}
-.ex-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ex-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px
+}
 .ex-top{display:flex;justify-content:space-between;gap:10px}
 .ex-name{font-weight:700}
 .ex-line{display:flex;flex-wrap:wrap;gap:8px}
-.ex-chip{background:var(--muted);border:1px solid var(--border);padding:4px 8px;border-radius:999px;font-size:12px}
+.ex-chip{
+  background:var(--muted);border:1px solid var(--border);
+  padding:4px 8px;border-radius:999px;font-size:12px
+}
 
-/* Week (aluno) */
-.week-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+/* Week (aluno) – tela de ROTINAS */
+.week-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:16px
+}
+.week-day-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:14px;margin-bottom:12px
+}
+.week-day-title{font-weight:700;margin-bottom:4px}
+.week-day-sub{font-size:14px;color:var(--sub);margin-bottom:6px}
+
+/* Timer genérico (usado na tela de treino do dia) */
 .week-timer{
   display:flex;justify-content:space-between;align-items:center;
   margin-bottom:16px;padding:10px 14px;border-radius:12px;
@@ -117,21 +202,40 @@ textarea{resize:vertical}
 .week-timer-left{display:flex;align-items:center;gap:8px;font-weight:600}
 .week-timer-display{letter-spacing:.08em;font-variant-numeric:tabular-nums}
 .week-timer-actions{display:flex;gap:8px}
-.day-box{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;cursor:pointer}
-.ex-list{margin-top:10px;padding-left:4px;font-size:14px}
-.ex-list div{margin-bottom:6px}
-.week-ex-main{display:flex;align-items:center;gap:8px}
-.week-ex-meta{margin-left:24px;font-size:13px;color:var(--sub);display:flex;flex-direction:column;gap:4px;margin-top:4px}
-.week-ex-edit-row{display:flex;align-items:center;gap:6px}
-.week-ex-edit-area{display:flex;align-items:center;gap:6px;margin-left:24px;margin-top:4px}
-.week-ex-edit-area input{
+
+/* Lista de exercícios do DIA (aluno) */
+.session-ex-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:12px;margin-bottom:10px
+}
+.session-ex-header{
+  display:flex;justify-content:space-between;align-items:center;gap:8px
+}
+.session-ex-main{display:flex;align-items:center;gap:8px}
+.session-ex-meta{
+  margin-top:6px;font-size:13px;color:var(--sub);
+  display:flex;flex-direction:column;gap:4px
+}
+.session-ex-edit-row{display:flex;align-items:center;gap:6px}
+.session-ex-edit-area{display:flex;align-items:center;gap:6px;margin-top:4px}
+.session-ex-edit-area input{
   padding:4px 6px;border-radius:6px;border:1px solid var(--border);
   font-size:12px;width:80px;
 }
+.session-ex-timer{
+  margin-top:8px;display:flex;align-items:center;gap:8px;
+  font-size:13px
+}
 
 /* Modal */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;padding:16px}
-.modal{width:100%;max-width:520px;background:var(--panel);border-radius:16px;border:1px solid var(--border);padding:20px}
+.modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;padding:16px
+}
+.modal{
+  width:100%;max-width:520px;background:var(--panel);
+  border-radius:16px;border:1px solid var(--border);padding:20px
+}
 
 /* Pequenos toques */
 hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
@@ -256,29 +360,48 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <div id="ex-list" class="list"></div>
   </section>
 
-  <!-- ============ VIEW: SEMANA (ALUNO) ============ -->
+  <!-- ============ VIEW: SEMANA (ALUNO) – LISTA DE DIAS ============ -->
   <section id="week-view" class="week-view hidden">
     <div class="week-header">
       <div>
-        <h2 style="margin:0" id="week-student-name">Treino da Semana</h2>
+        <h2 style="margin:0" id="week-student-name">Rotinas de Treino</h2>
         <div id="week-personal" class="subtitle"></div>
         <div id="week-cycle" class="subtitle"></div>
       </div>
       <button id="btn-week-back" class="back" style="border:1px solid var(--border)">← Sair</button>
     </div>
 
+    <div id="week-days"></div>
+  </section>
+
+  <!-- ============ VIEW: TREINO DO DIA (ALUNO) ============ -->
+  <section id="day-session-view" class="week-view hidden">
+    <div class="week-header">
+      <div>
+        <h2 id="session-day-title" style="margin:0">Treino do Dia</h2>
+        <div id="session-student-name" class="subtitle"></div>
+        <div id="session-cycle" class="subtitle"></div>
+      </div>
+      <button id="btn-session-back" class="back" style="border:1px solid var(--border)">← Rotinas</button>
+    </div>
+
     <div class="week-timer">
       <div class="week-timer-left">
         <span>⏱</span>
-        <span id="week-timer-display" class="week-timer-display">00:00</span>
+        <span id="session-timer-display" class="week-timer-display">00:00</span>
       </div>
       <div class="week-timer-actions">
-        <button id="btn-timer-toggle" class="btn-xs">Iniciar</button>
-        <button id="btn-timer-reset" class="btn-xs">Zerar</button>
+        <button id="btn-session-timer-toggle" class="btn-xs">Iniciar</button>
+        <button id="btn-session-timer-reset" class="btn-xs">Zerar</button>
       </div>
     </div>
 
-    <div id="week-days"></div>
+    <div id="session-progress" class="subtitle" style="margin-bottom:12px"></div>
+    <div id="session-exercises"></div>
+
+    <div style="margin-top:16px">
+      <button id="btn-session-finish" class="btn primary" style="width:100%">Concluir treino do dia</button>
+    </div>
   </section>
 
   <!-- ============ MODAL: ALUNO (PERSONAL) ============ -->
@@ -399,8 +522,8 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 /* --------------- Helpers UI --------------- */
-const $ = (id)=>document.getElementById(id);
-const $$=(sel)=>Array.from(document.querySelectorAll(sel));
+const $  = (id)=>document.getElementById(id);
+const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 const alertBox = $("alert");
 function showAlert(msg, ok=false, ms = ok ? 1800 : 3500){
   if(!alertBox){ alert(msg); return; }
@@ -441,6 +564,17 @@ function ymdToBr(ymd){
   const el = $(id); if(el) maskDateBR(el);
 });
 
+/* --------------- Helpers treino --------------- */
+function normalizeLoadInput(str){
+  const t = (str||"").trim();
+  if(!t) return "—";
+  // se for só número (ou número com vírgula/ponto), coloca "kg" no final
+  if(/^\d+([.,]\d+)?$/.test(t) && !/[a-zA-Z]/.test(t)){
+    return t.replace(",",".")+" kg";
+  }
+  return t;
+}
+
 /* --------- Estado Global --------- */
 let isStudentMode = false;
 let currentUser   = null;
@@ -450,32 +584,54 @@ let unsubStudents = null, unsubCycles = null, unsubDays = null, unsubEx = null;
 let currentStudent = null, currentCycle = null, currentDay = null;
 let weekStudentId = null;
 
-/* --------- Timer (área do aluno) --------- */
-let timerInterval = null;
-let elapsedSeconds = 0;
+/* --------- Timer GERAL do treino do dia (aluno) --------- */
+let sessionTimerInterval = null;
+let sessionElapsedSeconds = 0;
+
 function formatTimer(sec){
   const m = String(Math.floor(sec/60)).padStart(2,"0");
   const s = String(sec%60).padStart(2,"0");
   return `${m}:${s}`;
 }
-function updateTimerUI(){
-  const el = $("week-timer-display");
-  if(el) el.textContent = formatTimer(elapsedSeconds);
-  const btn = $("btn-timer-toggle");
-  if(btn) btn.textContent = timerInterval ? "Pausar" : "Iniciar";
+function updateSessionTimerUI(){
+  const el = $("session-timer-display");
+  if(el) el.textContent = formatTimer(sessionElapsedSeconds);
+  const btn = $("btn-session-timer-toggle");
+  if(btn) btn.textContent = sessionTimerInterval ? "Pausar" : "Iniciar";
 }
-function startTimer(){
-  if(timerInterval) return;
-  timerInterval = setInterval(()=>{ elapsedSeconds++; updateTimerUI(); },1000);
-  updateTimerUI();
+function startSessionTimer(){
+  if(sessionTimerInterval) return;
+  sessionTimerInterval = setInterval(()=>{
+    sessionElapsedSeconds++;
+    updateSessionTimerUI();
+  },1000);
+  updateSessionTimerUI();
 }
-function pauseTimer(){
-  if(!timerInterval) return;
-  clearInterval(timerInterval); timerInterval=null; updateTimerUI();
+function pauseSessionTimer(){
+  if(!sessionTimerInterval) return;
+  clearInterval(sessionTimerInterval);
+  sessionTimerInterval = null;
+  updateSessionTimerUI();
 }
-function resetTimer(){ pauseTimer(); elapsedSeconds=0; updateTimerUI(); }
-$("btn-timer-toggle")?.addEventListener("click",()=>{ timerInterval?pauseTimer():startTimer(); });
-$("btn-timer-reset")?.addEventListener("click",resetTimer);
+function resetSessionTimer(){
+  pauseSessionTimer();
+  sessionElapsedSeconds = 0;
+  updateSessionTimerUI();
+}
+$("btn-session-timer-toggle")?.addEventListener("click",()=>{
+  sessionTimerInterval ? pauseSessionTimer() : startSessionTimer();
+});
+$("btn-session-timer-reset")?.addEventListener("click",resetSessionTimer);
+
+/* --------- Timer INDIVIDUAL por exercício (aluno) --------- */
+let exTimers = {}; // key -> {sec, interval, running}
+
+function stopAllExTimers(){
+  Object.values(exTimers).forEach(t=>{
+    if(t.interval) clearInterval(t.interval);
+  });
+  exTimers = {};
+}
 
 /* --------- LocalStorage progresso aluno --------- */
 function progressKey(studentId){ return `meutreino_progress_${studentId}`; }
@@ -492,7 +648,7 @@ function saveProgress(studentId,data){
 }
 
 /* --------- Views --------- */
-const VIEWS = ["auth-card","app","train-view","days-view","ex-view","week-view"];
+const VIEWS = ["auth-card","app","train-view","days-view","ex-view","week-view","day-session-view"];
 let currentView = "auth-card";
 function applySecurityView(){
   if(isStudentMode){
@@ -591,7 +747,7 @@ $("form-reset")?.addEventListener("submit",async(e)=>{
     await sendPasswordResetEmail(auth,$("rs-email").value.trim());
     showAlert("Email enviado!",true);
     $("go-login").click();
-  }catch(err){ showAlert(err.message); }
+  }catch(err){ showAlert("Erro: "+err.message); }
 });
 $("btn-logout")?.addEventListener("click",async()=>{
   isStudentMode=false;
@@ -744,7 +900,6 @@ async function deleteStudent(st){
     showAlert("Aluno removido ✅",true);
   }catch(err){ showAlert("Erro ao excluir: "+err.message); }
 }
-
 /* --------- Ciclos --------- */
 let cyclesCache=[];
 function openTrainView(st){
@@ -1027,11 +1182,12 @@ function renderExercises(list){
     wrap.appendChild(card);
   });
 }
-/* --------- Semana do aluno --------- */
+
+/* --------- Semana do aluno (lista de dias) --------- */
 const DAY_ORDER = ["seg","ter","qua","qui","sex","sab","dom"];
 const DAY_LABEL = {
-  seg:"SEGUNDA",ter:"TERÇA",qua:"QUARTA",
-  qui:"QUINTA",sex:"SEXTA",sab:"SÁBADO",dom:"DOMINGO"
+  seg:"Segunda",ter:"Terça",qua:"Quarta",
+  qui:"Quinta",sex:"Sexta",sab:"Sábado",dom:"Domingo"
 };
 function todayId(){ return ["dom","seg","ter","qua","qui","sex","sab"][new Date().getDay()]; }
 function formatDate(d){
@@ -1069,149 +1225,222 @@ async function fetchWeek(studentId,cycleId){
   return map;
 }
 
+let weekData = null;
+let currentSessionDayId = null;
+
 function renderWeek(map){
+  weekData = map;
   const wrap=$("week-days");
   wrap.innerHTML="";
   const today=todayId();
   const progress=loadProgress(weekStudentId);
 
-  for(const id of DAY_ORDER){
-    const d=map[id];
+  DAY_ORDER.forEach(id=>{
+    const d = map[id];
+    const exList = d.exercises||[];
+    const total = exList.length;
+    let doneCount = 0;
+    exList.forEach(e=>{
+      const key=`${id}_${e.id}`;
+      if(progress[key]?.done) doneCount++;
+    });
+    const status =
+      total===0 ? "Nenhum exercício cadastrado" :
+      doneCount===0 ? "Você ainda não realizou esse treino" :
+      doneCount===total ? "Treino concluído pelo menos uma vez" :
+      `Você concluiu ${doneCount} de ${total} exercícios`;
+
     const box=document.createElement("div");
-    box.className="day-box";
-    box.dataset.day=id;
-    const isToday=id===today;
-
-    const exHtml=(d.exercises?.length||0)
-      ? d.exercises.map(e=>{
-          const key=`${id}_${e.id}`;
-          const state=progress[key] || {};
-          const done=!!state.done;
-          const cargaAluno=state.load || e.load || "—";
-          return `
-            <div class="week-ex" data-ex-id="${e.id}" data-day-id="${id}">
-              <label class="week-ex-main">
-                <input type="checkbox" class="week-ex-done" ${done?"checked":""}>
-                <span><b>${e.name||"(Sem nome)"}</b></span>
-              </label>
-              <div class="week-ex-meta">
-                <span>Séries: ${e.sets||"—"} | Reps: ${e.reps||"—"} | Carga: ${cargaAluno==="—"?"—":cargaAluno} | Desc: ${e.rest||"—"}</span>
-                <div class="week-ex-edit-row">
-                  <span>Carga atual: <span class="week-ex-load">${cargaAluno}</span></span>
-                  <button type="button" class="week-ex-edit-link">Editar</button>
-                </div>
-                <div class="week-ex-edit-area hidden">
-                  <input type="text" class="week-ex-load-input" value="${cargaAluno==="—"?"":cargaAluno}">
-                  <button type="button" class="btn-xs week-ex-save">Salvar</button>
-                  <button type="button" class="btn-xs week-ex-cancel">Cancelar</button>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join("")
-      : `<div style="opacity:.7">Sem exercícios cadastrados.</div>`;
-
+    box.className="week-day-card";
     box.innerHTML=`
-      <div class="day-top">
-        <span>${DAY_LABEL[id]}${isToday?" (HOJE)":""}</span>
-        <span>${(d.exercises?.length||0)} exercício(s)</span>
+      <div class="week-day-title">${DAY_LABEL[id]}${id===today?" (HOJE)":""}</div>
+      <div class="week-day-sub">${total} exercício(s)</div>
+      <div class="week-day-sub">${status}</div>
+      <button class="btn primary day-open" data-day-id="${id}" style="margin-top:10px;width:100%">Ver treino</button>
+    `;
+    box.querySelector(".day-open").addEventListener("click",()=>openDaySession(id));
+    wrap.appendChild(box);
+  });
+}
+
+/* --------- Tela de TREINO DO DIA (aluno) --------- */
+function updateSessionProgress(day){
+  const exList = day.exercises||[];
+  const total = exList.length;
+  const progress = loadProgress(weekStudentId);
+  let doneCount = 0;
+  exList.forEach(e=>{
+    const key=`${currentSessionDayId}_${e.id}`;
+    if(progress[key]?.done) doneCount++;
+  });
+  $("session-progress").textContent =
+    total ? `Progresso: ${doneCount}/${total} exercícios concluídos` :
+            "Nenhum exercício cadastrado para este dia.";
+}
+
+function renderDaySessionExercises(day){
+  const wrap = $("session-exercises");
+  wrap.innerHTML="";
+  const progress = loadProgress(weekStudentId);
+
+  (day.exercises||[]).forEach(e=>{
+    const key=`${currentSessionDayId}_${e.id}`;
+    const state = progress[key] || {};
+    const done = !!state.done;
+    const cargaBase = state.load || e.load || "—";
+
+    const timerKey = `${weekStudentId}_${key}`;
+    if(!exTimers[timerKey]) exTimers[timerKey] = {sec:0,interval:null,running:false};
+
+    const card=document.createElement("div");
+    card.className="session-ex-card";
+    card.dataset.exId=e.id;
+    card.dataset.dayId=currentSessionDayId;
+    card.dataset.timerKey=timerKey;
+
+    card.innerHTML=`
+      <div class="session-ex-header">
+        <label class="session-ex-main">
+          <input type="checkbox" class="session-ex-done" ${done?"checked":""}>
+          <span><b>${e.name||"(Sem nome)"}</b></span>
+        </label>
       </div>
-      <div class="ex-list" style="${isToday?"":"display:none"}">
-        ${exHtml}
+      <div class="session-ex-meta">
+        <span>Séries: ${e.sets||"—"} • Reps: ${e.reps||"—"} • Carga: <span class="session-ex-load">${cargaBase}</span> • Descanso: ${e.rest||"—"}</span>
+        <div class="session-ex-edit-row">
+          <button type="button" class="btn-xs session-ex-edit-link">Editar carga</button>
+        </div>
+        <div class="session-ex-edit-area hidden">
+          <input type="text" class="session-ex-load-input" value="${cargaBase==="—"?"":cargaBase}">
+          <button type="button" class="btn-xs session-ex-save">Salvar</button>
+          <button type="button" class="btn-xs session-ex-cancel">Cancelar</button>
+        </div>
+      </div>
+      <div class="session-ex-timer">
+        <span class="session-ex-timer-display">00:00</span>
+        <button type="button" class="btn-xs session-ex-timer-toggle">Iniciar</button>
+        <button type="button" class="btn-xs session-ex-timer-reset">Zerar</button>
       </div>
     `;
 
-    box.addEventListener("click",ev=>{
-      if(ev.target.closest("button,input")) return;
-      const cont=box.querySelector(".ex-list");
-      const open=cont.style.display!=="none";
-      cont.style.display=open?"none":"block";
-    });
-
-    wrap.appendChild(box);
-  }
-
-  // check de feito
-  wrap.querySelectorAll(".week-ex-done").forEach(chk=>{
-    chk.addEventListener("change",()=>{
-      const exEl=chk.closest(".week-ex");
-      const exId=exEl.dataset.exId;
-      const dayId=exEl.dataset.dayId;
-      const key=`${dayId}_${exId}`;
+    // checkbox feito
+    card.querySelector(".session-ex-done").addEventListener("change",(ev)=>{
       const p=loadProgress(weekStudentId);
       p[key]=p[key]||{};
-      p[key].done=chk.checked;
+      p[key].done=ev.target.checked;
       saveProgress(weekStudentId,p);
+      updateSessionProgress(day);
     });
-  });
 
-  // abrir editor
-  wrap.querySelectorAll(".week-ex-edit-link").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const exEl=btn.closest(".week-ex");
-      const row =exEl.querySelector(".week-ex-edit-row");
-      const area=exEl.querySelector(".week-ex-edit-area");
-      const input=exEl.querySelector(".week-ex-load-input");
+    // abrir editor de carga
+    const row   = card.querySelector(".session-ex-edit-row");
+    const area  = card.querySelector(".session-ex-edit-area");
+    const input = card.querySelector(".session-ex-load-input");
+    const spanLoad = card.querySelector(".session-ex-load");
+
+    card.querySelector(".session-ex-edit-link").addEventListener("click",()=>{
       row.style.display="none";
       area.classList.remove("hidden");
       input.focus(); input.select();
     });
-  });
-
-  // cancelar edição
-  wrap.querySelectorAll(".week-ex-cancel").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const exEl=btn.closest(".week-ex");
-      const row =exEl.querySelector(".week-ex-edit-row");
-      const area=exEl.querySelector(".week-ex-edit-area");
+    card.querySelector(".session-ex-cancel").addEventListener("click",()=>{
       area.classList.add("hidden");
       row.style.display="flex";
     });
-  });
-
-  // salvar nova carga
-  wrap.querySelectorAll(".week-ex-save").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const exEl=btn.closest(".week-ex");
-      const exId=exEl.dataset.exId;
-      const dayId=exEl.dataset.dayId;
-      const row   =exEl.querySelector(".week-ex-edit-row");
-      const area  =exEl.querySelector(".week-ex-edit-area");
-      const input =exEl.querySelector(".week-ex-load-input");
-      const spanLoad=exEl.querySelector(".week-ex-load");
-      const novo=input.value.trim();
-      spanLoad.textContent = novo || "—";
-      const key=`${dayId}_${exId}`;
+    card.querySelector(".session-ex-save").addEventListener("click",()=>{
+      const novoNorm = normalizeLoadInput(input.value);
+      spanLoad.textContent = novoNorm;
       const p=loadProgress(weekStudentId);
       p[key]=p[key]||{};
-      p[key].load=novo || "—";
+      p[key].load = novoNorm;
       saveProgress(weekStudentId,p);
       area.classList.add("hidden");
       row.style.display="flex";
     });
+
+    // timer individual
+    const dispTimer = card.querySelector(".session-ex-timer-display");
+    const btnToggle = card.querySelector(".session-ex-timer-toggle");
+    const btnReset  = card.querySelector(".session-ex-timer-reset");
+
+    function updateExTimerUI(){
+      const t = exTimers[timerKey];
+      dispTimer.textContent = formatTimer(t.sec||0);
+      btnToggle.textContent = t.running ? "Pausar" : "Iniciar";
+    }
+    updateExTimerUI();
+
+    btnToggle.addEventListener("click",()=>{
+      const t = exTimers[timerKey];
+      if(t.running){
+        t.running=false;
+        if(t.interval) clearInterval(t.interval);
+        t.interval=null;
+      }else{
+        t.running=true;
+        t.interval=setInterval(()=>{
+          t.sec++;
+          updateExTimerUI();
+        },1000);
+      }
+      updateExTimerUI();
+    });
+
+    btnReset.addEventListener("click",()=>{
+      const t = exTimers[timerKey];
+      if(t.interval) clearInterval(t.interval);
+      t.interval=null;
+      t.running=false;
+      t.sec=0;
+      updateExTimerUI();
+    });
+
+    wrap.appendChild(card);
   });
+
+  updateSessionProgress(day);
 }
 
+function openDaySession(dayId){
+  currentSessionDayId = dayId;
+  const day = weekData?.[dayId];
+  if(!day) return;
+  stopAllExTimers();
+  resetSessionTimer();
+
+  $("session-day-title").innerText = `Treino de ${DAY_LABEL[dayId]}`;
+  $("session-student-name").innerText = $("week-student-name").textContent || "";
+  $("session-cycle").innerText = $("week-cycle").textContent || "";
+
+  renderDaySessionExercises(day);
+  goTo("day-session-view");
+}
+
+/* --------- Login + abertura da semana --------- */
 async function openWeekView(studentDoc){
   try{
     isStudentMode=true;
     currentStudent=studentDoc;
     weekStudentId=studentDoc.id;
-    elapsedSeconds=0; resetTimer();
+    resetSessionTimer();
+    stopAllExTimers();
 
     const cycle=await pickActiveCycle(studentDoc.id);
     $("week-student-name").innerText=studentDoc.name || "Seu Treino";
+    $("session-student-name").innerText=studentDoc.name || "Seu Treino";
     $("week-personal").innerText="";
     $("week-cycle").innerText =
       cycle ? (cycle.name||"Ciclo") + (cycle.start&&cycle.end ? ` (${formatDate(cycle.start)} — ${formatDate(cycle.end)})` : "")
             : "Sem ciclo ativo";
+    $("session-cycle").innerText = $("week-cycle").textContent;
 
     if(!cycle){
       goTo("week-view");
       $("week-days").innerHTML=
-        `<div class="day-box">
-           <div class="day-top"><span>Sem ciclo</span><span>0 ex.</span></div>
-           <div class="ex-list" style="display:block">Peça ao seu personal para cadastrar um ciclo.</div>
+        `<div class="week-day-card">
+           <div class="week-day-title">Sem ciclo</div>
+           <div class="week-day-sub">0 exercício(s)</div>
+           <div class="week-day-sub">Peça ao seu personal para cadastrar um ciclo.</div>
          </div>`;
       return;
     }
@@ -1270,6 +1499,12 @@ function resetContext(){ currentStudent=null; currentCycle=null; currentDay=null
 
 function navBack(){
   if(isStudentMode){
+    if(currentView==="day-session-view"){ // volta para lista de dias, sem sair do aluno
+      stopAllExTimers();
+      pauseSessionTimer();
+      goTo("week-view");
+      return;
+    }
     if(currentView==="ex-view"){ goTo("days-view"); return; }
     if(currentView==="days-view" || currentView==="train-view"){ goTo("week-view"); return; }
     if(currentView==="week-view"){
@@ -1294,6 +1529,17 @@ $("btn-week-back")?.addEventListener("click",()=>{
   if(confirm("Quer sair da área do aluno?")){
     isStudentMode=false; resetRealtime(); resetContext(); goTo("auth-card");
   }
+});
+$("btn-session-back")?.addEventListener("click",()=>{
+  stopAllExTimers();
+  pauseSessionTimer();
+  goTo("week-view");
+});
+$("btn-session-finish")?.addEventListener("click",()=>{
+  stopAllExTimers();
+  resetSessionTimer();
+  showAlert("Treino do dia concluído! ✅",true);
+  goTo("week-view");
 });
 
 /* --------- UX extra --------- */
