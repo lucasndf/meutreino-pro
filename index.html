@@ -21,7 +21,7 @@ body{
   font-family:'Inter',sans-serif;
   background:var(--bg);
   color:var(--text);
-  overscroll-behavior-y:none; /* evita atualizar arrastando pra cima (pull-to-refresh) */
+  overscroll-behavior-y:none;
 }
 .hidden{display:none!important}
 
@@ -193,7 +193,7 @@ textarea{resize:vertical}
 .week-day-title{font-weight:700;margin-bottom:4px}
 .week-day-sub{font-size:14px;color:var(--sub);margin-bottom:6px}
 
-/* Timer genérico (usado na tela de treino do dia) */
+/* Timer genérico (treino do dia) */
 .week-timer{
   display:flex;justify-content:space-between;align-items:center;
   margin-bottom:16px;padding:10px 14px;border-radius:12px;
@@ -244,8 +244,25 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
 <body>
 <main class="wrap">
 
-  <!-- ============ AUTH CARD ============ -->
-  <section id="auth-card" class="card">
+  <!-- ============ TELA INICIAL: ESCOLHER PERFIL ============ -->
+  <section id="role-screen" class="card">
+    <div class="brand">
+      <div class="brand-logo">🏋️</div>
+      MeuTreino <span class="pro">PRO</span>
+    </div>
+    <h2 class="title">Bem-vindo</h2>
+    <p class="subtitle">Como você quer acessar o app?</p>
+
+    <button id="btn-role-student" class="btn primary" style="margin-bottom:10px">
+      Sou aluno
+    </button>
+    <button id="btn-role-personal" class="btn ghost">
+      Sou personal trainer
+    </button>
+  </section>
+
+  <!-- ============ AUTH CARD (PERSONAL) ============ -->
+  <section id="auth-card" class="card hidden">
     <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
     <h2 class="title" id="view-title">Entrar</h2>
     <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
@@ -297,11 +314,10 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <div class="linkbar">
       <button class="link" id="go-signup">Criar conta</button>
       <button class="link" id="go-reset">Esqueci a senha</button>
-      <button class="link hidden" id="go-login">Voltar login</button>
     </div>
 
     <div class="linkbar">
-      <button class="link" id="btn-open-student-login">Sou Aluno</button>
+      <button class="link" id="go-role">Voltar</button>
     </div>
   </section>
 
@@ -512,7 +528,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
   </div>
 
 </main>
-
 <!-- ===================== JS ÚNICO (Firebase + App) ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
@@ -588,7 +603,6 @@ function ymdToBr(ymd){
 function normalizeLoadInput(str){
   const t = (str||"").trim();
   if(!t) return "—";
-  // se for só número (ou número com vírgula/ponto), coloca "kg" no final
   if(/^\d+([.,]\d+)?$/.test(t) && !/[a-zA-Z]/.test(t)){
     return t.replace(",",".")+" kg";
   }
@@ -604,9 +618,10 @@ let unsubStudents = null, unsubCycles = null, unsubDays = null, unsubEx = null;
 let currentStudent = null, currentCycle = null, currentDay = null;
 let weekStudentId = null;
 
-/* --------- Timer GERAL do treino do dia (aluno) --------- */
+/* --------- Timer GERAL do treino do dia (aluno) – TIMESTAMP --------- */
 let sessionTimerInterval = null;
-let sessionElapsedSeconds = 0;
+let sessionElapsedSeconds = 0;     // total acumulado
+let sessionStartTimestamp = null;  // Date.now() no início/retomada
 
 function formatTimer(sec){
   const m = String(Math.floor(sec/60)).padStart(2,"0");
@@ -619,23 +634,30 @@ function updateSessionTimerUI(){
   const btn = $("btn-session-timer-toggle");
   if(btn) btn.textContent = sessionTimerInterval ? "Pausar" : "Iniciar";
 }
+function tickSessionTimer(){
+  if(!sessionStartTimestamp) return;
+  const diffMs = Date.now() - sessionStartTimestamp;
+  sessionElapsedSeconds = Math.max(0, Math.floor(diffMs/1000));
+  updateSessionTimerUI();
+}
 function startSessionTimer(){
   if(sessionTimerInterval) return;
-  sessionTimerInterval = setInterval(()=>{
-    sessionElapsedSeconds++;
-    updateSessionTimerUI();
-  },1000);
-  updateSessionTimerUI();
+  // baseia no tempo real decorrido
+  sessionStartTimestamp = Date.now() - sessionElapsedSeconds*1000;
+  sessionTimerInterval = setInterval(tickSessionTimer,1000);
+  tickSessionTimer();
 }
 function pauseSessionTimer(){
   if(!sessionTimerInterval) return;
   clearInterval(sessionTimerInterval);
   sessionTimerInterval = null;
+  // mantém sessionElapsedSeconds; startTimestamp será recalculado no próximo start
   updateSessionTimerUI();
 }
 function resetSessionTimer(){
   pauseSessionTimer();
   sessionElapsedSeconds = 0;
+  sessionStartTimestamp = null;
   updateSessionTimerUI();
 }
 $("btn-session-timer-toggle")?.addEventListener("click",()=>{
@@ -643,8 +665,8 @@ $("btn-session-timer-toggle")?.addEventListener("click",()=>{
 });
 $("btn-session-timer-reset")?.addEventListener("click",resetSessionTimer);
 
-/* --------- Timer INDIVIDUAL por exercício (aluno) --------- */
-let exTimers = {}; // key -> {sec, interval, running}
+/* --------- Timer INDIVIDUAL por exercício – TIMESTAMP --------- */
+let exTimers = {}; // key -> {elapsed, interval, startTs, running}
 
 function stopAllExTimers(){
   Object.values(exTimers).forEach(t=>{
@@ -668,8 +690,8 @@ function saveProgress(studentId,data){
 }
 
 /* --------- Views --------- */
-const VIEWS = ["auth-card","app","train-view","days-view","ex-view","week-view","day-session-view"];
-let currentView = "auth-card";
+const VIEWS = ["role-screen","auth-card","app","train-view","days-view","ex-view","week-view","day-session-view"];
+let currentView = "role-screen";
 function applySecurityView(){
   if(isStudentMode){
     hide($("btn-add")); hide($("plan-pill")); hide($("user-pill"));
@@ -685,7 +707,6 @@ function goTo(viewId){
   currentView = viewId;
   applySecurityView();
 }
-
 /* --------- Auth State (personal) --------- */
 async function ensureUserDoc(){
   if(!auth.currentUser) return;
@@ -712,7 +733,7 @@ onAuthStateChanged(auth, async (user)=>{
     if(!isStudentMode){
       resetRealtime(); resetContext();
       currentUser=null;
-      goTo("auth-card");
+      goTo("role-screen");
     }
   }
 });
@@ -776,8 +797,14 @@ $("btn-logout")?.addEventListener("click",async()=>{
   isStudentMode=false;
   await signOut(auth).catch(()=>{});
   resetRealtime(); resetContext();
-  goTo("auth-card");
+  goTo("role-screen");
   showAlert("Você saiu ✅",true);
+});
+
+/* botão VOLTAR para tela inicial de perfil */
+$("go-role")?.addEventListener("click",()=>{
+  hideAlert();
+  goTo("role-screen");
 });
 
 /* --------- Caps Lock + mostrar senha --------- */
@@ -878,7 +905,7 @@ function openStudentModal(st){
   $("modal-bg").classList.remove("hidden");
 }
 
-/* Salvar aluno (CPF campo, id auto) */
+/* Salvar aluno */
 $("form-student").addEventListener("submit",async(e)=>{
   e.preventDefault();
   const cpf = onlyDigits($("st-cpf").value);
@@ -1314,7 +1341,7 @@ function renderDaySessionExercises(day){
     const cargaBase = state.load || e.load || "—";
 
     const timerKey = `${weekStudentId}_${key}`;
-    if(!exTimers[timerKey]) exTimers[timerKey] = {sec:0,interval:null,running:false};
+    if(!exTimers[timerKey]) exTimers[timerKey] = {elapsed:0,interval:null,startTs:null,running:false};
 
     const card=document.createElement("div");
     card.className="session-ex-card";
@@ -1356,7 +1383,7 @@ function renderDaySessionExercises(day){
       updateSessionProgress(day);
     });
 
-    // abrir editor de carga
+    // editar carga
     const row   = card.querySelector(".session-ex-edit-row");
     const area  = card.querySelector(".session-ex-edit-area");
     const input = card.querySelector(".session-ex-load-input");
@@ -1382,16 +1409,26 @@ function renderDaySessionExercises(day){
       row.style.display="flex";
     });
 
-    // timer individual
+    // timer individual (timestamp)
     const dispTimer = card.querySelector(".session-ex-timer-display");
     const btnToggle = card.querySelector(".session-ex-timer-toggle");
     const btnReset  = card.querySelector(".session-ex-timer-reset");
 
     function updateExTimerUI(){
       const t = exTimers[timerKey];
-      dispTimer.textContent = formatTimer(t.sec||0);
+      const sec = t.elapsed || 0;
+      dispTimer.textContent = formatTimer(sec);
       btnToggle.textContent = t.running ? "Pausar" : "Iniciar";
     }
+
+    function tickExTimer(){
+      const t = exTimers[timerKey];
+      if(!t.startTs) return;
+      const diffMs = Date.now() - t.startTs;
+      t.elapsed = Math.max(0, Math.floor(diffMs/1000));
+      updateExTimerUI();
+    }
+
     updateExTimerUI();
 
     btnToggle.addEventListener("click",()=>{
@@ -1402,10 +1439,9 @@ function renderDaySessionExercises(day){
         t.interval=null;
       }else{
         t.running=true;
-        t.interval=setInterval(()=>{
-          t.sec++;
-          updateExTimerUI();
-        },1000);
+        t.startTs = Date.now() - (t.elapsed||0)*1000;
+        t.interval=setInterval(tickExTimer,1000);
+        tickExTimer();
       }
       updateExTimerUI();
     });
@@ -1415,7 +1451,8 @@ function renderDaySessionExercises(day){
       if(t.interval) clearInterval(t.interval);
       t.interval=null;
       t.running=false;
-      t.sec=0;
+      t.elapsed=0;
+      t.startTs=null;
       updateExTimerUI();
     });
 
@@ -1439,7 +1476,6 @@ function openDaySession(dayId){
   renderDaySessionExercises(day);
   goTo("day-session-view");
 }
-
 /* --------- Login + abertura da semana --------- */
 async function openWeekView(studentDoc){
   try{
@@ -1479,12 +1515,29 @@ async function openWeekView(studentDoc){
 }
 
 /* --------- Login aluno --------- */
-$("btn-open-student-login")?.addEventListener("click",()=>{
+function openStudentLogin(){
   $("stu-cpf").value="";
   $("stu-birth").value="";
   $("student-login-bg").classList.remove("hidden");
+}
+
+$("btn-stu-login-cancel")?.addEventListener("click",()=>{
+  $("student-login-bg").classList.add("hidden");
+  // volta para tela de escolha de perfil
+  if(isStudentMode) goTo("role-screen");
 });
-$("btn-stu-login-cancel")?.addEventListener("click",()=> $("student-login-bg").classList.add("hidden"));
+
+/* botão "Sou aluno" da TELA INICIAL */
+$("btn-role-student")?.addEventListener("click",()=>{
+  isStudentMode=true;
+  openStudentLogin();
+});
+
+/* botão "Sou personal trainer" da TELA INICIAL */
+$("btn-role-personal")?.addEventListener("click",()=>{
+  isStudentMode=false;
+  goTo("auth-card");
+});
 
 $("form-student-login")?.addEventListener("submit",async(e)=>{
   e.preventDefault();
@@ -1540,13 +1593,13 @@ exitConfirmBtn?.addEventListener("click",()=>{
   isStudentMode=false;
   resetRealtime();
   resetContext();
-  goTo("auth-card");
+  goTo("role-screen");
   showAlert("Você saiu da área do aluno ✅",true);
 });
 
 function navBack(){
   if(isStudentMode){
-    if(currentView==="day-session-view"){ // volta para lista de dias, sem sair do aluno
+    if(currentView==="day-session-view"){
       stopAllExTimers();
       pauseSessionTimer();
       goTo("week-view");
@@ -1563,6 +1616,7 @@ function navBack(){
     if(currentView==="ex-view"){ goTo("days-view"); return; }
     if(currentView==="days-view"){ goTo("train-view"); return; }
     if(currentView==="train-view"){ goTo("app"); return; }
+    if(currentView==="app"){ goTo("role-screen"); return; }
     goTo("app");
   }
 }
