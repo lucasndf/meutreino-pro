@@ -142,7 +142,6 @@ textarea{resize:vertical}
    ============================================ */
 @media (max-width: 700px){
 
-  /* "Meus Alunos" passa para linha de cima sozinho */
   .topbar{
     grid-template-columns: 1fr;
     align-items:flex-start;
@@ -152,7 +151,6 @@ textarea{resize:vertical}
     max-width:100%;
   }
 
-  /* Plano / Email / Sair vira GRID organizado */
   .tools{
     display:grid;
     grid-template-columns: 1fr auto;
@@ -162,16 +160,14 @@ textarea{resize:vertical}
     justify-items:end;
   }
 
-  /* Linha 1 */
   #plan-pill{
-    justify-self:start; /* esquerda */
+    justify-self:start;
   }
 
   #user-pill{
-    justify-self:end;   /* direita */
+    justify-self:end;
   }
 
-  /* Linha 2 – Sair sozinho abaixo */
   #btn-logout{
     grid-column: 1 / -1;
     justify-self:end;
@@ -227,7 +223,6 @@ textarea{resize:vertical}
   padding:14px;background:#fff7d1;border:1px dashed #e3c54b;
   border-radius:12px;color:#5c4a00
 }
-
 /* Days / Exercises (personal) */
 .days-grid{display:grid;gap:12px}
 @media(min-width:700px){.days-grid{grid-template-columns:repeat(2,1fr)}}
@@ -304,8 +299,23 @@ textarea{resize:vertical}
   display:flex;align-items:center;justify-content:center;padding:16px
 }
 .modal{
-  width:100%;max-width:520px;background:var(--panel);
-  border-radius:16px;border:1px solid var(--border);padding:20px
+  width:100%;
+  max-width:520px;
+  background:var(--panel);
+  border-radius:16px;
+  border:1px solid var(--border);
+  padding:20px;
+
+  /* para caber na tela sem precisar tirar o zoom */
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+@media (max-height:700px){
+  .modal{
+    max-height:85vh;
+    padding:16px;
+  }
 }
 
 /* Pequenos toques */
@@ -373,7 +383,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     </div>
 
     <div class="linkbar">
-      <!-- aqui só personal; login de aluno ficou na tela inicial -->
       <button class="link" id="btn-open-start">Voltar</button>
     </div>
   </section>
@@ -394,9 +403,9 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
       <strong>Meus Alunos</strong>
       <input id="search" class="search" type="text" placeholder="Pesquisar por nome...">
       <div class="tools">
-        <!-- 🔴 AQUI TROCAMOS O TEXTO INICIAL -->
-        <span class="pill" id="plan-pill">Iniciante — 1 aluno de free</span>
+        <span class="pill" id="plan-pill">Plano: Iniciante — 1 aluno de free</span>
         <span class="pill" id="user-pill">...</span>
+        <button id="btn-admin" class="btn ghost hidden" style="width:auto">Admin</button>
         <button id="btn-logout" class="btn ghost" style="width:auto">Sair</button>
       </div>
     </div>
@@ -405,6 +414,17 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <button id="btn-add" class="fab" title="Novo Aluno">+</button>
   </section>
 
+  <!-- ============ ADMIN VIEW: PLANOS DOS PERSONAIS ============ -->
+  <section id="admin-view" class="app hidden">
+    <div class="topbar">
+      <strong>Painel Admin — Planos</strong>
+      <span class="pill">Gerencie os planos dos personais</span>
+      <div class="tools">
+        <button id="btn-admin-back" class="btn ghost" style="width:auto">Voltar</button>
+      </div>
+    </div>
+    <div id="admin-users-list" class="grid"></div>
+  </section>
   <!-- ============ VIEW: CICLOS ============ -->
   <section id="train-view" class="view hidden">
     <div class="view-header">
@@ -495,7 +515,7 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
       <form id="form-student">
         <div class="field"><label>Nome</label><input id="st-name" required></div>
         <div class="field"><label>WhatsApp</label><input id="st-phone" inputmode="tel" placeholder="(DDD) 99999-9999"></div>
-        <div class="field"><label>CPF (11 dígitos — será o Login do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric"></div>
+        <div class="field"><label>CPF (11 dígitos — será o ID do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric"></div>
         <div class="field"><label>Data de Nascimento</label><input id="st-birth" type="text" placeholder="DD/MM/AAAA" maxlength="10" inputmode="numeric" required></div>
         <div class="field"><label>Objetivo</label>
           <select id="st-goal">
@@ -597,7 +617,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
 
 </main>
 </div>
-
 <!-- ===================== JS ÚNICO (Firebase + App) ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
@@ -630,8 +649,16 @@ const db   = getFirestore(app);
 const $  = (id)=>document.getElementById(id);
 const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 const alertBox = $("alert");
+
 function showAlert(msg, ok=false, ms = ok ? 1800 : 3500){
-  if(!alertBox){ alert(msg); return; }
+  // se a tela de auth estiver visível, usamos o alert estilizado
+  const authVisible = !$("auth-card")?.classList.contains("hidden");
+
+  if(!authVisible || !alertBox){
+    window.alert(msg);
+    return;
+  }
+
   alertBox.innerText = msg;
   alertBox.classList.remove("hidden","ok");
   if (ok) alertBox.classList.add("ok");
@@ -679,68 +706,31 @@ function normalizeLoadInput(str){
   return t;
 }
 
+/* --------- Planos --------- */
+const PLAN_META = {
+  iniciante: {
+    label: "Iniciante — 1 aluno de free",
+    studentsLimit: 1,
+  },
+  crescimento: {
+    label: "Crescimento — 10 alunos (R$ 19,90/mês)",
+    studentsLimit: 10,
+  },
+  pro: {
+    label: "PRO — (R$ 39,90/mês)",
+    studentsLimit: 9999,
+  },
+};
+
 /* --------- Estado Global --------- */
 let isStudentMode = false;
 let currentUser   = null;
-
-/* 🔥 Plano atual do personal – NOVO MODELO */
-let currentPlan = {
-  plan: "iniciante",                     // "iniciante" | "crescimento" | "pro"
-  limit: 1,                              // 1 / 10 / Infinity
-  pill: "Iniciante — 1 aluno de free"    // texto exibido no pill
-};
-
+let isAdminUser   = false;
+let currentPlan   = { slug:"iniciante", studentsLimit:1 };
 let studentsCache = [];
 let unsubStudents = null, unsubCycles = null, unsubDays = null, unsubEx = null;
 let currentStudent = null, currentCycle = null, currentDay = null;
 let weekStudentId = null;
-
-/* 🧠 Resolve plano a partir do doc do Firestore */
-function resolvePlanFromDoc(data = {}){
-  const raw = (data.plan || "iniciante").toLowerCase();
-
-  // migrar "free" antigo → Iniciante
-  if(raw === "free"){
-    return {
-      plan: "iniciante",
-      limit: 1,
-      pill: "Iniciante — 1 aluno de free"
-    };
-  }
-
-  if(raw === "iniciante"){
-    return {
-      plan: "iniciante",
-      limit: 1,
-      pill: "Iniciante — 1 aluno de free"
-    };
-  }
-
-  if(raw === "crescimento"){
-    return {
-      plan: "crescimento",
-      limit: 10,
-      pill: "Crescimento — 10 alunos (R$ 19,90/mês)"
-    };
-  }
-
-  if(raw === "pro"){
-    return {
-      plan: "pro",
-      limit: Infinity,
-      pill: "PRO — (R$ 39,90/mês)"
-    };
-  }
-
-  const storedLimit = Number(data.studentsLimit ?? data.limit ?? 1);
-  const safeLimit = Number.isFinite(storedLimit) && storedLimit > 0 ? storedLimit : 1;
-
-  return {
-    plan: raw,
-    limit: safeLimit,
-    pill: `Plano: ${raw.toUpperCase()} (${safeLimit} alunos)`
-  };
-}
 
 /* --------- Timer GERAL do treino do dia (aluno) com TIMESTAMP --------- */
 let sessionTimerInterval = null;
@@ -820,24 +810,37 @@ function saveProgress(studentId,data){
 }
 
 /* --------- Views --------- */
-const VIEWS = ["start-screen","auth-card","app","train-view","days-view","ex-view","week-view","day-session-view"];
+const VIEWS = [
+  "start-screen","auth-card","app",
+  "train-view","days-view","ex-view",
+  "week-view","day-session-view","admin-view"
+];
 let currentView = "start-screen";
+
 function applySecurityView(){
   if(isStudentMode){
-    hide($("btn-add")); hide($("plan-pill")); hide($("user-pill"));
-    hide($("btn-new-cycle")); hide($("btn-new-ex"));
+    hide($("btn-add"));
+    hide($("plan-pill"));
+    hide($("user-pill"));
+    hide($("btn-new-cycle"));
+    hide($("btn-new-ex"));
+    hide($("btn-admin"));
   }else{
-    show($("btn-add")); show($("plan-pill")); show($("user-pill"));
-    show($("btn-new-cycle")); show($("btn-new-ex"));
+    show($("btn-add"));
+    show($("plan-pill"));
+    show($("user-pill"));
+    show($("btn-new-cycle"));
+    show($("btn-new-ex"));
+    if(isAdminUser) show($("btn-admin")); else hide($("btn-admin"));
   }
 }
+
 function goTo(viewId){
   VIEWS.forEach(id => $(id)?.classList.add("hidden"));
   $(viewId)?.classList.remove("hidden");
   currentView = viewId;
   applySecurityView();
 }
-
 /* --------- TELA INICIAL: ESCOLHA DE MODO --------- */
 $("start-student")?.addEventListener("click",()=>{
   isStudentMode = true;
@@ -853,44 +856,68 @@ $("btn-open-start")?.addEventListener("click",()=>{
   goTo("start-screen");
 });
 
-/* --------- Auth State (personal) --------- */
+/* --------- Planos / user doc --------- */
+function updatePlanPill(){
+  const pill = $("plan-pill");
+  if(!pill) return;
+  const meta = PLAN_META[currentPlan.slug] || PLAN_META.iniciante;
+  pill.textContent = `Plano: ${meta.label}`;
+}
+
 async function ensureUserDoc(){
   if(!auth.currentUser) return;
+
   const uref = doc(db,"users",auth.currentUser.uid);
   const usnap = await getDoc(uref);
 
   if(!usnap.exists()){
-    // NOVO USER → Iniciante
-    const baseData = {
-      plan:"iniciante",
-      studentsLimit:1,
-      email:auth.currentUser.email||"",
-      createdAt:serverTimestamp()
+    const initial = {
+      planSlug: "iniciante",
+      studentsLimit: PLAN_META.iniciante.studentsLimit,
+      email: auth.currentUser.email || "",
+      isAdmin: false,
+      createdAt: serverTimestamp(),
     };
-    await setDoc(uref,baseData,{merge:true});
-    currentPlan = resolvePlanFromDoc(baseData);
-  }else{
-    let data = usnap.data() || {};
-    const updates = {};
+    await setDoc(uref, initial, { merge: true });
+    currentPlan = { slug: initial.planSlug, studentsLimit: initial.studentsLimit };
+    isAdminUser = false;
+  } else {
+    const data = usnap.data() || {};
 
-    if(!data.plan || data.plan === "free"){
-      updates.plan = "iniciante";
-    }
-    if(!("studentsLimit" in data)){
-      updates.studentsLimit = 1;
+    isAdminUser = !!data.isAdmin;
+
+    let slug  = data.planSlug;
+    let limit = data.studentsLimit;
+
+    if(!slug && data.plan){
+      if(data.plan === "pro"){
+        slug  = "pro";
+        limit = PLAN_META.pro.studentsLimit;
+      } else {
+        slug  = "iniciante";
+        limit = PLAN_META.iniciante.studentsLimit;
+      }
     }
 
-    if(Object.keys(updates).length>0){
-      await setDoc(uref,updates,{merge:true});
-      data = {...data,...updates};
+    if(!slug) slug = "iniciante";
+    if(typeof limit !== "number"){
+      limit = (PLAN_META[slug] || PLAN_META.iniciante).studentsLimit;
     }
-    currentPlan = resolvePlanFromDoc(data);
+
+    currentPlan = { slug, studentsLimit: limit };
+
+    await setDoc(uref, {
+      planSlug: currentPlan.slug,
+      studentsLimit: currentPlan.studentsLimit,
+      isAdmin: isAdminUser,
+    }, { merge: true });
   }
 
-  const pill = $("plan-pill");
-  if(pill) pill.innerText = currentPlan.pill;
+  updatePlanPill();
+  if(isAdminUser) show($("btn-admin")); else hide($("btn-admin"));
 }
 
+/* --------- Auth State (personal) --------- */
 onAuthStateChanged(auth, async (user)=>{
   if(user && !isStudentMode){
     currentUser = user;
@@ -1046,15 +1073,14 @@ function renderStudents(){
     });
 }
 $("btn-add")?.addEventListener("click",()=>{
-  // 🔥 Agora respeita o plano atual (iniciante/crescimento/pro)
-  if(currentPlan.plan!=="pro" && studentsCache.length>=(currentPlan.limit||1)){
-    showAlert(
-      currentPlan.plan==="iniciante"
-        ? "Plano Iniciante permite apenas 1 aluno de free. Atualize o plano para cadastrar mais alunos."
-        : "Você atingiu o limite de alunos do seu plano. Atualize para um plano maior."
-    );
+  const meta = PLAN_META[currentPlan.slug] || PLAN_META.iniciante;
+  const limit = currentPlan.studentsLimit ?? meta.studentsLimit;
+
+  if(studentsCache.length >= limit){
+    showAlert(`Limite do plano atingido.\nPlano atual: ${meta.label}`);
     return;
   }
+
   $("modal-title").innerText="Novo Aluno";
   $("form-student").reset();
   $("modal-bg").classList.remove("hidden");
@@ -1401,7 +1427,6 @@ function renderExercises(list){
     wrap.appendChild(card);
   });
 }
-
 /* --------- Semana do aluno (lista de dias) --------- */
 const DAY_ORDER = ["seg","ter","qua","qui","sex","sab","dom"];
 const DAY_LABEL = {
@@ -1577,7 +1602,7 @@ function renderDaySessionExercises(day){
       row.style.display="flex";
     });
 
-    // timer individual COM TIMESTAMP
+    // timer individual
     const dispTimer = card.querySelector(".session-ex-timer-display");
     const btnToggle = card.querySelector(".session-ex-timer-toggle");
     const btnReset  = card.querySelector(".session-ex-timer-reset");
@@ -1708,7 +1733,6 @@ $("form-student-login")?.addEventListener("submit",async(e)=>{
     await openWeekView(found);
   }catch(err){ showAlert("Erro: "+err.message); }
 });
-
 /* --------- Navegação / reset --------- */
 function resetRealtime(){
   unsubStudents?.(); unsubStudents=null;
@@ -1761,6 +1785,7 @@ function navBack(){
     if(currentView==="days-view"){ goTo("train-view"); return; }
     if(currentView==="train-view"){ goTo("app"); return; }
     if(currentView==="auth-card"){ goTo("start-screen"); return; }
+    if(currentView==="admin-view"){ goTo("app"); return; }
     goTo("app");
   }
 }
@@ -1781,6 +1806,102 @@ $("btn-session-finish")?.addEventListener("click",()=>{
   resetSessionTimer();
   showAlert("Treino do dia concluído! ✅",true);
   goTo("week-view");
+});
+
+/* --------- ADMIN VIEW: GERENCIAR PLANOS DOS PERSONAIS --------- */
+async function loadAdminUsers(){
+  const list = $("admin-users-list");
+  if(!list) return;
+  list.innerHTML = "<p>Carregando personais...</p>";
+
+  try{
+    const snap = await getDocs(collection(db,"users"));
+    const arr = [];
+    snap.forEach(d => {
+      const data = d.data() || {};
+      const slug =
+        data.planSlug ||
+        (data.plan === "pro" ? "pro" : "iniciante");
+      arr.push({
+        id: d.id,
+        email: data.email || "(sem email)",
+        planSlug: slug,
+      });
+    });
+
+    arr.sort((a,b)=> (a.email||"").localeCompare(b.email||""));
+
+    list.innerHTML = "";
+    arr.forEach(u => {
+      const meta = PLAN_META[u.planSlug] || PLAN_META.iniciante;
+      const card = document.createElement("div");
+      card.className = "card-student";
+      card.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <strong>${u.email}</strong>
+          <span class="badge">Plano atual: ${meta.label}</span>
+        </div>
+        <div class="field" style="margin-top:8px">
+          <label>Alterar plano</label>
+          <select data-user-id="${u.id}" class="admin-plan-select">
+            <option value="iniciante" ${u.planSlug==="iniciante"?"selected":""}>
+              Iniciante — 1 aluno de free
+            </option>
+            <option value="crescimento" ${u.planSlug==="crescimento"?"selected":""}>
+              Crescimento — 10 alunos (R$ 19,90/mês)
+            </option>
+            <option value="pro" ${u.planSlug==="pro"?"selected":""}>
+              PRO — (R$ 39,90/mês)
+            </option>
+          </select>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+
+    $$(".admin-plan-select").forEach(sel => {
+      sel.addEventListener("change", async (e)=>{
+        const uid  = e.target.dataset.userId;
+        const slug = e.target.value;
+        const meta = PLAN_META[slug] || PLAN_META.iniciante;
+
+        try{
+          await setDoc(doc(db,"users",uid),{
+            planSlug: slug,
+            studentsLimit: meta.studentsLimit,
+          }, { merge:true });
+
+          showAlert("Plano atualizado ✅", true);
+
+          if(uid === auth.currentUser?.uid){
+            currentPlan = { slug, studentsLimit: meta.studentsLimit };
+            updatePlanPill();
+          }
+        }catch(err){
+          console.error(err);
+          showAlert("Erro ao atualizar plano: "+err.message);
+        }
+      });
+    });
+
+  }catch(err){
+    console.error(err);
+    list.innerHTML = "<p>Erro ao carregar usuários.</p>";
+    showAlert("Erro ao carregar personais: "+err.message);
+  }
+}
+
+$("btn-admin")?.addEventListener("click", ()=>{
+  if(!isAdminUser){
+    showAlert("Você não tem acesso de admin.");
+    return;
+  }
+  goTo("admin-view");
+  loadAdminUsers();
+});
+
+$("btn-admin-back")?.addEventListener("click", ()=>{
+  goTo("app");
 });
 
 /* --------- UX extra --------- */
