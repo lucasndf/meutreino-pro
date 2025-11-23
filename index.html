@@ -119,6 +119,7 @@ textarea{resize:vertical}
 .app,.view,.week-view{
   width:100%;max-width:1100px;margin:auto;padding:20px
 }
+<style>
 /* ============================================
    TOPO DO APP (DESKTOP)
    ============================================ */
@@ -137,42 +138,6 @@ textarea{resize:vertical}
   flex-wrap:wrap;
 }
 
-/* ============================================
-   AJUSTE DO TOPO DO APP NO CELULAR
-   ============================================ */
-@media (max-width: 700px){
-
-  .topbar{
-    grid-template-columns: 1fr;
-    align-items:flex-start;
-  }
-
-  .search{
-    max-width:100%;
-  }
-
-  .tools{
-    display:grid;
-    grid-template-columns: 1fr auto;
-    column-gap: 8px;
-    row-gap: 6px;
-    align-items:center;
-    justify-items:end;
-  }
-
-  #plan-pill{
-    justify-self:start;
-  }
-
-  #user-pill{
-    justify-self:end;
-  }
-
-  #btn-logout{
-    grid-column: 1 / -1;
-    justify-self:end;
-  }
-}
 .pill{
   padding:6px 12px;background:var(--muted);
   border-radius:12px;border:1px solid var(--border);font-size:14px
@@ -182,6 +147,38 @@ textarea{resize:vertical}
 @media(min-width:740px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
 
+/* ============================================
+   AJUSTE DO TOPO NO CELULAR
+   ============================================ */
+@media (max-width:700px){
+  .topbar{
+    grid-template-columns:1fr;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .search{
+    max-width:100%;
+  }
+  /* tools em coluna, mais organizado */
+  .tools{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:8px;
+  }
+  .pill{
+    width:100%;
+    text-align:left;
+  }
+  #btn-admin,
+  #btn-logout{
+    align-self:flex-end;
+    width:auto;
+  }
+}
+
+/* Cards de alunos */
 .card-student{
   background:var(--panel);border:1px solid var(--border);
   border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px
@@ -223,7 +220,8 @@ textarea{resize:vertical}
   padding:14px;background:#fff7d1;border:1px dashed #e3c54b;
   border-radius:12px;color:#5c4a00
 }
-/* Days / Exercises (personal) */
+
+/* Dias / Exercícios (personal) */
 .days-grid{display:grid;gap:12px}
 @media(min-width:700px){.days-grid{grid-template-columns:repeat(2,1fr)}}
 .day-card{
@@ -259,7 +257,7 @@ textarea{resize:vertical}
 .week-day-title{font-weight:700;margin-bottom:4px}
 .week-day-sub{font-size:14px;color:var(--sub);margin-bottom:6px}
 
-/* Timer genérico (usado na tela de treino do dia) */
+/* Timer genérico da tela de treino do dia */
 .week-timer{
   display:flex;justify-content:space-between;align-items:center;
   margin-bottom:16px;padding:10px 14px;border-radius:12px;
@@ -299,27 +297,14 @@ textarea{resize:vertical}
   display:flex;align-items:center;justify-content:center;padding:16px
 }
 .modal{
-  width:100%;
-  max-width:520px;
-  background:var(--panel);
-  border-radius:16px;
-  border:1px solid var(--border);
-  padding:20px;
-
-  /* para caber na tela sem precisar tirar o zoom */
-  max-height:90vh;
-  overflow-y:auto;
-}
-
-@media (max-height:700px){
-  .modal{
-    max-height:85vh;
-    padding:16px;
-  }
+  width:100%;max-width:520px;background:var(--panel);
+  border-radius:16px;border:1px solid var(--border);padding:20px
 }
 
 /* Pequenos toques */
 hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
+
+/* Admin view reaproveita .app e .grid */
 </style>
 </head>
 <body>
@@ -327,7 +312,7 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
 <main class="wrap">
 
   <!-- ============ AUTH CARD ============ -->
-  <section id="auth-card" class="card">
+  <section id="auth-card" class="card hidden">
     <div class="brand"><div class="brand-logo">🏋️</div> MeuTreino <span class="pro">PRO</span></div>
     <h2 class="title" id="view-title">Entrar</h2>
     <p class="subtitle" id="view-sub">Gerencie seus alunos facilmente.</p>
@@ -383,6 +368,7 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     </div>
 
     <div class="linkbar">
+      <!-- aqui só personal; login de aluno ficou na tela inicial -->
       <button class="link" id="btn-open-start">Voltar</button>
     </div>
   </section>
@@ -397,7 +383,7 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <button id="start-personal" class="btn ghost">Sou Personal Trainer</button>
   </section>
 
-  <!-- ============ APP: LISTA DE ALUNOS ============ -->
+  <!-- ============ APP: LISTA DE ALUNOS (PERSONAL) ============ -->
   <section id="app" class="app hidden">
     <div class="topbar">
       <strong>Meus Alunos</strong>
@@ -414,17 +400,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     <button id="btn-add" class="fab" title="Novo Aluno">+</button>
   </section>
 
-  <!-- ============ ADMIN VIEW: PLANOS DOS PERSONAIS ============ -->
-  <section id="admin-view" class="app hidden">
-    <div class="topbar">
-      <strong>Painel Admin — Planos</strong>
-      <span class="pill">Gerencie os planos dos personais</span>
-      <div class="tools">
-        <button id="btn-admin-back" class="btn ghost" style="width:auto">Voltar</button>
-      </div>
-    </div>
-    <div id="admin-users-list" class="grid"></div>
-  </section>
   <!-- ============ VIEW: CICLOS ============ -->
   <section id="train-view" class="view hidden">
     <div class="view-header">
@@ -477,7 +452,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
 
     <div id="week-days"></div>
   </section>
-
   <!-- ============ VIEW: TREINO DO DIA (ALUNO) ============ -->
   <section id="day-session-view" class="week-view hidden">
     <div class="week-header">
@@ -515,7 +489,7 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
       <form id="form-student">
         <div class="field"><label>Nome</label><input id="st-name" required></div>
         <div class="field"><label>WhatsApp</label><input id="st-phone" inputmode="tel" placeholder="(DDD) 99999-9999"></div>
-        <div class="field"><label>CPF (11 dígitos — será o ID do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric"></div>
+        <div class="field"><label>CPF (11 dígitos — será o Login do aluno)</label><input id="st-cpf" maxlength="11" required inputmode="numeric"></div>
         <div class="field"><label>Data de Nascimento</label><input id="st-birth" type="text" placeholder="DD/MM/AAAA" maxlength="10" inputmode="numeric" required></div>
         <div class="field"><label>Objetivo</label>
           <select id="st-goal">
@@ -577,7 +551,6 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
       </form>
     </div>
   </div>
-
   <!-- ============ MODAL: LOGIN ALUNO ============ -->
   <div id="student-login-bg" class="modal-bg hidden" style="z-index:2100">
     <div class="modal" style="max-width:380px">
@@ -615,6 +588,18 @@ hr.sep{border:0;border-top:1px dashed var(--border);margin:16px 0}
     </div>
   </div>
 
+  <!-- ============ ADMIN VIEW: PLANOS DOS PERSONAIS ============ -->
+  <section id="admin-view" class="app hidden">
+    <div class="topbar">
+      <strong>Painel Admin — Planos</strong>
+      <button id="btn-admin-load" class="btn ghost" style="width:auto">Gerencie os planos dos personais</button>
+      <div class="tools">
+        <button id="btn-admin-back" class="btn ghost" style="width:auto">Voltar</button>
+      </div>
+    </div>
+    <div id="admin-users-list" class="grid"></div>
+  </section>
+
 </main>
 </div>
 <!-- ===================== JS ÚNICO (Firebase + App) ===================== -->
@@ -630,6 +615,21 @@ import {
   updateDoc, deleteDoc, query, where, setDoc, serverTimestamp,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+/* ===== CSS extra via JS (poderia estar no <style>, mas deixei aqui pra ficar junto com ajustes atuais) ===== */
+const styleExtra = document.createElement("style");
+styleExtra.textContent = `
+/* espaço extra no fim da tela de treino do dia (mobile) */
+#day-session-view{
+  padding-bottom:120px;
+}
+@supports (padding-bottom: env(safe-area-inset-bottom)){
+  #day-session-view{
+    padding-bottom:calc(120px + env(safe-area-inset-bottom));
+  }
+}
+`;
+document.head.appendChild(styleExtra);
 
 /* --------------- CONFIG DO SEU PROJETO --------------- */
 const firebaseConfig = {
@@ -649,16 +649,8 @@ const db   = getFirestore(app);
 const $  = (id)=>document.getElementById(id);
 const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
 const alertBox = $("alert");
-
 function showAlert(msg, ok=false, ms = ok ? 1800 : 3500){
-  // se a tela de auth estiver visível, usamos o alert estilizado
-  const authVisible = !$("auth-card")?.classList.contains("hidden");
-
-  if(!authVisible || !alertBox){
-    window.alert(msg);
-    return;
-  }
-
+  if(!alertBox){ alert(msg); return; }
   alertBox.innerText = msg;
   alertBox.classList.remove("hidden","ok");
   if (ok) alertBox.classList.add("ok");
@@ -706,27 +698,33 @@ function normalizeLoadInput(str){
   return t;
 }
 
-/* --------- Planos --------- */
+/* --------- Estado Global + planos --------- */
 const PLAN_META = {
   iniciante: {
-    label: "Iniciante — 1 aluno de free",
-    studentsLimit: 1,
+    slug:"iniciante",
+    label:"Iniciante — 1 aluno de free",
+    studentsLimit:1,
+    pill:"Plano: Iniciante — 1 aluno de free"
   },
-  crescimento: {
-    label: "Crescimento — 10 alunos (R$ 19,90/mês)",
-    studentsLimit: 10,
+  crescimento:{
+    slug:"crescimento",
+    label:"Crescimento — 10 alunos (R$ 19,90/mês)",
+    studentsLimit:10,
+    pill:"Plano: Crescimento — 10 alunos (R$ 19,90/mês)"
   },
-  pro: {
-    label: "PRO — (R$ 39,90/mês)",
-    studentsLimit: 9999,
-  },
+  pro:{
+    slug:"pro",
+    label:"PRO — (R$ 39,90/mês)",
+    studentsLimit:9999,
+    pill:"Plano: PRO — (R$ 39,90/mês)"
+  }
 };
 
-/* --------- Estado Global --------- */
 let isStudentMode = false;
 let currentUser   = null;
-let isAdminUser   = false;
 let currentPlan   = { slug:"iniciante", studentsLimit:1 };
+let isAdminUser   = false;
+
 let studentsCache = [];
 let unsubStudents = null, unsubCycles = null, unsubDays = null, unsubEx = null;
 let currentStudent = null, currentCycle = null, currentDay = null;
@@ -762,7 +760,6 @@ function startSessionTimer(){
   updateSessionTimerUI();
 }
 function pauseSessionTimer(){
-  if(!sessionTimerInterval && sessionStartTimestamp==null) return;
   if(sessionTimerInterval){
     clearInterval(sessionTimerInterval);
     sessionTimerInterval = null;
@@ -785,16 +782,14 @@ $("btn-session-timer-toggle")?.addEventListener("click",()=>{
 });
 $("btn-session-timer-reset")?.addEventListener("click",resetSessionTimer);
 
-/* --------- Timer INDIVIDUAL por exercício (aluno) com TIMESTAMP --------- */
+/* --------- Timer INDIVIDUAL por exercício (aluno) --------- */
 let exTimers = {}; // key -> {elapsed, start, interval, running}
-
 function stopAllExTimers(){
   Object.values(exTimers).forEach(t=>{
     if(t.interval) clearInterval(t.interval);
   });
   exTimers = {};
 }
-
 /* --------- LocalStorage progresso aluno --------- */
 function progressKey(studentId){ return `meutreino_progress_${studentId}`; }
 function loadProgress(studentId){
@@ -810,37 +805,35 @@ function saveProgress(studentId,data){
 }
 
 /* --------- Views --------- */
-const VIEWS = [
-  "start-screen","auth-card","app",
-  "train-view","days-view","ex-view",
-  "week-view","day-session-view","admin-view"
-];
+const VIEWS = ["start-screen","auth-card","app","train-view","days-view","ex-view","week-view","day-session-view","admin-view"];
 let currentView = "start-screen";
 
 function applySecurityView(){
   if(isStudentMode){
-    hide($("btn-add"));
-    hide($("plan-pill"));
-    hide($("user-pill"));
-    hide($("btn-new-cycle"));
-    hide($("btn-new-ex"));
+    hide($("btn-add")); hide($("plan-pill")); hide($("user-pill"));
+    hide($("btn-new-cycle")); hide($("btn-new-ex"));
     hide($("btn-admin"));
   }else{
-    show($("btn-add"));
-    show($("plan-pill"));
-    show($("user-pill"));
-    show($("btn-new-cycle"));
-    show($("btn-new-ex"));
+    show($("btn-add")); show($("plan-pill")); show($("user-pill"));
+    show($("btn-new-cycle")); show($("btn-new-ex"));
     if(isAdminUser) show($("btn-admin")); else hide($("btn-admin"));
   }
 }
-
 function goTo(viewId){
   VIEWS.forEach(id => $(id)?.classList.add("hidden"));
   $(viewId)?.classList.remove("hidden");
   currentView = viewId;
   applySecurityView();
 }
+
+/* --------- Plano helper --------- */
+function updatePlanPill(){
+  const pill = $("plan-pill");
+  if(!pill) return;
+  const meta = PLAN_META[currentPlan.slug] || PLAN_META.iniciante;
+  pill.textContent = meta.pill;
+}
+
 /* --------- TELA INICIAL: ESCOLHA DE MODO --------- */
 $("start-student")?.addEventListener("click",()=>{
   isStudentMode = true;
@@ -856,72 +849,36 @@ $("btn-open-start")?.addEventListener("click",()=>{
   goTo("start-screen");
 });
 
-/* --------- Planos / user doc --------- */
-function updatePlanPill(){
-  const pill = $("plan-pill");
-  if(!pill) return;
-  const meta = PLAN_META[currentPlan.slug] || PLAN_META.iniciante;
-  pill.textContent = `Plano: ${meta.label}`;
-}
-
+/* --------- Auth State (personal) --------- */
 async function ensureUserDoc(){
   if(!auth.currentUser) return;
-
   const uref = doc(db,"users",auth.currentUser.uid);
   const usnap = await getDoc(uref);
-
   if(!usnap.exists()){
-    const initial = {
-      planSlug: "iniciante",
-      studentsLimit: PLAN_META.iniciante.studentsLimit,
-      email: auth.currentUser.email || "",
-      isAdmin: false,
-      createdAt: serverTimestamp(),
-    };
-    await setDoc(uref, initial, { merge: true });
-    currentPlan = { slug: initial.planSlug, studentsLimit: initial.studentsLimit };
-    isAdminUser = false;
-  } else {
+    await setDoc(uref,{
+      email:auth.currentUser.email||"",
+      planSlug:"iniciante",
+      studentsLimit:1,
+      isAdmin:false,
+      createdAt:serverTimestamp()
+    },{merge:true});
+    currentPlan={slug:"iniciante",studentsLimit:1};
+    isAdminUser=false;
+  }else{
     const data = usnap.data() || {};
-
+    const slug = data.planSlug || (data.plan==="pro"?"pro":"iniciante");
+    const meta = PLAN_META[slug] || PLAN_META.iniciante;
+    currentPlan = {slug:meta.slug,studentsLimit:data.studentsLimit||meta.studentsLimit};
     isAdminUser = !!data.isAdmin;
-
-    let slug  = data.planSlug;
-    let limit = data.studentsLimit;
-
-    if(!slug && data.plan){
-      if(data.plan === "pro"){
-        slug  = "pro";
-        limit = PLAN_META.pro.studentsLimit;
-      } else {
-        slug  = "iniciante";
-        limit = PLAN_META.iniciante.studentsLimit;
-      }
-    }
-
-    if(!slug) slug = "iniciante";
-    if(typeof limit !== "number"){
-      limit = (PLAN_META[slug] || PLAN_META.iniciante).studentsLimit;
-    }
-
-    currentPlan = { slug, studentsLimit: limit };
-
-    await setDoc(uref, {
-      planSlug: currentPlan.slug,
-      studentsLimit: currentPlan.studentsLimit,
-      isAdmin: isAdminUser,
-    }, { merge: true });
   }
-
   updatePlanPill();
-  if(isAdminUser) show($("btn-admin")); else hide($("btn-admin"));
+  $("user-pill").innerText = auth.currentUser.email || "Personal";
+  applySecurityView();
 }
 
-/* --------- Auth State (personal) --------- */
 onAuthStateChanged(auth, async (user)=>{
   if(user && !isStudentMode){
     currentUser = user;
-    $("user-pill").innerText = user.email || "Personal";
     await ensureUserDoc();
     await startStudentsSnapshot();
     goTo("app");
@@ -1074,19 +1031,15 @@ function renderStudents(){
 }
 $("btn-add")?.addEventListener("click",()=>{
   const meta = PLAN_META[currentPlan.slug] || PLAN_META.iniciante;
-  const limit = currentPlan.studentsLimit ?? meta.studentsLimit;
-
-  if(studentsCache.length >= limit){
-    showAlert(`Limite do plano atingido.\nPlano atual: ${meta.label}`);
+  if(currentPlan.slug!=="pro" && studentsCache.length>= (currentPlan.studentsLimit || meta.studentsLimit)){
+    showAlert("Limite do seu plano atingido. Atualize para um plano maior para cadastrar mais alunos.");
     return;
   }
-
   $("modal-title").innerText="Novo Aluno";
   $("form-student").reset();
   $("modal-bg").classList.remove("hidden");
 });
 $("btn-cancel")?.addEventListener("click",()=> $("modal-bg").classList.add("hidden"));
-
 function openStudentModal(st){
   $("modal-title").innerText="Editar Aluno";
   $("st-name").value  = st.name  || "";
@@ -1099,7 +1052,7 @@ function openStudentModal(st){
   $("modal-bg").classList.remove("hidden");
 }
 
-/* Salvar aluno (CPF campo, id auto) */
+/* Salvar aluno */
 $("form-student").addEventListener("submit",async(e)=>{
   e.preventDefault();
   const cpf = onlyDigits($("st-cpf").value);
@@ -1667,7 +1620,7 @@ function openDaySession(dayId){
   goTo("day-session-view");
 }
 
-/* --------- Login + abertura da semana --------- */
+/* --------- Login + abertura da semana (aluno) --------- */
 async function openWeekView(studentDoc){
   try{
     isStudentMode=true;
@@ -1698,7 +1651,7 @@ async function openWeekView(studentDoc){
     const week=await fetchWeek(studentDoc.id,cycle.id);
     goTo("week-view");
     renderWeek(week);
-    showAlert("Bons treinos! 💪",true);
+    // removido alerta "Bons treinos!"
   }catch(err){
     console.error(err);
     showAlert("Erro ao carregar a semana: "+err.message);
@@ -1733,6 +1686,7 @@ $("form-student-login")?.addEventListener("submit",async(e)=>{
     await openWeekView(found);
   }catch(err){ showAlert("Erro: "+err.message); }
 });
+
 /* --------- Navegação / reset --------- */
 function resetRealtime(){
   unsubStudents?.(); unsubStudents=null;
@@ -1742,7 +1696,7 @@ function resetRealtime(){
 }
 function resetContext(){ currentStudent=null; currentCycle=null; currentDay=null; weekStudentId=null; }
 
-/* MODAL PREMIUM: SAIR DO TREINO (ALUNO) */
+/* MODAL SAIR DO TREINO (ALUNO) */
 const exitStudentBg = $("exit-student-bg");
 const exitCancelBtn = $("exit-student-cancel");
 const exitConfirmBtn = $("exit-student-confirm");
@@ -1762,7 +1716,7 @@ exitConfirmBtn?.addEventListener("click",()=>{
   resetRealtime();
   resetContext();
   goTo("start-screen");
-  showAlert("Você saiu da área do aluno ✅",true);
+  // removido alerta "Você saiu da área do aluno"
 });
 
 function navBack(){
@@ -1781,11 +1735,11 @@ function navBack(){
     }
     goTo("week-view");
   }else{
+    if(currentView==="admin-view"){ goTo("app"); return; }
     if(currentView==="ex-view"){ goTo("days-view"); return; }
     if(currentView==="days-view"){ goTo("train-view"); return; }
     if(currentView==="train-view"){ goTo("app"); return; }
     if(currentView==="auth-card"){ goTo("start-screen"); return; }
-    if(currentView==="admin-view"){ goTo("app"); return; }
     goTo("app");
   }
 }
@@ -1808,12 +1762,20 @@ $("btn-session-finish")?.addEventListener("click",()=>{
   goTo("week-view");
 });
 
-/* --------- ADMIN VIEW: GERENCIAR PLANOS DOS PERSONAIS --------- */
+/* --------- ADMIN --------- */
+$("btn-admin")?.addEventListener("click",()=>{
+  if(!isAdminUser){
+    showAlert("Você não tem acesso de admin.");
+    return;
+  }
+  goTo("admin-view");
+});
+$("btn-admin-back")?.addEventListener("click",()=> goTo("app"));
+$("btn-admin-load")?.addEventListener("click",loadAdminUsers);
+
 async function loadAdminUsers(){
   const list = $("admin-users-list");
-  if(!list) return;
   list.innerHTML = "<p>Carregando personais...</p>";
-
   try{
     const snap = await getDocs(collection(db,"users"));
     const arr = [];
@@ -1828,7 +1790,6 @@ async function loadAdminUsers(){
         planSlug: slug,
       });
     });
-
     arr.sort((a,b)=> (a.email||"").localeCompare(b.email||""));
 
     list.innerHTML = "";
@@ -1865,45 +1826,25 @@ async function loadAdminUsers(){
         const slug = e.target.value;
         const meta = PLAN_META[slug] || PLAN_META.iniciante;
 
-        try{
-          await setDoc(doc(db,"users",uid),{
-            planSlug: slug,
-            studentsLimit: meta.studentsLimit,
-          }, { merge:true });
+        await setDoc(doc(db,"users",uid),{
+          planSlug: slug,
+          studentsLimit: meta.studentsLimit,
+        }, { merge:true });
 
-          showAlert("Plano atualizado ✅", true);
+        showAlert("Plano atualizado ✅", true);
 
-          if(uid === auth.currentUser?.uid){
-            currentPlan = { slug, studentsLimit: meta.studentsLimit };
-            updatePlanPill();
-          }
-        }catch(err){
-          console.error(err);
-          showAlert("Erro ao atualizar plano: "+err.message);
+        if(uid === auth.currentUser?.uid){
+          currentPlan = { slug, studentsLimit: meta.studentsLimit };
+          updatePlanPill();
         }
       });
     });
-
   }catch(err){
     console.error(err);
     list.innerHTML = "<p>Erro ao carregar usuários.</p>";
     showAlert("Erro ao carregar personais: "+err.message);
   }
 }
-
-$("btn-admin")?.addEventListener("click", ()=>{
-  if(!isAdminUser){
-    showAlert("Você não tem acesso de admin.");
-    return;
-  }
-  goTo("admin-view");
-  loadAdminUsers();
-});
-
-$("btn-admin-back")?.addEventListener("click", ()=>{
-  goTo("app");
-});
-
 /* --------- UX extra --------- */
 $("login-email")?.setAttribute("placeholder","email@exemplo.com");
 $("login-pass")?.setAttribute("placeholder","••••••••");
